@@ -7,4 +7,4 @@
 
 [Discord](https://discord.gg/PwVGfng)
 
-download linke -> [![CircleCI](https://circleci.com/gh/spigotpe-beta/spigotpe.svg?style=svg)](https://circleci.com/gh/spigotpe-beta/spigotpe)
+download linke -> [![CircleCI](https://circleci.com/gh/spigotpe-beta/Spigotpe.svg?style=svg)](https://circleci.com/gh/spigotpe-beta/Spigotpe)
