@@ -19,10 +19,32 @@
  *
 */
 
+
 namespace pocketmine\item;
 
-class GlassBottle extends Item{
-	public function __construct($meta = 0, $count = 1){
-		parent::__construct(self::GLASS_BOTTLE, $meta, $count, "Glass Bottle");
+
+use pocketmine\block\Block;
+use pocketmine\entity\Entity;
+use pocketmine\Player;
+
+class Axe extends TieredTool{
+
+	public function getToolType() : int{
+		return TieredTool::TYPE_AXE;
+	}
+
+	public function isAxe(){
+		return $this->tier;
+	}
+
+	public function onDestroyBlock(Block $block, Player $player = null) : bool{
+		if($block->getHardness() > 0){
+			return $this->applyDamage(1);
+		}
+		return false;
+	}
+
+	public function onAttackEntity(Entity $entity, Player $player = null) : bool{
+		return $this->applyDamage(2);
 	}
 }

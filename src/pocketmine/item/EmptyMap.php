@@ -21,8 +21,15 @@
 
 namespace pocketmine\item;
 
-class GlassBottle extends Item{
-	public function __construct($meta = 0, $count = 1){
-		parent::__construct(self::GLASS_BOTTLE, $meta, $count, "Glass Bottle");
+
+use pocketmine\level\Level;
+use pocketmine\math\Vector3;
+use pocketmine\Player;
+
+class EmptyMap extends Item{
+
+	public function onClickAir(Player $player) : bool{
+		//TODO: create map
+		return false;
 	}
 }

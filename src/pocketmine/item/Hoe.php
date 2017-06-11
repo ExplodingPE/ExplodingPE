@@ -21,27 +21,34 @@
 
 namespace pocketmine\item;
 
+
 use pocketmine\block\Block;
-use pocketmine\block\Solid;
+use pocketmine\entity\Entity;
+use pocketmine\math\Vector3;
 use pocketmine\Player;
 
-class FlintSteel extends Tool{
+class Hoe extends TieredTool{
 
 	public function getToolType() : int{
-		return 0;
+		return Tool::TYPE_HOE;
+	}
+
+	public function isHoe(){
+		return $this->tier;
 	}
 
 	public function onClickBlock(Player $player, Block $block, Block $blockClicked, int $face, float $fx, float $fy, float $fz){
-		if(($block->getId() === Block::AIR or $block->getId() === Block::FIRE) and ($blockClicked instanceof Solid)){
-			//MCPE deals damage to flint and steel if used on an existing fire.
-			$player->getLevel()->setBlock($block, Block::get(Block::FIRE), true);
+		if($blockClicked->canBeTilled() and $face !== Vector3::SIDE_DOWN){ //Can click on any side to till, except bottom.
+			$player->getLevel()->setBlock($blockClicked, Block::get(Block::FARMLAND), true, true);
 			$this->applyDamage(1);
-
-			//TODO: nether portals
 
 			return true;
 		}
 
 		return false;
+	}
+
+	public function onAttackEntity(Entity $entity, Player $player = null) : bool{
+		return $this->applyDamage(1);
 	}
 }

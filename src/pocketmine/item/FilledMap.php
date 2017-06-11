@@ -21,8 +21,24 @@
 
 namespace pocketmine\item;
 
-class GlassBottle extends Item{
-	public function __construct($meta = 0, $count = 1){
-		parent::__construct(self::GLASS_BOTTLE, $meta, $count, "Glass Bottle");
+
+use pocketmine\nbt\tag\StringTag;
+
+class FilledMap extends Item{
+
+	public function getMapId() : int{
+		$tag = $this->getNamedTagEntry("map_uuid");
+		if($tag instanceof StringTag){
+			return (int) $tag->getValue();
+		}
+
+		return -1;
 	}
+
+	public function setMapId(int $id){
+		$tag = $this->getNamedTag();
+		$tag->map_uuid = new StringTag("map_uuid", (string) $id);
+		$this->setNamedTag($tag);
+	}
+
 }

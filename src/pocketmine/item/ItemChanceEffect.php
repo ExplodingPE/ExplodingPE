@@ -19,29 +19,44 @@
  *
 */
 
+
 namespace pocketmine\item;
 
 
-interface FoodSource extends Consumable{
+use pocketmine\entity\Effect;
+
+/**
+ * Class used to manage effect properties for consumable items which have a random chance of giving the eater effects.
+ */
+class ItemChanceEffect{
+	private $effect;
+	private $chance;
+
+	public function __construct(Effect $effect, float $chance = 1.0){
+		$this->effect = $effect;
+		$this->chance = max(0, min($chance, 1.0));
+	}
 
 	/**
-	 * Returns the number of hunger points this food type will give to the eater.
-	 *
-	 * @return int
+	 * @return Effect
 	 */
-	public function getFoodRestore() : int;
+	public function getEffect() : Effect{
+		return $this->effect;
+	}
 
 	/**
-	 * Returns the amount of saturation which will be given to the eater when the food is eaten.
-	 *
+	 * Returns the percentage chance that this effect will be applied to the eater
 	 * @return float
 	 */
-	public function getSaturationRestore() : float;
+	public function getChance() : float{
+		return $this->chance;
+	}
 
 	/**
-	 * Returns whether the eater must be hungry to eat this item.
-	 *
+	 * Returns a random true/false whether to apply an effect to the eater
 	 * @return bool
 	 */
-	public function requiresHunger() : bool;
+	public function shouldApply() : bool{
+		return lcg_value() <= $this->chance;
+	}
 }

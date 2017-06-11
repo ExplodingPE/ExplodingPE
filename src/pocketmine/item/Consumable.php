@@ -19,29 +19,41 @@
  *
 */
 
+
 namespace pocketmine\item;
 
 use pocketmine\block\Block;
-use pocketmine\block\Solid;
-use pocketmine\Player;
+use pocketmine\entity\Effect;
+use pocketmine\entity\Entity;
 
-class FlintSteel extends Tool{
+interface Consumable{
 
-	public function getToolType() : int{
-		return 0;
-	}
+	/**
+	 * Returns the result of eating the material.
+	 * This may return an Item for eating an item, or a Block for eating things like cake.
+	 *
+	 * @return Item|Block|mixed
+	 */
+	public function getResidue();
 
-	public function onClickBlock(Player $player, Block $block, Block $blockClicked, int $face, float $fx, float $fy, float $fz){
-		if(($block->getId() === Block::AIR or $block->getId() === Block::FIRE) and ($blockClicked instanceof Solid)){
-			//MCPE deals damage to flint and steel if used on an existing fire.
-			$player->getLevel()->setBlock($block, Block::get(Block::FIRE), true);
-			$this->applyDamage(1);
+	/**
+	 * Returns effects to be applied to the eater.
+	 *
+	 * @return Effect[]
+	 */
+	public function getAdditionalEffects() : array;
 
-			//TODO: nether portals
+	/**
+	 * Returns whether the target entity can consume this material.
+	 * @param Entity $entity
+	 *
+	 * @return bool
+	 */
+	public function canBeConsumedBy(Entity $entity) : bool;
 
-			return true;
-		}
-
-		return false;
-	}
+	/**
+	 * Performs any additional actions necessary when this consumable is consumed.
+	 * @param Entity $consumer
+	 */
+	public function onConsume(Entity $consumer);
 }
