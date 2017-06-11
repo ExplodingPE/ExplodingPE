@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types=1);
-
 /**
  * Named Binary Tag handling classes
  */
@@ -40,9 +38,9 @@ use pocketmine\nbt\tag\NamedTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\Tag;
-use pocketmine\utils\Binary;
 
 #ifndef COMPILE
+use pocketmine\utils\Binary;
 #endif
 
 
@@ -72,19 +70,6 @@ class NBT{
 	public $offset;
 	public $endianness;
 	private $data;
-
-	public static function combineCompoundTags(CompoundTag $nbt, CompoundTag $nbtExtra, $override = false) {
-		$tag = clone $nbt;
-		foreach ($nbtExtra as $k => $v) {
-			if (!($v instanceof Tag)) {
-				continue;
-			}
-			if (!isset($tag->{$k}) or (isset($tag->{$k}) and $override)) {
-				$tag->{$k} = clone $v;
-			}
-		}
-		return $tag;
-	}
 
 	/**
 	 * @param int $type
