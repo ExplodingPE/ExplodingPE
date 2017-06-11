@@ -88,7 +88,7 @@ class Beacon extends Spawnable implements Nameable, InventoryHolder {
 		return $this->hasName() ? $this->namedtag->CustomName->getValue() : "Beacon";
 	}
 
-	public function hasName() {
+	public function hasName() : bool{
 		return isset($this->namedtag->CustomName);
 	}
 
