@@ -5,9 +5,6 @@
 [submodule "src/spl"]
 	path = src/spl
 	url = https://github.com/pmmp/PocketMine-SPL.git
-[submodule "src/pocketmine/lang/locale"]
-	path = src/pocketmine/lang/locale
-	url = https://github.com/pmmp/PocketMine-Language.git
 [submodule "tests/plugins/PocketMine-DevTools"]
 	path = tests/plugins/PocketMine-DevTools
 	url = https://github.com/pmmp/PocketMine-DevTools.git
