@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace {
 	function safe_var_dump(){
 		static $cnt = 0;
@@ -73,9 +75,9 @@ namespace pocketmine {
 	use pocketmine\wizard\SetupWizard;
 	use raklib\RakLib;
 
-	const VERSION = "1.0dev";
+	const VERSION = "1.6.2dev";
 	const API_VERSION = "3.0.0-ALPHA5";
-	const CODENAME = "rubyscube";
+	const CODENAME = "Unleashed";
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.
@@ -142,12 +144,12 @@ namespace pocketmine {
 		}
 	});
 
-	ini_set("allow_url_fopen", 1);
-	ini_set("display_errors", 1);
-	ini_set("display_startup_errors", 1);
+	ini_set("allow_url_fopen", '1');
+	ini_set("display_errors", '1');
+	ini_set("display_startup_errors", '1');
 	ini_set("default_charset", "utf-8");
 
-	ini_set("memory_limit", -1);
+	ini_set("memory_limit", '-1');
 	define('pocketmine\START_TIME', microtime(true));
 
 	$opts = getopt("", ["data:", "plugins:", "no-wizard", "enable-profiler"]);
@@ -458,6 +460,10 @@ namespace pocketmine {
 		exit(1); //Exit with error
 	}
 
+	if(PHP_INT_SIZE < 8){
+		$logger->warning("Running PocketMine-MP with 32-bit systems/PHP is deprecated. Support for 32-bit may be dropped in the future.");
+	}
+
 	$gitHash = str_repeat("00", 20);
 	if(file_exists(\pocketmine\PATH . ".git/HEAD")){ //Found Git information!
 		$ref = trim(file_get_contents(\pocketmine\PATH . ".git/HEAD"));
@@ -486,6 +492,11 @@ namespace pocketmine {
 			$logger->join();
 			exit(-1);
 		}
+	}
+
+
+	if(\Phar::running(true) === ""){
+		$logger->warning("Non-packaged PocketMine-MP installation detected, do not use on production.");
 	}
 
 	ThreadManager::init();
