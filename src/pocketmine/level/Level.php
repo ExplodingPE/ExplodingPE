@@ -26,7 +26,6 @@ declare(strict_types = 1);
  */
 namespace pocketmine\level;
 
-use pocketmine\block\Air;
 use pocketmine\block\Beetroot;
 use pocketmine\block\Block;
 use pocketmine\block\BrownMushroom;
@@ -40,6 +39,7 @@ use pocketmine\block\Leaves;
 use pocketmine\block\Leaves2;
 use pocketmine\block\MelonStem;
 use pocketmine\block\Mycelium;
+use pocketmine\block\NetherWartPlant;
 use pocketmine\block\Potato;
 use pocketmine\block\PumpkinStem;
 use pocketmine\block\RedMushroom;
@@ -47,7 +47,7 @@ use pocketmine\block\Sapling;
 use pocketmine\block\SnowLayer;
 use pocketmine\block\Sugarcane;
 use pocketmine\block\Wheat;
-use pocketmine\entity\Arrow;
+use pocketmine\entity\projectile\Arrow;
 use pocketmine\entity\Effect;
 use pocketmine\entity\Entity;
 use pocketmine\entity\Item as DroppedItem;
@@ -65,6 +65,7 @@ use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\Timings;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Item;
+use pocketmine\item\Tool;
 use pocketmine\level\format\Chunk;
 use pocketmine\level\format\io\BaseLevelProvider;
 use pocketmine\level\format\io\LevelProvider;
@@ -255,6 +256,7 @@ class Level implements ChunkManager, Metadatable{
 		Block::LEAVES2 => Leaves2::class,
 		Block::FIRE => Fire::class,
 		Block::BEETROOT_BLOCK => Beetroot::class,
+		Block::NETHER_WART_PLANT => NetherWartPlant::class
 	];
 
 	/** @var LevelTimings */
@@ -594,7 +596,7 @@ class Level implements ChunkManager, Metadatable{
 		$pk->unknownBool = $unknown;
 		$pk->disableRelativeVolume = $disableRelativeVolume;
 		list($pk->x, $pk->y, $pk->z) = [$pos->x, $pos->y, $pos->z];
-		$this->addChunkPacket($pos->x >> 4, $pos->z >> 4, $pk);
+		$this->addChunkPacket(((int) $pos->x) >> 4, ((int) $pos->z) >> 4, $pk);
 	}
 
 	public function getAutoSave() : bool{
@@ -1356,17 +1358,17 @@ class Level implements ChunkManager, Metadatable{
 	*/
 
 	public function getFullLight(Vector3 $pos) : int{
-		$chunk = $this->getChunk($pos->x >> 4, $pos->z >> 4, false);
-		$level = 0;
-		if($chunk !== null){
-			$level = $chunk->getBlockSkyLight($pos->x & 0x0f, $pos->y, $pos->z & 0x0f);
-			//TODO: decrease light level by time of day
-			if($level < 15){
-				$level = max($chunk->getBlockLight($pos->x & 0x0f, $pos->y, $pos->z & 0x0f), $level);
-			}
-		}
+		return $this->getFullLightAt($pos->x, $pos->y, $pos->z);
+	}
 
-		return $level;
+	public function getFullLightAt(int $x, int $y, int $z) : int{
+		//TODO: decrease light level by time of day
+		$skyLight = $this->getBlockSkyLightAt($x, $y, $z);
+		if($skyLight < 15){
+			return max($skyLight, $this->getBlockLightAt($x, $y, $z));
+		}else{
+			return $skyLight;
+		}
 	}
 
 	/**
@@ -1632,7 +1634,6 @@ class Level implements ChunkManager, Metadatable{
 	 */
 	public function useBreakOn(Vector3 $vector, Item &$item = null, Player $player = null, bool $createParticles = false) : bool{
 		$target = $this->getBlock($vector);
-		//TODO: Adventure mode checks
 
 		if($item === null){
 			$item = Item::get(Item::AIR, 0, 0);
@@ -1702,15 +1703,16 @@ class Level implements ChunkManager, Metadatable{
 			return false;
 		}else{
 			$drops = $target->getDrops($item); //Fixes tile entities being deleted before getting drops
-			foreach($drops as $k => $i){
-				$drops[$k] = Item::get($i[0], $i[1], $i[2]);
-			}
 		}
+
+		assert(count(array_filter($drops, function($drop){
+			return !($drop instanceof Item);
+		})) === 0);
 
 		$above = $this->getBlock(new Vector3($target->x, $target->y + 1, $target->z));
 		if($above !== null){
 			if($above->getId() === Item::FIRE){
-				$this->setBlock($above, new Air(), true);
+				$this->setBlock($above, Block::get(Block::AIR), true);
 			}
 		}
 
@@ -1736,10 +1738,7 @@ class Level implements ChunkManager, Metadatable{
 		}
 
 		if($item !== null){
-			$item->useOn($target);
-			if($item->isTool() and $item->getDamage() >= $item->getMaxDurability()){
-				$item = Item::get(Item::AIR, 0, 0);
-			}
+			$item->onDestroyBlock($target, $player);
 		}
 
 		if($player === null or $player->isSurvival()){
@@ -1811,21 +1810,17 @@ class Level implements ChunkManager, Metadatable{
 			$this->server->getPluginManager()->callEvent($ev);
 			if(!$ev->isCancelled()){
 				$target->onUpdate(self::BLOCK_UPDATE_TOUCH);
-				if(!$player->isSneaking() and $target->canBeActivated() === true and $target->onActivate($item, $player) === true){
+				if(!$player->isSneaking() and $target->onActivate($item, $player) === true){
 					return true;
 				}
 
-				if(!$player->isSneaking() and $item->canBeActivated() and $item->onActivate($this, $player, $block, $target, $face, $fx, $fy, $fz)){
-					if($item->getCount() <= 0){
-						$item = Item::get(Item::AIR, 0, 0);
-
-						return true;
-					}
+				if(!$player->isSneaking() and $item->onClickBlock($player, $block, $target, $face, $fx, $fy, $fz)){
+					return true;
 				}
 			}else{
 				return false;
 			}
-		}elseif($target->canBeActivated() === true and $target->onActivate($item, $player) === true){
+		}elseif($target->onActivate($item, $player) === true){
 			return true;
 		}
 
@@ -1836,7 +1831,8 @@ class Level implements ChunkManager, Metadatable{
 			return false;
 		}
 
-		if(!($block->canBeReplaced() === true or ($hand->getId() === Item::WOOD_SLAB and $block->getId() === Item::WOOD_SLAB) or ($hand->getId() === Item::SLAB and $block->getId() === Item::SLAB))){
+		//TODO: remove this hack
+		if(!($block->canBeReplaced() === true or ($hand->getId() === Item::WOODEN_SLAB and $block->getId() === Item::WOODEN_SLAB) or ($hand->getId() === Item::STONE_SLAB and $block->getId() === Item::STONE_SLAB))){
 			return false;
 		}
 
@@ -1894,10 +1890,7 @@ class Level implements ChunkManager, Metadatable{
 			$this->broadcastLevelSoundEvent($hand, LevelSoundEventPacket::SOUND_PLACE, 1, $hand->getId());
 		}
 
-		$item->setCount($item->getCount() - 1);
-		if($item->getCount() <= 0){
-			$item = Item::get(Item::AIR, 0, 0);
-		}
+		$item->pop();
 
 		return true;
 	}
