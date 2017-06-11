@@ -19,12 +19,13 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\level\Level;
-use pocketmine\math\Vector3;
 use pocketmine\Player;
 
 class SnowLayer extends Flowable{
@@ -53,8 +54,8 @@ class SnowLayer extends Flowable{
 
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
-		if($block->getSide(Vector3::SIDE_DOWN)->isSolid()){
-			//TODO: fix placement
+		$down = $this->getSide(0);
+		if($down->isSolid()){
 			$this->getLevel()->setBlock($block, $this, true);
 
 			return true;
@@ -65,16 +66,10 @@ class SnowLayer extends Flowable{
 
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
-			if(!$this->getSide(Vector3::SIDE_DOWN)->isSolid()){
-				$this->getLevel()->setBlock($this, Block::get(Block::AIR), false, false);
+			if($this->getSide(0)->getId() === self::AIR){ //Replace with common break method
+				$this->getLevel()->setBlock($this, new Air(), true);
 
 				return Level::BLOCK_UPDATE_NORMAL;
-			}
-		}elseif($type === Level::BLOCK_UPDATE_RANDOM){
-			if($this->level->getBlockLightAt($this->x, $this->y, $this->z) >= 12){
-				$this->getLevel()->setBlock($this, Block::get(Block::AIR), false, false);
-
-				return Level::BLOCK_UPDATE_RANDOM;
 			}
 		}
 
@@ -84,7 +79,7 @@ class SnowLayer extends Flowable{
 	public function getDrops(Item $item){
 		if($item->isShovel() !== false){
 			return [
-				Item::get(Item::SNOWBALL, 0, 1)
+				[Item::SNOWBALL, 0, 1],
 			];
 		}
 

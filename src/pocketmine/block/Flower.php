@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
@@ -67,7 +69,7 @@ class Flower extends Flowable{
 
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
-		$down = $this->getSide(Vector3::SIDE_DOWN);
+		$down = $this->getSide(0);
 		if($down->getId() === Block::GRASS or $down->getId() === Block::DIRT or $down->getId() === Block::FARMLAND){
 			$this->getLevel()->setBlock($block, $this, true);
 

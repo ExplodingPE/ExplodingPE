@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\entity;
 
 use pocketmine\block\Block;
@@ -73,9 +75,9 @@ class FallingSand extends Entity{
 		return false;
 	}
 
-	public function attack(EntityDamageEvent $source){
+	public function attack($damage, EntityDamageEvent $source){
 		if($source->getCause() === EntityDamageEvent::CAUSE_VOID){
-			parent::attack($source);
+			parent::attack($damage, $source);
 		}
 	}
 

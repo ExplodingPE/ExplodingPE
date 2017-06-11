@@ -19,16 +19,18 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Tool;
 
 class NetherBrickStairs extends Stair{
 
-	protected $id = self::NETHER_BRICK_STAIRS;
+	protected $id = self::NETHER_BRICKS_STAIRS;
 
 	public function getName(){
-		return "Nether Brick Stairs";
+		return "Nether Bricks Stairs";
 	}
 
 	public function getHardness(){

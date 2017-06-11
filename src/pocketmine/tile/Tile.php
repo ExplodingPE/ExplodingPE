@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 /**
  * All the Tile classes and related classes
  */
@@ -37,14 +39,12 @@ abstract class Tile extends Position{
 	const BREWING_STAND = "BrewingStand";
 	const CHEST = "Chest";
 	const ENCHANT_TABLE = "EnchantTable";
-	const ENDER_CHEST = "EnderChest";
 	const FLOWER_POT = "FlowerPot";
 	const FURNACE = "Furnace";
 	const ITEM_FRAME = "ItemFrame";
 	const MOB_SPAWNER = "MobSpawner";
 	const SIGN = "Sign";
 	const SKULL = "Skull";
-	const BED = "Bed";
 
 	public static $tileCount = 1;
 
@@ -67,10 +67,8 @@ abstract class Tile extends Position{
 	public $tickTimer;
 
 	public static function init(){
-		self::registerTile(Bed::class);
 		self::registerTile(Chest::class);
 		self::registerTile(EnchantTable::class);
-		self::registerTile(EnderChest::class);
 		self::registerTile(FlowerPot::class);
 		self::registerTile(Furnace::class);
 		self::registerTile(ItemFrame::class);
@@ -113,6 +111,7 @@ abstract class Tile extends Position{
 
 	/**
 	 * Returns the short save name
+	 *
 	 * @return string
 	 */
 	public function getSaveId(){

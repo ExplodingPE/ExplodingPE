@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\event\block\BlockGrowEvent;
@@ -64,9 +66,9 @@ class MelonStem extends Crops{
 						}
 					}
 					$side = $this->getSide(mt_rand(2, 5));
-					$d = $side->getSide(Vector3::SIDE_DOWN);
+					$d = $side->getSide(0);
 					if($side->getId() === self::AIR and ($d->getId() === self::FARMLAND or $d->getId() === self::GRASS or $d->getId() === self::DIRT)){
-						Server::getInstance()->getPluginManager()->callEvent($ev = new BlockGrowEvent($side, Block::get(Block::MELON_BLOCK)));
+						Server::getInstance()->getPluginManager()->callEvent($ev = new BlockGrowEvent($side, new Melon()));
 						if(!$ev->isCancelled()){
 							$this->getLevel()->setBlock($side, $ev->getNewState(), true);
 						}
@@ -82,7 +84,7 @@ class MelonStem extends Crops{
 
 	public function getDrops(Item $item){
 		return [
-			Item::get(Item::MELON_SEEDS, 0, mt_rand(0, 2))
+			[Item::MELON_SEEDS, 0, mt_rand(0, 2)],
 		];
 	}
 }

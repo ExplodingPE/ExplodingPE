@@ -19,12 +19,13 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 use pocketmine\math\AxisAlignedBB;
-use pocketmine\math\Vector3;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
@@ -40,6 +41,10 @@ class Chest extends Transparent{
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;
+	}
+
+	public function canBeActivated(){
+		return true;
 	}
 
 	public function getHardness(){
@@ -127,14 +132,14 @@ class Chest extends Transparent{
 		if($t instanceof TileChest){
 			$t->unpair();
 		}
-		$this->getLevel()->setBlock($this, Block::get(Block::AIR), true, true);
+		$this->getLevel()->setBlock($this, new Air(), true, true);
 
 		return true;
 	}
 
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player){
-			$top = $this->getSide(Vector3::SIDE_UP);
+			$top = $this->getSide(1);
 			if($top->isTransparent() !== true){
 				return true;
 			}
@@ -169,7 +174,7 @@ class Chest extends Transparent{
 
 	public function getDrops(Item $item){
 		return [
-			Item::get($this->getId(), 0, 1)
+			[$this->id, 0, 1],
 		];
 	}
 }

@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\entity\Entity;
@@ -149,7 +151,7 @@ class Ladder extends Transparent{
 
 	public function getDrops(Item $item){
 		return [
-			Item::get($this->getId(), 0, 1)
+			[$this->id, 0, 1],
 		];
 	}
 }

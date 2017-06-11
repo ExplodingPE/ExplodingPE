@@ -19,9 +19,10 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
-use pocketmine\item\Item;
 use pocketmine\item\Tool;
 
 class Podzol extends Solid{
@@ -42,11 +43,5 @@ class Podzol extends Solid{
 
 	public function getHardness(){
 		return 2.5;
-	}
-
-	public function getDrops(Item $item){
-		return [
-			Item::get(Item::DIRT, 0, 1)
-		];
 	}
 }

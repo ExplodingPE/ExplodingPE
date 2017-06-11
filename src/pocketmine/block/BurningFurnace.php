@@ -19,10 +19,11 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
-use pocketmine\item\TieredTool;
 use pocketmine\item\Tool;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\CompoundTag;
@@ -43,6 +44,10 @@ class BurningFurnace extends Solid{
 
 	public function getName(){
 		return "Burning Furnace";
+	}
+
+	public function canBeActivated(){
+		return true;
 	}
 
 	public function getHardness(){
@@ -90,6 +95,12 @@ class BurningFurnace extends Solid{
 		return true;
 	}
 
+	public function onBreak(Item $item){
+		$this->getLevel()->setBlock($this, new Air(), true, true);
+
+		return true;
+	}
+
 	public function onActivate(Item $item, Player $player = null){
 		if($player instanceof Player){
 			$furnace = $this->getLevel()->getTile($this);
@@ -118,12 +129,11 @@ class BurningFurnace extends Solid{
 	}
 
 	public function getDrops(Item $item){
-		if($item->isPickaxe() >= TieredTool::TIER_WOODEN){
-			return [
-				Item::get($this->getId(), 0, 1)
-			];
-		}else{
-			return [];
+		$drops = [];
+		if($item->isPickaxe() >= Tool::TIER_WOODEN){
+			$drops[] = [Item::FURNACE, 0, 1];
 		}
+
+		return $drops;
 	}
 }

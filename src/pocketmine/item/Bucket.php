@@ -19,29 +19,40 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\item;
 
 use pocketmine\block\Air;
 use pocketmine\block\Block;
 use pocketmine\block\Liquid;
-use pocketmine\entity\Entity;
-use pocketmine\entity\Human;
-use pocketmine\event\player\PlayerBucketEmptyEvent;
 use pocketmine\event\player\PlayerBucketFillEvent;
+use pocketmine\level\Level;
 use pocketmine\Player;
 
-class Bucket extends Item implements Consumable{
+class Bucket extends Item{
+	public function __construct($meta = 0, $count = 1){
+		parent::__construct(self::BUCKET, $meta, $count, "Bucket");
+	}
 
-	public function onClickBlock(Player $player, Block $block, Block $blockClicked, int $face, float $fx, float $fy, float $fz){
-		$bucketBlock = Block::get($this->meta);
+	public function getMaxStackSize(){
+		return 1;
+	}
 
-		if($bucketBlock instanceof Air){
-			if($blockClicked instanceof Liquid and $blockClicked->getDamage() === 0){
+	public function canBeActivated(){
+		return true;
+	}
+
+	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
+		$targetBlock = Block::get($this->meta);
+
+		if($targetBlock instanceof Air){
+			if($target instanceof Liquid and $target->getDamage() === 0){
 				$result = clone $this;
-				$result->setDamage($blockClicked->getId());
+				$result->setDamage($target->getId());
 				$player->getServer()->getPluginManager()->callEvent($ev = new PlayerBucketFillEvent($player, $block, $face, $this, $result));
 				if(!$ev->isCancelled()){
-					$player->getLevel()->setBlock($blockClicked, Block::get(Block::AIR), true, true);
+					$player->getLevel()->setBlock($target, new Air(), true, true);
 					if($player->isSurvival()){
 						$player->getInventory()->setItemInHand($ev->getItem());
 					}
@@ -50,12 +61,12 @@ class Bucket extends Item implements Consumable{
 					$player->getInventory()->sendContents($player);
 				}
 			}
-		}elseif($bucketBlock instanceof Liquid){
+		}elseif($targetBlock instanceof Liquid){
 			$result = clone $this;
 			$result->setDamage(0);
-			$player->getServer()->getPluginManager()->callEvent($ev = new PlayerBucketEmptyEvent($player, $block, $face, $this, $result));
+			$player->getServer()->getPluginManager()->callEvent($ev = new PlayerBucketFillEvent($player, $block, $face, $this, $result));
 			if(!$ev->isCancelled()){
-				$player->getLevel()->setBlock($block, $bucketBlock, true, true);
+				$player->getLevel()->setBlock($block, $targetBlock, true, true);
 				if($player->isSurvival()){
 					$player->getInventory()->setItemInHand($ev->getItem());
 				}
@@ -66,25 +77,5 @@ class Bucket extends Item implements Consumable{
 		}
 
 		return false;
-	}
-
-	public function canBeConsumed() : bool{
-		return $this->meta === 1; //Milk
-	}
-
-	public function canBeConsumedBy(Entity $entity) : bool{
-		return $entity instanceof Human;
-	}
-
-	public function getAdditionalEffects() : array{
-		return [];
-	}
-
-	public function getResidue(){
-		return Item::get(Item::BUCKET, 0, 1);
-	}
-
-	public function onConsume(Entity $entity){
-		$entity->removeAllEffects();
 	}
 }

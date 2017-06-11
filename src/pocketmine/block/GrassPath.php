@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
@@ -58,11 +60,7 @@ class GrassPath extends Transparent{
 
 	public function getDrops(Item $item){
 		return [
-			Item::get(Item::DIRT, 0, 1)
+			[Item::DIRT, 0, 1],
 		];
-	}
-
-	public function canBeTilled() : bool{
-		return true;
 	}
 }

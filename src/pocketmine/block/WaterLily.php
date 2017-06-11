@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
@@ -56,7 +58,7 @@ class WaterLily extends Flowable{
 
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
-		if($target instanceof FlowingWater){
+		if($target instanceof Water){
 			$up = $target->getSide(Vector3::SIDE_UP);
 			if($up->getId() === Block::AIR){
 				$this->getLevel()->setBlock($up, $this, true, true);
@@ -69,7 +71,7 @@ class WaterLily extends Flowable{
 
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
-			if(!($this->getSide(Vector3::SIDE_DOWN) instanceof FlowingWater)){
+			if(!($this->getSide(0) instanceof Water)){
 				$this->getLevel()->useBreakOn($this);
 				return Level::BLOCK_UPDATE_NORMAL;
 			}
@@ -80,7 +82,7 @@ class WaterLily extends Flowable{
 
 	public function getDrops(Item $item){
 		return [
-			Item::get($this->getId(), 0, 1)
+			[$this->id, 0, 1]
 		];
 	}
 }

@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
@@ -58,7 +60,7 @@ class HayBale extends Solid{
 
 	public function getDrops(Item $item){
 		return [
-			Item::get($this->id, 0, 1)
+			[$this->id, 0, 1],
 		];
 	}
 

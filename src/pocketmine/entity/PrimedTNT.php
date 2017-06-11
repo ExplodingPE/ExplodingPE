@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\entity;
 
 use pocketmine\event\entity\EntityDamageEvent;
@@ -46,9 +48,9 @@ class PrimedTNT extends Entity implements Explosive{
 	public $canCollide = false;
 
 
-	public function attack(EntityDamageEvent $source){
+	public function attack($damage, EntityDamageEvent $source){
 		if($source->getCause() === EntityDamageEvent::CAUSE_VOID){
-			parent::attack($source);
+			parent::attack($damage, $source);
 		}
 	}
 

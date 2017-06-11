@@ -19,11 +19,13 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\level\Level;
 
-class WallSign extends StandingSign{
+class WallSign extends SignPost{
 
 	protected $id = self::WALL_SIGN;
 

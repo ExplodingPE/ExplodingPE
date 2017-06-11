@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 /**
  * All the Item classes
  */
@@ -28,6 +30,7 @@ use pocketmine\block\Block;
 use pocketmine\entity\Entity;
 use pocketmine\inventory\Fuel;
 use pocketmine\item\enchantment\Enchantment;
+use pocketmine\level\Level;
 use pocketmine\nbt\NBT;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
@@ -88,128 +91,158 @@ class Item implements ItemIds, \JsonSerializable{
 	public $count;
 	/** @var string */
 	protected $name;
-	protected $maxStackSize = 64;
-	protected $attackPoints = 1; //Default 1 for punching with any item, or air
+
+	public function canBeActivated(){
+		return false;
+	}
 
 	public static function init(){
-		if(static::class !== Item::class){
-			//Make sure nobody accidentally called SomeOtherItem::init() by mistake and called this by accident
-			throw new \RuntimeException("Tried to call inherited item Item::init() from descendent class " . static::class);
-		}
-
 		if(self::$list === null){
 			self::$list = new \SplFixedArray(65536);
-			$items = json_decode(file_get_contents(\pocketmine\PATH . "src/pocketmine/resources/items.json"), true);
-			if(!is_array($items)){
-				throw new \RuntimeException("items.json is invalid, the file cannot be read!");
-			}
-
-			$types = [
-				"axe" => Axe::class,
-				"boots" => Boots::class,
-				"bow" => Bow::class,
-				"bucket" => Bucket::class,
-				"chestplate" => Chestplate::class,
-				"chorus_fruit" => ChorusFruit::class,
-				"empty_map" => EmptyMap::class,
-				"fishing_rod" => FishingRod::class,
-				"flint_and_steel" => FlintSteel::class,
-				"food" => Food::class,
-				"helmet" => Helmet::class,
-				"hoe" => Hoe::class,
-				"leggings" => Leggings::class,
-				"map_filled" => FilledMap::class,
-				"pickaxe" => Pickaxe::class,
-				"potion" => Potion::class,
-				"projectile" => ProjectileItem::class,
-				"shears" => Shears::class,
-				"shovel" => Shovel::class,
-				"spawn_egg" => SpawnEgg::class,
-				"sword" => Sword::class
-			];
-
-			foreach($items as $itemName => $itemData){
-				if(!isset($itemData["id"])){
-					throw new \RuntimeException("Missing ID from item entry");
-				}elseif(!isset($itemData["fallback_name"])){
-					throw new \RuntimeException("Missing fallback English name from item entry");
-				}
-
-				if(isset($itemData["type"])){
-					if(!isset($types[$itemData["type"]])){
-						throw new \RuntimeException("Unknown item type " . $itemData["type"]);
-					}
-
-					$class = $types[$itemData["type"]];
-				}else{
-					$class = $types[$itemName] ?? Item::class;
-				}
-
-				$dataList = [
-					0 => $itemData
-				];
-
-				if(isset($itemData["variants"])){
-					foreach($itemData["variants"] as $variantName => $variantData){
-						if(!isset($variantData["meta"])){
-							throw new \RuntimeException("Missing variant meta value from item entry");
-						}
-						$dataList[(int) $variantData["meta"]] = array_replace($itemData, $variantData);
-					}
-				}
-
-				foreach($dataList as $meta => $variantData){
-					/** @var Item $class */
-					$newItem = $class::fromJsonTypeData($variantData);
-
-					if(isset($variantData["max_stack_size"])){
-						$newItem->setMaxStackSize($variantData["max_stack_size"]);
-					}
-
-					if(isset($variantData["block"])){
-						if(defined(Block::class . "::" . strtoupper($variantData["block"]))){ //TODO: remove this hack
-							$newItem->setBlock(Block::get(constant(Block::class . "::" . strtoupper($variantData["block"]))));
-						}
-					}
-
-					self::registerItem($newItem);
-				}
-			}
+			self::$list[self::IRON_SHOVEL] = IronShovel::class;
+			self::$list[self::IRON_PICKAXE] = IronPickaxe::class;
+			self::$list[self::IRON_AXE] = IronAxe::class;
+			self::$list[self::FLINT_STEEL] = FlintSteel::class;
+			self::$list[self::APPLE] = Apple::class;
+			self::$list[self::BOW] = Bow::class;
+			self::$list[self::ARROW] = Arrow::class;
+			self::$list[self::COAL] = Coal::class;
+			self::$list[self::DIAMOND] = Diamond::class;
+			self::$list[self::IRON_INGOT] = IronIngot::class;
+			self::$list[self::GOLD_INGOT] = GoldIngot::class;
+			self::$list[self::IRON_SWORD] = IronSword::class;
+			self::$list[self::WOODEN_SWORD] = WoodenSword::class;
+			self::$list[self::WOODEN_SHOVEL] = WoodenShovel::class;
+			self::$list[self::WOODEN_PICKAXE] = WoodenPickaxe::class;
+			self::$list[self::WOODEN_AXE] = WoodenAxe::class;
+			self::$list[self::STONE_SWORD] = StoneSword::class;
+			self::$list[self::STONE_SHOVEL] = StoneShovel::class;
+			self::$list[self::STONE_PICKAXE] = StonePickaxe::class;
+			self::$list[self::STONE_AXE] = StoneAxe::class;
+			self::$list[self::DIAMOND_SWORD] = DiamondSword::class;
+			self::$list[self::DIAMOND_SHOVEL] = DiamondShovel::class;
+			self::$list[self::DIAMOND_PICKAXE] = DiamondPickaxe::class;
+			self::$list[self::DIAMOND_AXE] = DiamondAxe::class;
+			self::$list[self::STICK] = Stick::class;
+			self::$list[self::BOWL] = Bowl::class;
+			self::$list[self::MUSHROOM_STEW] = MushroomStew::class;
+			self::$list[self::GOLD_SWORD] = GoldSword::class;
+			self::$list[self::GOLD_SHOVEL] = GoldShovel::class;
+			self::$list[self::GOLD_PICKAXE] = GoldPickaxe::class;
+			self::$list[self::GOLD_AXE] = GoldAxe::class;
+			self::$list[self::STRING] = StringItem::class;
+			self::$list[self::FEATHER] = Feather::class;
+			self::$list[self::GUNPOWDER] = Gunpowder::class;
+			self::$list[self::WOODEN_HOE] = WoodenHoe::class;
+			self::$list[self::STONE_HOE] = StoneHoe::class;
+			self::$list[self::IRON_HOE] = IronHoe::class;
+			self::$list[self::DIAMOND_HOE] = DiamondHoe::class;
+			self::$list[self::GOLD_HOE] = GoldHoe::class;
+			self::$list[self::WHEAT_SEEDS] = WheatSeeds::class;
+			self::$list[self::WHEAT] = Wheat::class;
+			self::$list[self::BREAD] = Bread::class;
+			self::$list[self::LEATHER_CAP] = LeatherCap::class;
+			self::$list[self::LEATHER_TUNIC] = LeatherTunic::class;
+			self::$list[self::LEATHER_PANTS] = LeatherPants::class;
+			self::$list[self::LEATHER_BOOTS] = LeatherBoots::class;
+			self::$list[self::CHAIN_HELMET] = ChainHelmet::class;
+			self::$list[self::CHAIN_CHESTPLATE] = ChainChestplate::class;
+			self::$list[self::CHAIN_LEGGINGS] = ChainLeggings::class;
+			self::$list[self::CHAIN_BOOTS] = ChainBoots::class;
+			self::$list[self::IRON_HELMET] = IronHelmet::class;
+			self::$list[self::IRON_CHESTPLATE] = IronChestplate::class;
+			self::$list[self::IRON_LEGGINGS] = IronLeggings::class;
+			self::$list[self::IRON_BOOTS] = IronBoots::class;
+			self::$list[self::DIAMOND_HELMET] = DiamondHelmet::class;
+			self::$list[self::DIAMOND_CHESTPLATE] = DiamondChestplate::class;
+			self::$list[self::DIAMOND_LEGGINGS] = DiamondLeggings::class;
+			self::$list[self::DIAMOND_BOOTS] = DiamondBoots::class;
+			self::$list[self::GOLD_HELMET] = GoldHelmet::class;
+			self::$list[self::GOLD_CHESTPLATE] = GoldChestplate::class;
+			self::$list[self::GOLD_LEGGINGS] = GoldLeggings::class;
+			self::$list[self::GOLD_BOOTS] = GoldBoots::class;
+			self::$list[self::FLINT] = Flint::class;
+			self::$list[self::RAW_PORKCHOP] = RawPorkchop::class;
+			self::$list[self::COOKED_PORKCHOP] = CookedPorkchop::class;
+			self::$list[self::PAINTING] = Painting::class;
+			self::$list[self::GOLDEN_APPLE] = GoldenApple::class;
+			self::$list[self::SIGN] = Sign::class;
+			self::$list[self::WOODEN_DOOR] = WoodenDoor::class;
+			self::$list[self::BUCKET] = Bucket::class;
+			self::$list[self::MINECART] = Minecart::class;
+			self::$list[self::IRON_DOOR] = IronDoor::class;
+			self::$list[self::REDSTONE] = Redstone::class;
+			self::$list[self::SNOWBALL] = Snowball::class;
+			self::$list[self::BOAT] = Boat::class;
+			self::$list[self::LEATHER] = Leather::class;
+			self::$list[self::BRICK] = Brick::class;
+			self::$list[self::CLAY] = Clay::class;
+			self::$list[self::SUGARCANE] = Sugarcane::class;
+			self::$list[self::PAPER] = Paper::class;
+			self::$list[self::BOOK] = Book::class;
+			self::$list[self::SLIMEBALL] = Slimeball::class;
+			self::$list[self::EGG] = Egg::class;
+			self::$list[self::COMPASS] = Compass::class;
+			self::$list[self::FISHING_ROD] = FishingRod::class;
+			self::$list[self::CLOCK] = Clock::class;
+			self::$list[self::GLOWSTONE_DUST] = GlowstoneDust::class;
+			self::$list[self::RAW_FISH] = Fish::class;
+			self::$list[self::COOKED_FISH] = CookedFish::class;
+			self::$list[self::DYE] = Dye::class;
+			self::$list[self::BONE] = Bone::class;
+			self::$list[self::SUGAR] = Sugar::class;
+			self::$list[self::CAKE] = Cake::class;
+			self::$list[self::BED] = Bed::class;
+			self::$list[self::COOKIE] = Cookie::class;
+			self::$list[self::SHEARS] = Shears::class;
+			self::$list[self::MELON] = Melon::class;
+			self::$list[self::PUMPKIN_SEEDS] = PumpkinSeeds::class;
+			self::$list[self::MELON_SEEDS] = MelonSeeds::class;
+			self::$list[self::RAW_BEEF] = RawBeef::class;
+			self::$list[self::STEAK] = Steak::class;
+			self::$list[self::RAW_CHICKEN] = RawChicken::class;
+			self::$list[self::COOKED_CHICKEN] = CookedChicken::class;
+			self::$list[self::GOLD_NUGGET] = GoldNugget::class;
+			self::$list[self::NETHER_WART] = NetherWart::class;
+			self::$list[self::POTION] = Potion::class;
+			self::$list[self::GLASS_BOTTLE] = GlassBottle::class;
+			self::$list[self::SPIDER_EYE] = SpiderEye::class;
+			self::$list[self::FERMENTED_SPIDER_EYE] = FermentedSpiderEye::class;
+			self::$list[self::BLAZE_POWDER] = BlazePowder::class;
+			self::$list[self::MAGMA_CREAM] = MagmaCream::class;
+			self::$list[self::BREWING_STAND] = BrewingStand::class;
+			self::$list[self::GLISTERING_MELON] = GlisteringMelon::class;
+			self::$list[self::SPAWN_EGG] = SpawnEgg::class;
+			self::$list[self::EMERALD] = Emerald::class;
+			self::$list[self::ITEM_FRAME] = ItemFrame::class;
+			self::$list[self::FLOWER_POT] = FlowerPot::class;
+			self::$list[self::CARROT] = Carrot::class;
+			self::$list[self::POTATO] = Potato::class;
+			self::$list[self::BAKED_POTATO] = BakedPotato::class;
+			self::$list[self::GOLDEN_CARROT] = GoldenCarrot::class;
+			self::$list[self::MOB_HEAD] = MobHead::class;
+			self::$list[self::PUMPKIN_PIE] = PumpkinPie::class;
+			self::$list[self::NETHER_BRICK] = NetherBrick::class;
+			self::$list[self::QUARTZ] = Quartz::class;
+			self::$list[self::QUARTZ] = NetherQuartz::class;
+			self::$list[self::COOKED_RABBIT] = CookedRabbit::class;
+			// self::$list[self::CAMERA] = Camera::class;
+			self::$list[self::BEETROOT] = Beetroot::class;
+			self::$list[self::BEETROOT_SEEDS] = BeetrootSeeds::class;
+			self::$list[self::BEETROOT_SOUP] = BeetrootSoup::class;
+			self::$list[self::PRISMARINE_CRYSTALS] = PrismarineCrystals::class;
+			self::$list[self::PRISMARINE_SHARD] = PrismarineShard::class;
+			self::$list[self::NETHER_STAR] = NetherStar::class;
+			self::$list[self::ENCHANTED_GOLDEN_APPLE] = GoldenAppleEnchanted::class;
 
 			for($i = 0; $i < 256; ++$i){
-				self::registerItem(new ItemBlock(Block::get($i)));
+				if(Block::$list[$i] !== null){
+					self::$list[$i] = Block::$list[$i];
+				}
 			}
 		}
 
 		self::initCreativeItems();
-	}
-
-	/**
-	 * @internal
-	 *
-	 * Deserializes an Item type from JSON data. Used internally for reading items from string.
-	 * NOTE: This method handles TYPES and WILL NOT handle data produced by {@link Item#jsonSerialize}
-	 *
-	 * TODO: separate concerns of item types and item stacks
-	 *
-	 * @param array $data
-	 *
-	 * @return Item
-	 */
-	protected static function fromJsonTypeData(array $data){
-		return new static($data["id"], $data["meta"] ?? 0, 1, $data["fallback_name"]);
-	}
-
-	/**
-	 * Adds an Item type to the index. Plugins may use this method to register new items, or override existing ones.
-	 * @since API 3.0.0
-	 *
-	 * @param Item $item
-	 */
-	public static function registerItem(Item $item){
-		$existing = self::$list[$item->id] ?? [];
-		$existing[$item->meta & 0xffff] = $item;
-		self::$list[$item->id] = $existing;
 	}
 
 	private static $creative = [];
@@ -288,17 +321,13 @@ class Item implements ItemIds, \JsonSerializable{
 	 */
 	public static function get(int $id, int $meta = 0, int $count = 1, $tags = "") : Item{
 		try{
-			$class = self::$list[$id][$meta] ?? self::$list[$id][0] ?? null;
-			if($class !== null){
-				/** @var Item $item */
-				$item = clone $class;
-				$item->setDamage($meta);
-				$item->setCount($count);
-				$item->setCompoundTag($tags);
-
-				return $item;
-			}else{
+			$class = self::$list[$id];
+			if($class === null){
 				return (new Item($id, $meta, $count))->setCompoundTag($tags);
+			}elseif($id < 256){
+				return (new ItemBlock(new $class($meta), $meta, $count))->setCompoundTag($tags);
+			}else{
+				return (new $class($meta, $count))->setCompoundTag($tags);
 			}
 		}catch(\RuntimeException $e){
 			return (new Item($id, $meta, $count))->setCompoundTag($tags);
@@ -467,26 +496,10 @@ class Item implements ItemIds, \JsonSerializable{
 		}
 
 		$tag = $this->getNamedTag();
-
-		return isset($tag->ench) and $tag->ench instanceof ListTag;
-	}
-
-	/**
-	 * @param int $id
-	 * @param int $level
-	 *
-	 * @return bool
-	 */
-	public function hasEnchantment(int $id, int $level = -1) : bool{
-		if(!$this->hasEnchantments()){
-			return false;
-		}
-
-		foreach($this->getNamedTag()->ench as $entry){
-			if($entry["id"] === $id){
-				if($level === -1 or $entry["lvl"] === $level){
-					return true;
-				}
+		if(isset($tag->ench)){
+			$tag = $tag->ench;
+			if($tag instanceof ListTag){
+				return true;
 			}
 		}
 
@@ -506,43 +519,12 @@ class Item implements ItemIds, \JsonSerializable{
 		foreach($this->getNamedTag()->ench as $entry){
 			if($entry["id"] === $id){
 				$e = Enchantment::getEnchantment($entry["id"]);
-				if($e !== null){
-					$e->setLevel($entry["lvl"]);
-					return $e;
-				}
+				$e->setLevel($entry["lvl"]);
+				return $e;
 			}
 		}
 
 		return null;
-	}
-
-	/**
-	 * @param int $id
-	 * @param int $level
-	 */
-	public function removeEnchantment(int $id, int $level = -1){
-		if(!$this->hasEnchantments()){
-			return;
-		}
-
-		$tag = $this->getNamedTag();
-		foreach($tag->ench as $k => $entry){
-			if($entry["id"] === $id){
-				if($level === -1 or $entry["lvl"] === $level){
-					unset($tag->ench[$k]);
-					break;
-				}
-			}
-		}
-		$this->setNamedTag($tag);
-	}
-
-	public function removeEnchantments(){
-		if($this->hasEnchantments()){
-			$tag = $this->getNamedTag();
-			unset($tag->ench);
-			$this->setNamedTag($tag);
-		}
 	}
 
 	/**
@@ -555,26 +537,26 @@ class Item implements ItemIds, \JsonSerializable{
 			$tag = $this->getNamedTag();
 		}
 
-		$found = false;
-
 		if(!isset($tag->ench)){
 			$tag->ench = new ListTag("ench", []);
 			$tag->ench->setTagType(NBT::TAG_Compound);
-		}else{
-			foreach($tag->ench as $k => $entry){
-				if($entry["id"] === $ench->getId()){
-					$tag->ench->{$k} = new CompoundTag("", [
-						"id" => new ShortTag("id", $ench->getId()),
-						"lvl" => new ShortTag("lvl", $ench->getLevel())
-					]);
-					$found = true;
-					break;
-				}
+		}
+
+		$found = false;
+
+		foreach($tag->ench as $k => $entry){
+			if($entry["id"] === $ench->getId()){
+				$tag->ench->{$k} = new CompoundTag("", [
+					"id" => new ShortTag("id", $ench->getId()),
+					"lvl" => new ShortTag("lvl", $ench->getLevel())
+				]);
+				$found = true;
+				break;
 			}
 		}
 
 		if(!$found){
-			$tag->ench->{count($tag->ench)} = new CompoundTag("", [
+			$tag->ench->{count($tag->ench) + 1} = new CompoundTag("", [
 				"id" => new ShortTag("id", $ench->getId()),
 				"lvl" => new ShortTag("lvl", $ench->getLevel())
 			]);
@@ -587,16 +569,16 @@ class Item implements ItemIds, \JsonSerializable{
 	 * @return Enchantment[]
 	 */
 	public function getEnchantments() : array{
+		if(!$this->hasEnchantments()){
+			return [];
+		}
+
 		$enchantments = [];
 
-		if($this->hasEnchantments()){
-			foreach($this->getNamedTag()->ench as $entry){
-				$e = Enchantment::getEnchantment($entry["id"]);
-				if($e !== null){
-					$e->setLevel($entry["lvl"]);
-					$enchantments[] = $e;
-				}
-			}
+		foreach($this->getNamedTag()->ench as $entry){
+			$e = Enchantment::getEnchantment($entry["id"]);
+			$e->setLevel($entry["lvl"]);
+			$enchantments[] = $e;
 		}
 
 		return $enchantments;
@@ -785,19 +767,6 @@ class Item implements ItemIds, \JsonSerializable{
 	}
 
 	/**
-	 * Pops an item from the stack and returns it, decreasing the stack count of this item stack by one.
-	 * @return Item
-	 */
-	public function pop() : Item{
-		$item = clone $this;
-		$item->setCount(1);
-
-		$this->count--;
-
-		return $item;
-	}
-
-	/**
 	 * Returns the name of the item, or the custom name if it is set.
 	 * @return string
 	 */
@@ -850,10 +819,6 @@ class Item implements ItemIds, \JsonSerializable{
 		}
 	}
 
-	protected function setBlock(Block $block){
-		$this->block = $block;
-	}
-
 	/**
 	 * @return int
 	 */
@@ -890,11 +855,7 @@ class Item implements ItemIds, \JsonSerializable{
 	 * @return int
 	 */
 	public function getMaxStackSize(){
-		return $this->maxStackSize;
-	}
-
-	protected function setMaxStackSize(int $size){
-		$this->maxStackSize = max(0, min($size, 64));
+		return 64;
 	}
 
 	final public function getFuelTime(){
@@ -909,21 +870,12 @@ class Item implements ItemIds, \JsonSerializable{
 	}
 
 	/**
-	 * Returns the amount of damage that this item will deal to an entity.
+	 * @param Entity|Block $object
 	 *
-	 * @return float
+	 * @return bool
 	 */
-	public function getAttackPoints() : float{
-		return $this->attackPoints;
-	}
-
-	/**
-	 * Returns the number of defense points gained from wearing this item.
-	 *
-	 * @return int
-	 */
-	public function getDefensePoints() : int{
-		return 0;
+	public function useOn($object){
+		return false;
 	}
 
 	/**
@@ -971,9 +923,10 @@ class Item implements ItemIds, \JsonSerializable{
 	/**
 	 * Called when a player uses this item on a block.
 	 *
+	 * @param Level $level
 	 * @param Player $player
 	 * @param Block $block
-	 * @param Block $blockClicked
+	 * @param Block $target
 	 * @param int $face
 	 * @param float $fx
 	 * @param float $fy
@@ -981,66 +934,7 @@ class Item implements ItemIds, \JsonSerializable{
 	 *
 	 * @return bool
 	 */
-	public function onClickBlock(Player $player, Block $block, Block $blockClicked, int $face, float $fx, float $fy, float $fz){
-		return false;
-	}
-
-	/**
-	 * Called when a player uses this item on the air, for example throwing a snowball.
-	 *
-	 * @param Player $player
-	 *
-	 * @return bool
-	 */
-	public function onClickAir(Player $player) : bool{
-		return false;
-	}
-
-	/**
-	 * Called when a block is destroyed using this item.
-	 *
-	 * @param Block $block
-	 * @param Player|null $player
-	 *
-	 * @return bool
-	 */
-	public function onDestroyBlock(Block $block, Player $player = null) : bool{
-		return false;
-	}
-
-	/**
-	 * Called when this item is used to deal damage to an entity.
-	 *
-	 * @param Entity $entity
-	 * @param Player|null $player
-	 *
-	 * @return bool
-	 */
-	public function onAttackEntity(Entity $entity, Player $player = null) : bool{
-		return false;
-	}
-
-	/**
-	 * Called when this item is used on an entity, for example when right-clicking a horse to feed it.
-	 *
-	 * @param Entity $entity
-	 * @param Player|null $player
-	 *
-	 * @return bool
-	 */
-	public function onInteractWithEntity(Entity $entity, Player $player = null) : bool{
-		return false;
-	}
-
-	/**
-	 * Called when a player is using this item (right-click) and releases the use-item button.
-	 * For example, this is called for bows when the player releases their use-item to shoot an arrow.
-	 *
-	 * @param Player $player
-	 *
-	 * @return bool if anything was done
-	 */
-	public function onReleaseUsing(Player $player) : bool{
+	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
 		return false;
 	}
 

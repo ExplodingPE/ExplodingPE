@@ -18,10 +18,11 @@
  *
  *
 */
+
+declare(strict_types=1);
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
-use pocketmine\item\TieredTool;
 use pocketmine\item\Tool;
 
 class NetherBrickFence extends Transparent{
@@ -49,9 +50,9 @@ class NetherBrickFence extends Transparent{
 	}
 
 	public function getDrops(Item $item){
-		if($item->isPickaxe() >= TieredTool::TIER_WOODEN){
+		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			return [
-				Item::get($this->id, $this->meta, 1)
+				[$this->id, $this->meta, 1],
 			];
 		}else{
 			return [];

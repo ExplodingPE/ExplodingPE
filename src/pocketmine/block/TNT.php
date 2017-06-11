@@ -19,10 +19,11 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\entity\Entity;
-use pocketmine\item\FlintSteel;
 use pocketmine\item\Item;
 use pocketmine\nbt\tag\ByteTag;
 use pocketmine\nbt\tag\CompoundTag;
@@ -48,9 +49,13 @@ class TNT extends Solid{
 		return 0;
 	}
 
+	public function canBeActivated(){
+		return true;
+	}
+
 	public function onActivate(Item $item, Player $player = null){
-		if($item instanceof FlintSteel){
-			$item->applyDamage(1);
+		if($item->getId() === Item::FLINT_STEEL){
+			$item->useOn($this);
 			$this->ignite();
 			return true;
 		}
@@ -59,7 +64,7 @@ class TNT extends Solid{
 	}
 
 	public function ignite(int $fuse = 80){
-		$this->getLevel()->setBlock($this, Block::get(Block::AIR), true);
+		$this->getLevel()->setBlock($this, new Air(), true);
 
 		$mot = (new Random())->nextSignedFloat() * M_PI * 2;
 		$tnt = Entity::createEntity("PrimedTNT", $this->getLevel(), new CompoundTag("", [

@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\entity;
 
 use pocketmine\event\entity\EntityDamageEvent;
@@ -34,8 +36,11 @@ use pocketmine\Player;
 class Item extends Entity{
 	const NETWORK_ID = 64;
 
-	protected $owner = null;
-	protected $thrower = null;
+	/** @var string */
+	protected $owner = "";
+	/** @var string */
+	protected $thrower = "";
+	/** @var int */
 	protected $pickupDelay = 0;
 	/** @var ItemItem */
 	protected $item;
@@ -82,14 +87,14 @@ class Item extends Entity{
 		$this->server->getPluginManager()->callEvent(new ItemSpawnEvent($this));
 	}
 
-	public function attack(EntityDamageEvent $source){
+	public function attack($damage, EntityDamageEvent $source){
 		if(
 			$source->getCause() === EntityDamageEvent::CAUSE_VOID or
 			$source->getCause() === EntityDamageEvent::CAUSE_FIRE_TICK or
 			$source->getCause() === EntityDamageEvent::CAUSE_ENTITY_EXPLOSION or
 			$source->getCause() === EntityDamageEvent::CAUSE_BLOCK_EXPLOSION
 		){
-			parent::attack($source);
+			parent::attack($damage, $source);
 		}
 	}
 

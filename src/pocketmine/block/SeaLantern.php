@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
@@ -45,7 +47,7 @@ class SeaLantern extends Transparent{
 
 	public function getDrops(Item $item){
 		return [
-			Item::get(Item::PRISMARINE_CRYSTALS, 0, mt_rand(2, 3))
+			[Item::PRISMARINE_CRYSTALS, 0, 3],
 		];
 	}
 

@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
@@ -48,6 +50,10 @@ class Trapdoor extends Transparent{
 
 	public function getHardness(){
 		return 3;
+	}
+
+	public function canBeActivated(){
+		return true;
 	}
 
 	protected function recalculateBoundingBox(){
@@ -140,7 +146,7 @@ class Trapdoor extends Transparent{
 
 	public function getDrops(Item $item){
 		return [
-			Item::get($this->getId(), 0, 1)
+			[$this->id, 0, 1],
 		];
 	}
 

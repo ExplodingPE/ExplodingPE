@@ -19,11 +19,12 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\inventory\AnvilInventory;
 use pocketmine\item\Item;
-use pocketmine\item\TieredTool;
 use pocketmine\item\Tool;
 use pocketmine\Player;
 
@@ -41,6 +42,10 @@ class Anvil extends Fallable{
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;
+	}
+
+	public function canBeActivated(){
+		return true;
 	}
 
 	public function getHardness(){
@@ -79,9 +84,9 @@ class Anvil extends Fallable{
 	}
 
 	public function getDrops(Item $item){
-		if($item->isPickaxe() >= TieredTool::TIER_WOODEN){
+		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			return [
-				Item::get($this->getId(), $this->getDamage() & 0x0c, 1)
+				[$this->id, $this->meta & 0x0c, 1],
 			];
 		}else{
 			return [];

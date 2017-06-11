@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\entity;
 
 use pocketmine\block\Block;
@@ -28,10 +30,10 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityDeathEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\Timings;
-use pocketmine\item\Consumable;
 use pocketmine\item\Item as ItemItem;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\FloatTag;
+use pocketmine\nbt\tag\ShortTag;
 use pocketmine\network\mcpe\protocol\EntityEventPacket;
 use pocketmine\utils\BlockIterator;
 
@@ -59,10 +61,6 @@ abstract class Living extends Entity implements Damageable{
 		}
 
 		$this->setHealth($this->namedtag["Health"]);
-
-		if(isset($this->namedtag->AbsorptionAmount) and $this->namedtag->AbsorptionAmount instanceof FloatTag){
-			$this->setAbsorption((float) $this->namedtag->AbsorptionAmount->getValue());
-		}
 	}
 
 	protected function addAttributes(){
@@ -74,10 +72,10 @@ abstract class Living extends Entity implements Damageable{
 		$this->attributeMap->addAttribute(Attribute::getAttribute(Attribute::ABSORPTION));
 	}
 
-	public function setHealth(float $amount){
+	public function setHealth($amount){
 		$wasAlive = $this->isAlive();
 		parent::setHealth($amount);
-		$this->attributeMap->getAttribute(Attribute::HEALTH)->setValue(ceil($this->getHealth()), true);
+		$this->attributeMap->getAttribute(Attribute::HEALTH)->setValue($this->getHealth(), true);
 		if($this->isAlive() and !$wasAlive){
 			$pk = new EntityEventPacket();
 			$pk->entityRuntimeId = $this->getId();
@@ -94,18 +92,17 @@ abstract class Living extends Entity implements Damageable{
 		$this->attributeMap->getAttribute(Attribute::HEALTH)->setMaxValue($amount);
 	}
 
-	public function getAbsorption() : float{
-		return $this->attributeMap->getAttribute(Attribute::ABSORPTION)->getValue();
+	public function getAbsorption() : int{
+		return (int) $this->attributeMap->getAttribute(Attribute::ABSORPTION)->getValue();
 	}
 
-	public function setAbsorption(float $absorption){
+	public function setAbsorption(int $absorption){
 		$this->attributeMap->getAttribute(Attribute::ABSORPTION)->setValue($absorption);
 	}
 
 	public function saveNBT(){
 		parent::saveNBT();
-		$this->namedtag->Health = new FloatTag("Health", ceil($this->getHealth())); //health may be a float due to damage reduction, round up as per vanilla
-		$this->namedtag->AbsorptionAmount = new FloatTag("AbsorptionAmount", $this->getAbsorption());
+		$this->namedtag->Health = new FloatTag("Health", $this->getHealth());
 	}
 
 	abstract public function getName();
@@ -116,28 +113,13 @@ abstract class Living extends Entity implements Damageable{
 		//return $this->getLevel()->rayTraceBlocks(Vector3::createVector($this->x, $this->y + $this->height, $this->z), Vector3::createVector($entity->x, $entity->y + $entity->height, $entity->z)) === null;
 	}
 
-	public function heal(EntityRegainHealthEvent $source){
-		parent::heal($source);
+	public function heal($amount, EntityRegainHealthEvent $source){
+		parent::heal($amount, $source);
 		if($source->isCancelled()){
 			return;
 		}
 
 		$this->attackTime = 0;
-	}
-
-	public function consume(Consumable $consumable){
-		foreach($consumable->getAdditionalEffects() as $effect){
-			$this->addEffect($effect);
-		}
-
-		$consumable->onConsume($this);
-
-		$pk = new EntityEventPacket();
-		$pk->entityRuntimeId = $this->id;
-		$pk->event = EntityEventPacket::USE_ITEM;
-		$this->server->broadcastPacket($this->hasSpawned, $pk);
-
-		return $consumable->getResidue();
 	}
 
 	/**
@@ -157,45 +139,15 @@ abstract class Living extends Entity implements Damageable{
 		}
 	}
 
-	public function getArmorPoints() : int{
-		return 0;
-	}
-
-	public function damageArmor(int $damage){
-		//TODO
-	}
-
-	public function applyDamageModifiers(EntityDamageEvent $source){
-		//TODO: armor enchantments
-		if($source->canBeReducedByArmor()){
-			//Using the system from before PC 1.9
-			$points = $this->getArmorPoints();
-			$armorReduction = $source->getFinalDamage() * $points * 0.04;
-			$source->setDamage(-$armorReduction, EntityDamageEvent::MODIFIER_ARMOR);
-		}
-
-		$source->setDamage(-min($this->getAbsorption(), $source->getFinalDamage()), EntityDamageEvent::MODIFIER_ABSORPTION);
-
-		$cause = $source->getCause();
-		if($cause !== EntityDamageEvent::CAUSE_VOID and $cause !== EntityDamageEvent::CAUSE_SUICIDE){
-			if($this->hasEffect(Effect::DAMAGE_RESISTANCE)){
-				$multiplier = 0.2 * ($this->getEffect(Effect::DAMAGE_RESISTANCE)->getEffectLevel());
-				$source->setDamage(-($source->getFinalDamage() * $multiplier), EntityDamageEvent::MODIFIER_RESISTANCE);
-			}
-		}
-	}
-
-	public function attack(EntityDamageEvent $source){
+	public function attack($damage, EntityDamageEvent $source){
 		if($this->attackTime > 0 or $this->noDamageTicks > 0){
 			$lastCause = $this->getLastDamageCause();
-			if($lastCause !== null and $lastCause->getDamage() >= $source->getDamage()){
+			if($lastCause !== null and $lastCause->getDamage() >= $damage){
 				$source->setCancelled();
 			}
 		}
 
-		$this->applyDamageModifiers($source);
-
-		parent::attack($source);
+		parent::attack($damage, $source);
 
 		if($source->isCancelled()){
 			return;
@@ -214,12 +166,9 @@ abstract class Living extends Entity implements Damageable{
 
 				$deltaX = $this->x - $e->x;
 				$deltaZ = $this->z - $e->z;
-				$this->knockBack($e, $source->getDamage(), $deltaX, $deltaZ, $source->getKnockBack());
+				$this->knockBack($e, $damage, $deltaX, $deltaZ, $source->getKnockBack());
 			}
 		}
-
-		$this->setAbsorption($this->getAbsorption() + $source->getDamage(EntityDamageEvent::MODIFIER_ABSORPTION));
-		$this->damageArmor($source->getDamage(EntityDamageEvent::MODIFIER_BASE));
 
 		$pk = new EntityEventPacket();
 		$pk->entityRuntimeId = $this->getId();
@@ -278,7 +227,7 @@ abstract class Living extends Entity implements Damageable{
 			if($this->isInsideOfSolid()){
 				$hasUpdate = true;
 				$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_SUFFOCATION, 1);
-				$this->attack($ev);
+				$this->attack($ev->getFinalDamage(), $ev);
 			}
 
 			if(!$this->hasEffect(Effect::WATER_BREATHING) and $this->isInsideOfWater()){
@@ -291,7 +240,7 @@ abstract class Living extends Entity implements Damageable{
 						$airTicks = 0;
 
 						$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_DROWNING, 2);
-						$this->attack($ev);
+						$this->attack($ev->getFinalDamage(), $ev);
 					}
 					$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, $airTicks);
 				}
@@ -303,7 +252,7 @@ abstract class Living extends Entity implements Damageable{
 						$airTicks = 0;
 
 						$ev = new EntityDamageEvent($this, EntityDamageEvent::CAUSE_SUFFOCATION, 2);
-						$this->attack($ev);
+						$this->attack($ev->getFinalDamage(), $ev);
 					}
 					$this->setDataProperty(self::DATA_AIR, self::DATA_TYPE_SHORT, $airTicks);
 				}else{

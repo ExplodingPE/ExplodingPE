@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
@@ -47,14 +49,13 @@ class Gravel extends Fallable{
 	public function getDrops(Item $item){
 		if(mt_rand(1, 10) === 1){
 			return [
-				Item::get(Item::FLINT, 0, 1)
-			];
-		}else{
-
-			return [
-				Item::get(Item::GRAVEL, 0, 1)
+				[Item::FLINT, 0, 1],
 			];
 		}
+
+		return [
+			[Item::GRAVEL, 0, 1],
+		];
 	}
 
 }

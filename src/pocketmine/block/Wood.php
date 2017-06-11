@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
@@ -71,7 +73,7 @@ class Wood extends Solid{
 
 	public function getDrops(Item $item){
 		return [
-			Item::get($this->getId(), $this->getDamage() & 0x03, 1)
+			[$this->id, $this->meta & 0x03, 1],
 		];
 	}
 

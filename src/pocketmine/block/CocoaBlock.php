@@ -19,11 +19,13 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 class CocoaBlock extends Solid{
 
-	protected $id = self::COCOA;
+	protected $id = self::COCOA_BLOCK;
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;

@@ -19,11 +19,12 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\inventory\EnchantInventory;
 use pocketmine\item\Item;
-use pocketmine\item\TieredTool;
 use pocketmine\item\Tool;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\IntTag;
@@ -63,6 +64,10 @@ class EnchantingTable extends Transparent{
 		return true;
 	}
 
+	public function canBeActivated(){
+		return true;
+	}
+
 	public function getHardness(){
 		return 5;
 	}
@@ -90,9 +95,9 @@ class EnchantingTable extends Transparent{
 	}
 
 	public function getDrops(Item $item){
-		if($item->isPickaxe() >= TieredTool::TIER_WOODEN){
+		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			return [
-				Item::get($this->getId(), $this->getDamage(), 1)
+				[$this->id, 0, 1],
 			];
 		}else{
 			return [];

@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
@@ -29,8 +31,22 @@ use pocketmine\Player;
 
 class FenceGate extends Transparent{
 
+	protected $id = self::FENCE_GATE;
+
+	public function __construct($meta = 0){
+		$this->meta = $meta;
+	}
+
+	public function getName(){
+		return "Oak Fence Gate";
+	}
+
 	public function getHardness(){
 		return 2;
+	}
+
+	public function canBeActivated(){
+		return true;
 	}
 
 	public function getToolType(){
@@ -75,7 +91,7 @@ class FenceGate extends Transparent{
 
 	public function getDrops(Item $item){
 		return [
-			Item::get($this->getId(), 0, 1)
+			[$this->id, 0, 1],
 		];
 	}
 

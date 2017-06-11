@@ -75,9 +75,9 @@ namespace pocketmine {
 	use pocketmine\wizard\SetupWizard;
 	use raklib\RakLib;
 
-	const VERSION = "1.6.2dev";
+	const VERSION = "1.0dev";
 	const API_VERSION = "3.0.0-ALPHA5";
-	const CODENAME = "Unleashed";
+	const CODENAME = "shiny ruby";
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.

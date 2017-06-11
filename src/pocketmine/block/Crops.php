@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\event\block\BlockGrowEvent;
@@ -29,6 +31,10 @@ use pocketmine\Player;
 use pocketmine\Server;
 
 abstract class Crops extends Flowable{
+
+	public function canBeActivated(){
+		return true;
+	}
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
 		if($block->getSide(Vector3::SIDE_DOWN)->getId() === Block::FARMLAND){

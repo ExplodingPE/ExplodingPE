@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\block;
 
 use pocketmine\item\Item;
@@ -36,15 +38,14 @@ class Wheat extends Crops{
 	}
 
 	public function getDrops(Item $item){
+		$drops = [];
 		if($this->meta >= 0x07){
-			return [
-				Item::get(Item::WHEAT, 0, 1),
-				Item::get(Item::WHEAT_SEEDS, 0, mt_rand(0, 3))
-			];
+			$drops[] = [Item::WHEAT, 0, 1];
+			$drops[] = [Item::WHEAT_SEEDS, 0, mt_rand(0, 3)];
 		}else{
-			return [
-				Item::get(Item::WHEAT_SEEDS, 0, 1)
-			];
+			$drops[] = [Item::WHEAT_SEEDS, 0, 1];
 		}
+
+		return $drops;
 	}
 }

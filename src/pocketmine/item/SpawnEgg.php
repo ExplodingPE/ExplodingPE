@@ -20,10 +20,13 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\item;
 
 use pocketmine\block\Block;
 use pocketmine\entity\Entity;
+use pocketmine\level\Level;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
@@ -32,9 +35,15 @@ use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
 
 class SpawnEgg extends Item{
+	public function __construct($meta = 0, $count = 1){
+		parent::__construct(self::SPAWN_EGG, $meta, $count, "Spawn Egg");
+	}
 
-	public function onClickBlock(Player $player, Block $block, Block $blockClicked, int $face, float $fx, float $fy, float $fz){
-		$block = $blockClicked->getSide($face);
+	public function canBeActivated(){
+		return true;
+	}
+
+	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
 		$nbt = new CompoundTag("", [
 			"Pos" => new ListTag("Pos", [
 				new DoubleTag("", $block->getX() + 0.5),
@@ -56,10 +65,12 @@ class SpawnEgg extends Item{
 			$nbt->CustomName = new StringTag("CustomName", $this->getCustomName());
 		}
 
-		$entity = Entity::createEntity($this->meta, $player->getLevel(), $nbt);
+		$entity = Entity::createEntity($this->meta, $level, $nbt);
 
 		if($entity instanceof Entity){
-			--$this->count;
+			if($player->isSurvival()){
+				--$this->count;
+			}
 			$entity->spawnToAll();
 			return true;
 		}
