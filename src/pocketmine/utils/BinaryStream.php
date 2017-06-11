@@ -57,30 +57,17 @@ class BinaryStream{
 		return $this->buffer;
 	}
 
-	/**
-	 * @param int|bool $len
-	 *
-	 * @return string
-	 */
-	public function get($len) : string{
-		if($len === true){
-			$str = substr($this->buffer, $this->offset);
-			$this->offset = strlen($this->buffer);
-			return $str;
-		}elseif($len < 0){
+	public function get(int $len) : string{
+		if($len < 0){
 			$this->offset = strlen($this->buffer) - 1;
 			return "";
 		}elseif($len === 0){
-			return "";
+			$str = substr($this->buffer, $this->offset);
+			$this->offset = strlen($this->buffer);
+			return $str;
 		}
 
 		return $len === 1 ? $this->buffer{$this->offset++} : substr($this->buffer, ($this->offset += $len) - $len, $len);
-	}
-
-	public function getRemaining() : string{
-		$str = substr($this->buffer, $this->offset);
-		$this->offset = strlen($this->buffer);
-		return $str;
 	}
 
 	public function put(string $str){

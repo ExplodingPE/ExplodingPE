@@ -19,36 +19,21 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
 
-use pocketmine\network\mcpe\NetworkSession;
+class PlayerFallPacket extends DataPacket{
+	const NETWORK_ID = Info::PLAYER_FALL_PACKET;
 
-class BlockEntityDataPacket extends DataPacket{
-	const NETWORK_ID = ProtocolInfo::BLOCK_ENTITY_DATA_PACKET;
-
-	public $x;
-	public $y;
-	public $z;
-	public $namedtag;
+	public $fallDistance;
 
 	public function decode(){
-		$this->getBlockPosition($this->x, $this->y, $this->z);
-		$this->namedtag = $this->get(0);
+		$this->fallDistance = $this->getLFloat();
 	}
 
 	public function encode(){
-		$this->reset();
-		$this->putBlockPosition($this->x, $this->y, $this->z);
-		$this->put($this->namedtag);
-	}
 
-	public function handle(NetworkSession $session) : bool{
-		return $session->handleBlockEntityData($this);
 	}
-
 }

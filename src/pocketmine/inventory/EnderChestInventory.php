@@ -2,51 +2,69 @@
 
 /*
  *
- *   _____       _             _   _____  ______      ____       _        
- *  / ____|     (_)           | | |  __ \|  ____|    |  _ \     | |       
- * | (___  _ __  _  __ _  ___ | |_| |__) | |__ ______| |_) | ___| |_ __ _ 
- *  \___ \| '_ \| |/ _` |/ _ \| __|  ___/|  __|______|  _ < / _ \ __/ _` |
- *  ____) | |_) | | (_| | (_) | |_| |    | |____     | |_) |  __/ || (_| |
- * |_____/| .__/|_|\__, |\___/ \__|_|    |______|    |____/ \___|\__\__,_|
- *        | |       __/ |                                                 
- *        |_|      |___/      
+ *  ____            _        _   __  __ _                  __  __ ____
+ * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
+ * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
+ * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
+ * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * @author SpigotPE-Beta Team
- * @link http://github.com/SpigotPE-Beta
+ * @author PocketMine Team
+ * @link http://www.pocketmine.net/
  *
  *
 */
 
+declare(strict_types=1);
+
 namespace pocketmine\inventory;
 
 use pocketmine\entity\Human;
+use pocketmine\item\Item;
 use pocketmine\level\Level;
 use pocketmine\level\Position;
+use pocketmine\nbt\tag\ListTag;
 use pocketmine\network\mcpe\protocol\BlockEventPacket;
 use pocketmine\Player;
-use pocketmine\tile\Chest;
-use pocketmine\tile\EnderChest;
 
-class EnderChestInventory extends ContainerInventory {
+class EnderChestInventory extends ContainerInventory{
+	 
+	private $owner;
 
-	public function __construct(Position $pos){
-        parent::__construct(new FakeBlockMenu($this, $pos), InventoryType::get(InventoryType::ENDER_CHEST));
+	public function __construct(Human $owner, $contents = null){
+		$this->owner = $owner;
+		parent::__construct(new FakeBlockMenu($this, $owner), InventoryType::get(InventoryType::ENDER_CHEST));
+
+		if($contents !== null){
+			if($contents instanceof ListTag){
+ 			foreach($contents as $item){
+ 				$this->setItem($item["Slot"], Item::nbtDeserialize($item));
+ 			}
+ 		}else{
+				throw new \InvalidArgumentException("Expecting ListTag, received " . gettype($contents));
+			}
+		}
 	}
 
-	/**
-	 * @return Human|InventoryHolder
-     */
+	public function getOwner(){
+		return $this->owner;
+	}
+ 
+	public function openAt(Position $pos){
+		$this->getHolder()->setComponents($pos->x, $pos->y, $pos->z);
+		$this->getHolder()->setLevel($pos->getLevel());
+		$this->owner->addWindow($this);
+	}
+ 
 	public function getHolder(){
 		return $this->holder;
 	}
 
 	public function onOpen(Player $who){
-	    $this->setContents($who->getEnderChestInventory()->getContents());
 		parent::onOpen($who);
 
 		if(count($this->getViewers()) === 1){
@@ -63,7 +81,6 @@ class EnderChestInventory extends ContainerInventory {
 	}
 
 	public function onClose(Player $who){
-        $who->getEnderChestInventory()->setContents($this->getContents());
 		if(count($this->getViewers()) === 1){
 			$pk = new BlockEventPacket();
 			$pk->x = $this->getHolder()->getX();
@@ -75,6 +92,8 @@ class EnderChestInventory extends ContainerInventory {
 				$level->addChunkPacket($this->getHolder()->getX() >> 4, $this->getHolder()->getZ() >> 4, $pk);
 			}
 		}
+
 		parent::onClose($who);
 	}
-}
+
+} 

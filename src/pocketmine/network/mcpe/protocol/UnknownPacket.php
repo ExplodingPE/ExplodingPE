@@ -45,7 +45,7 @@ class UnknownPacket extends DataPacket{
 
 	public function decode(){
 		$this->offset -= 1; //Rewind one byte so we can read the PID
-		$this->payload = $this->getRemaining();
+		$this->payload = $this->get(0);
 	}
 
 	public function encode(){

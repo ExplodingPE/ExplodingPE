@@ -177,7 +177,7 @@ class Level implements ChunkManager, Metadatable{
 	private $chunkPackets = [];
 
 	/** @var float[] */
-	private $unloadQueue = [];
+	private $unloadQueue;
 
 	private $time;
 	public $stopTime;
@@ -195,7 +195,7 @@ class Level implements ChunkManager, Metadatable{
 	private $scheduledBlockUpdateQueueIndex = [];
 
 	/** @var \SplQueue */
-	private $neighbourBlockUpdateQueue;
+	private $neighbourBlockUpdateQueue = [];
 
 	/** @var Player[][] */
 	private $chunkSendQueue = [];
@@ -265,17 +265,24 @@ class Level implements ChunkManager, Metadatable{
 	private $closed = false;
 
 	public static function chunkHash(int $x, int $z){
-		return (($x & 0xFFFFFFFF) << 32) | ($z & 0xFFFFFFFF);
+		return PHP_INT_SIZE === 8 ? (($x & 0xFFFFFFFF) << 32) | ($z & 0xFFFFFFFF) : $x . ":" . $z;
 	}
 
 	public static function blockHash(int $x, int $y, int $z){
-		return (($x & 0xFFFFFFF) << 36) | (($y & Level::Y_MASK) << 28) | ($z & 0xFFFFFFF);
+		return PHP_INT_SIZE === 8 ? (($x & 0xFFFFFFF) << 36) | (($y & Level::Y_MASK) << 28) | ($z & 0xFFFFFFF) : $x . ":" . $y . ":" . $z;
 	}
 
 	public static function getBlockXYZ($hash, &$x, &$y, &$z){
-		$x = $hash >> 36;
-		$y = ($hash >> 28) & Level::Y_MASK; //it's always positive
-		$z = ($hash & 0xFFFFFFF) << 36 >> 36;
+		if(PHP_INT_SIZE === 8){
+			$x = $hash >> 36;
+			$y = ($hash >> 28) & Level::Y_MASK; //it's always positive
+			$z = ($hash & 0xFFFFFFF) << 36 >> 36;
+		}else{
+			$hash = explode(":", $hash);
+			$x = (int) $hash[0];
+			$y = (int) $hash[1];
+			$z = (int) $hash[2];
+		}
 	}
 
 	/**
@@ -284,8 +291,14 @@ class Level implements ChunkManager, Metadatable{
 	 * @param int|null   $z
 	 */
 	public static function getXZ($hash, &$x, &$z){
-		$x = $hash >> 32;
-		$z = ($hash & 0xFFFFFFFF) << 32 >> 32;
+		if(PHP_INT_SIZE === 8){
+			$x = $hash >> 32;
+			$z = ($hash & 0xFFFFFFFF) << 32 >> 32;
+		}else{
+			$hash = explode(":", $hash);
+			$x = (int) $hash[0];
+			$z = (int) $hash[1];
+		}
 	}
 
 	public static function generateChunkLoaderId(ChunkLoader $loader) : int{
