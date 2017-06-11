@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine;
 
 use pocketmine\event\server\LowMemoryEvent;
@@ -90,6 +88,11 @@ class MemoryManager{
 		}
 
 		$hardLimit = ((int) $this->server->getProperty("memory.main-hard-limit", $defaultMemory));
+
+		if(PHP_INT_SIZE === 4 and $hardLimit >= 4096){
+			$this->server->getLogger()->warning("Cannot set memory limit higher than 4GB on 32-bit, defaulting to max 4095MB");
+			$hardLimit = 4095;
+		}
 
 		if($hardLimit <= 0){
 			ini_set("memory_limit", -1);

@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\utils;
 
 class UUID{
@@ -74,10 +72,10 @@ class UUID{
 	/**
 	 * Creates an UUIDv3 from binary data or list of binary data
 	 *
-	 * @param string[] ...$data
+	 * @param string ...$data
 	 * @return UUID
 	 */
-	public static function fromData(string ...$data){
+	public static function fromData(...$data){
 		$hash = hash("md5", implode($data), true);
 
 		return self::fromBinary($hash, 3);
