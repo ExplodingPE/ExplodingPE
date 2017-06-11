@@ -31,7 +31,7 @@ use pocketmine\block\Block;
 use pocketmine\command\CommandReader;
 use pocketmine\command\CommandSender;
 use pocketmine\command\ConsoleCommandSender;
-use pocketmine\command\PluginIdentifiableCommand;
+use pocketmine\command\PluginIdentifiableCommand; //$logger
 use pocketmine\command\SimpleCommandMap;
 use pocketmine\entity\Attribute;
 use pocketmine\entity\Effect;
@@ -1057,7 +1057,7 @@ class Server{
 
 			$level->setTickRate($this->baseTickRate);
 		}catch(\Throwable $e){
-			$this->logger->error($this->getLanguage()->translateString("pocketmine.level.generateError", [$name, $e->getMessage()]));
+			//$this->logger->error($this->getLanguage()->translateString("pocketmine.level.generateError", [$name, $e->getMessage()]));
 			$this->logger->logException($e);
 			return false;
 		}
