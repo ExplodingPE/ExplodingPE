@@ -1676,7 +1676,7 @@ class Server{
 			$this->pluginManager->registerInterface(ScriptPluginLoader::class);
 			//if($this->devtools){
 				//$this->pluginManager->registerInterface(FolderPluginLoader::class);
-			}
+			//}
 			register_shutdown_function([$this, "crashDump"]);
 
 			$this->queryRegenerateTask = new QueryRegenerateEvent($this, 5);
