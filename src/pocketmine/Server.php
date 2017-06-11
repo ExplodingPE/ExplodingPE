@@ -90,7 +90,7 @@ use pocketmine\plugin\PharPluginLoader;
 use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginLoadOrder;
 use pocketmine\plugin\PluginManager;
-use pocketmine\plugin\FolderPluginLoader;
+//use pocketmine\plugin\FolderPluginLoader;
 use pocketmine\plugin\ScriptPluginLoader;
 use pocketmine\resourcepacks\ResourcePackManager;
 use pocketmine\scheduler\FileWriteTask;
@@ -1674,8 +1674,8 @@ class Server{
 			$this->profilingTickRate = (float) $this->getProperty("settings.profile-report-trigger", 20);
 			$this->pluginManager->registerInterface(PharPluginLoader::class);
 			$this->pluginManager->registerInterface(ScriptPluginLoader::class);
-			if($this->devtools){
-				$this->pluginManager->registerInterface(FolderPluginLoader::class);
+			//if($this->devtools){
+				//$this->pluginManager->registerInterface(FolderPluginLoader::class);
 			}
 			register_shutdown_function([$this, "crashDump"]);
 
