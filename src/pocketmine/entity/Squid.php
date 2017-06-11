@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\entity;
 
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -53,8 +51,8 @@ class Squid extends WaterAnimal implements Ageable{
 		return "Squid";
 	}
 
-	public function attack($damage, EntityDamageEvent $source){
-		parent::attack($damage, $source);
+	public function attack(EntityDamageEvent $source){
+		parent::attack($source);
 		if($source->isCancelled()){
 			return;
 		}
