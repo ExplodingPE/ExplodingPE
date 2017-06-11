@@ -40,3 +40,5 @@ tests/plugins/PocketMine-DevTools/
 tests/travis\.sh
 
 tests/
+
+src/pocketmine/tile/Tile\.php
