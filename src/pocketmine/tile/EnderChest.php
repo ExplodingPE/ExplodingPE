@@ -45,16 +45,16 @@ class EnderChest extends Spawnable implements Nameable{
 		parent::__construct($level, $nbt);
 	}
 
-	public function getName(){
-		return isset($this->namedtag->CustomName) ? $this->namedtag->CustomName->getValue() : "Ender Chest";
+	public function getName() : string{
+		return $this->hasName() ? $this->namedtag->CustomName->getValue() : "Beacon";
 	}
 
-	public function hasName(){
+	public function hasName() : bool{
 		return isset($this->namedtag->CustomName);
 	}
 
-	public function setName($str){
-		if($str === ""){
+	public function setName(string $str) {
+		if ($str === "") {
 			unset($this->namedtag->CustomName);
 			return;
 		}

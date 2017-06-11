@@ -61,7 +61,7 @@ class Beacon extends Spawnable implements Nameable, InventoryHolder {
 		$this->inventory = new BeaconInventory($this);
 		parent::__construct($level, $nbt);
 		$this->scheduleUpdate();
-	}
+	} //setname
 
 	public function saveNBT() {
 		parent::saveNBT();
@@ -92,7 +92,7 @@ class Beacon extends Spawnable implements Nameable, InventoryHolder {
 		return isset($this->namedtag->CustomName);
 	}
 
-	public function setName($str) {
+	public function setName(string $str) {
 		if ($str === "") {
 			unset($this->namedtag->CustomName);
 			return;
