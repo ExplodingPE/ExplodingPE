@@ -46,7 +46,7 @@ class EnderChest extends Spawnable implements Nameable{
 	}
 
 	public function getName() : string{
-		return $this->hasName() ? $this->namedtag->CustomName->getValue() : "Beacon";
+		return isset($this->namedtag->CustomName) ? $this->namedtag->CustomName->getValue() : "Ender Chest";
 	}
 
 	public function hasName() : bool{
