@@ -180,7 +180,7 @@ class MainLogger extends \AttachableThreadedLogger{
 	protected function send($message, $level, $prefix, $color){
 		$now = time();
 
-		$message = TextFormat::toANSI(TextFormat::BOLD . TextFormat::RED . "[spigotpe] " . TextFormat::RESET . TextFormat::AQUA . "[" . date("H:i:s", $now) . "] " . TextFormat::RESET . $color . "[" . $prefix . "]:" . " " . $message . TextFormat::RESET);
+		$message = TextFormat::toANSI(TextFormat::BOLD . TextFormat::GRAY . "[ " . TextFormat::GREEN . "SpigotPE" . TextFormat::GRAY . "] " . TextFormat::RESET . TextFormat::AQUA . "[" . date("H:i:s", $now) . "] " . TextFormat::RESET . $color . "[" . $prefix . "]:" . " " . $message . TextFormat::RESET);
 		$cleanMessage = TextFormat::clean($message);
 
 		if(!Terminal::hasFormattingCodes()){
