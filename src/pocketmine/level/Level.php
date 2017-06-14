@@ -1838,7 +1838,7 @@ class Level implements ChunkManager, Metadatable{
 	 *
 	 * @return Entity
 	 */
-	public function getEntity(int $entityId){
+	public function getEntity($entityId){ //Simple Hack To Stop Console Spam. Set To public function getEntity(int $entityId){ later on.
 		return $this->entities[$entityId] ?? null;
 	}
 
