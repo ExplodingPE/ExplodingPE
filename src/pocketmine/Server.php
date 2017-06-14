@@ -145,7 +145,7 @@ class Server{
 	private $profilingTickRate = 20;
 
 	/** @var AutoUpdater */
-//	private $updater = null;
+	private $updater = null;
 
 	/** @var ServerScheduler */
 	private $scheduler = null;
@@ -590,9 +590,9 @@ class Server{
 	/**
 	 * @return AutoUpdater
 	 */
-	//public function getUpdater(){
-	//	return $this->updater;
-	//}
+	public function getUpdater(){
+		return $this->updater;
+	}
 
 	/**
 	 * @return PluginManager
@@ -1579,7 +1579,7 @@ class Server{
 
 			$this->pluginManager->loadPlugins($this->pluginPath);
 
-		//	$this->updater = new AutoUpdater($this, $this->getProperty("auto-updater.host", "www.pocketmine.net"));
+			$this->updater = new AutoUpdater($this, $this->getProperty("auto-updater.host", "www.pocketmine.net"));
 
 			$this->enablePlugins(PluginLoadOrder::STARTUP);
 
@@ -1999,9 +1999,11 @@ class Server{
 			$this->getLogger()->debug("Removing event handlers");
 			HandlerList::unregisterAll();
 
-			$this->getLogger()->debug("Stopping all tasks");
-			$this->scheduler->cancelAllTasks();
-			$this->scheduler->mainThreadHeartbeat(PHP_INT_MAX);
+			if($this->scheduler instanceof ServerScheduler){
+				$this->getLogger()->debug("Stopping all tasks");
+				$this->scheduler->cancelAllTasks();
+				$this->scheduler->mainThreadHeartbeat(PHP_INT_MAX);
+			}
 
 			$this->getLogger()->debug("Saving properties");
 			$this->properties->save();
@@ -2010,10 +2012,12 @@ class Server{
 			$this->console->shutdown();
 			$this->console->notify();
 
-			$this->getLogger()->debug("Stopping network interfaces");
-			foreach($this->network->getInterfaces() as $interface){
-				$interface->shutdown();
-				$this->network->unregisterInterface($interface);
+			if($this->network instanceof Network){
+				$this->getLogger()->debug("Stopping network interfaces");
+				foreach($this->network->getInterfaces() as $interface){
+					$interface->shutdown();
+					$this->network->unregisterInterface($interface);
+				}
 			}
 
 			gc_collect_cycles();
