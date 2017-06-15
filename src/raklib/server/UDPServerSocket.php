@@ -19,6 +19,8 @@
  *
 */
 
+declare(strict_types=1);
+
 namespace raklib\server;
 
 class UDPServerSocket{
@@ -26,7 +28,7 @@ class UDPServerSocket{
 	protected $logger;
 	protected $socket;
 
-	public function __construct(\ThreadedLogger $logger, $port = 19132, $interface = "0.0.0.0"){
+	public function __construct(\ThreadedLogger $logger, int $port = 19132, string $interface = "0.0.0.0"){
 		$this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
 		//socket_set_option($this->socket, SOL_SOCKET, SO_BROADCAST, 1); //Allow sending broadcast messages
 		if(@socket_bind($this->socket, $interface, $port) === true){
@@ -53,7 +55,7 @@ class UDPServerSocket{
 	 * @param string &$source
 	 * @param int    &$port
 	 *
-	 * @return int
+	 * @return int|bool
 	 */
 	public function readPacket(&$buffer, &$source, &$port){
 		return socket_recvfrom($this->socket, $buffer, 65535, 0, $source, $port);
@@ -64,9 +66,9 @@ class UDPServerSocket{
 	 * @param string $dest
 	 * @param int    $port
 	 *
-	 * @return int
+	 * @return int|bool
 	 */
-	public function writePacket($buffer, $dest, $port){
+	public function writePacket(string $buffer, string $dest, int $port){
 		return socket_sendto($this->socket, $buffer, strlen($buffer), 0, $dest, $port);
 	}
 
@@ -75,7 +77,7 @@ class UDPServerSocket{
 	 *
 	 * @return $this
 	 */
-	public function setSendBuffer($size){
+	public function setSendBuffer(int $size){
 		@socket_set_option($this->socket, SOL_SOCKET, SO_SNDBUF, $size);
 
 		return $this;
@@ -86,12 +88,10 @@ class UDPServerSocket{
 	 *
 	 * @return $this
 	 */
-	public function setRecvBuffer($size){
+	public function setRecvBuffer(int $size){
 		@socket_set_option($this->socket, SOL_SOCKET, SO_RCVBUF, $size);
 
 		return $this;
 	}
 
 }
-
-?>
