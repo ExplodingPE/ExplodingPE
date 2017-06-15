@@ -1,8 +1,3 @@
-![](http://cdn.pocketmine.net/img/PocketMine-MP-h.png)
-
-# PocketMine-MP Contribution Guidelines
-
-
 ## Creating an Issue
 - If you are reporting a bug:
  - **make sure that you are using the latest supported version** before opening an issue.
