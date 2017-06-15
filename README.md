@@ -4,9 +4,9 @@
 download linke -> [![CircleCI](https://circleci.com/gh/spigotpe-beta/Spigotpe.svg?style=svg)](https://circleci.com/gh/spigotpe-beta/Spigotpe)
 
 
-__A highly customisable, open source server software for Minecraft: Pocket Edition written in PHP__
-
 [![Build Status](https://travis-ci.org/spigotpe-beta/Spigotpe.svg?branch=master)](https://travis-ci.org/spigotpe-beta/Spigotpe)
+
+__A highly customisable, open source server software for Minecraft: Pocket Edition written in PHP__
 
 ### Setup, help & support, FAQs
 Head over to the [documentation site](http://pmmp.readthedocs.org/).
