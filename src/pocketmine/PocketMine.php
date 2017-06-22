@@ -1,27 +1,5 @@
 <?php
 
-/*
- *
- *  _____            _               _____           
- * / ____|          (_)             |  __ \          
- *| |  __  ___ _ __  _ ___ _   _ ___| |__) | __ ___  
- *| | |_ |/ _ \ '_ \| / __| | | / __|  ___/ '__/ _ \ 
- *| |__| |  __/ | | | \__ \ |_| \__ \ |   | | | (_) |
- * \_____|\___|_| |_|_|___/\__, |___/_|   |_|  \___/ 
- *                         __/ |                    
- *                        |___/                     
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * @author GenisysPro
- * @link https://github.com/GenisysPro/GenisysPro
- *
- *
-*/
-
 namespace {
 	function safe_var_dump(){
 		static $cnt = 0;
@@ -436,7 +414,7 @@ namespace pocketmine {
 	}
 
 	if($errors > 0){
-		$logger->critical("Please update your PHP from itxtech.org/genisys/get/, or recompile PHP again.");
+		$logger->critical("get php bin from pmmp.");
 		$logger->shutdown();
 		$logger->join();
 		exit(1); //Exit with error
@@ -462,7 +440,7 @@ namespace pocketmine {
 	}
 
 	if(\Phar::running(true) === ""){
-		$logger->warning("Non-packaged Genisys installation detected, do not use on production.");
+		$logger->warning("Non-packaged spigotpe installation detected, do not use on production.");
 	}
 
 	ThreadManager::init();
