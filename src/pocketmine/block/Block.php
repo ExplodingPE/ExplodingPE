@@ -220,7 +220,7 @@ class Block extends Position implements BlockIds, Metadatable{
 			self::$list[self::QUARTZ_BLOCK] = Quartz::class;
 			self::$list[self::QUARTZ_STAIRS] = QuartzStairs::class;
 			self::$list[self::DOUBLE_WOOD_SLAB] = DoubleWoodSlab::class;
-			self::$list[self::WOOD_SLAB] = WoodSlab::class;
+			self::$list[self::WOOD_SLAB] = WoodSlab::class;			
 			self::$list[self::STAINED_CLAY] = StainedClay::class;
 
 			self::$list[self::LEAVES2] = Leaves2::class;
