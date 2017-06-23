@@ -78,7 +78,7 @@ namespace pocketmine {
 	use pocketmine\wizard\SetupWizard;
 	use raklib\RakLib;
 
-	const VERSION = "1.2.1dev";
+	const VERSION = "1.3dev";
 	const API_VERSION = "3.0.0-ALPHA6";
 	const CODENAME = "Unleashed";
 
