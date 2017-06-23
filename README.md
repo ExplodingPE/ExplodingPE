@@ -5,6 +5,8 @@ download linke -> [![CircleCI](https://circleci.com/gh/spigotpe-beta/Spigotpe.sv
 
 __A highly customisable, open source server software for Minecraft: Pocket Edition written in PHP__
 
+## spigotpe are not affiliated with Mojang
+
 ### Setup, help & support, FAQs
 Head over to the [documentation site](http://pmmp.readthedocs.org/).
 If you don't find what you're looking for there, [talk to a human](#discussion). Please do not use our issue tracker for support requests.
