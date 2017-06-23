@@ -78,7 +78,7 @@ namespace pocketmine {
 	use pocketmine\wizard\SetupWizard;
 	use raklib\RakLib;
 
-	const VERSION = "1.6.2dev";
+	const VERSION = "1.2.1dev";
 	const API_VERSION = "3.0.0-ALPHA6";
 	const CODENAME = "Unleashed";
 
@@ -451,7 +451,6 @@ namespace pocketmine {
 			"mbstring" => "Multibyte String",
 			"yaml" => "YAML",
 			"sockets" => "Sockets",
-			"zip" => "Zip",
 			"zlib" => "Zlib"
 		];
 
@@ -493,11 +492,6 @@ namespace pocketmine {
 				$exitCode = -1;
 				break;
 			}
-		}
-
-
-		if(\Phar::running(true) === ""){
-			$logger->warning("Non-packaged PocketMine-MP installation detected, do not use on production.");
 		}
 
 		ThreadManager::init();
