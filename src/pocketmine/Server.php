@@ -1494,7 +1494,7 @@ class Server{
  		    $this->aiConfig = [
      		"cow" => $this->getProperty("ai.cow", true),
  			"chicken" => $this->getProperty("ai.chicken", true),
-    		"zombie" => $this->getAdvancedProperty("ai.zombie", 1),
+    		"zombie" => $this->getProperty("ai.zombie", 1),
  			"skeleton" => $this->getProperty("ai.skeleton", true),
  			"pig" => $this->getProperty("ai.pig", true),
  			"sheep" => $this->getProperty("ai.sheep", true),
@@ -1503,7 +1503,7 @@ class Server{
  			"snowgolem" => $this->getProperty("ai.snow-golem", true),
  			"pigzombie" => $this->getProperty("ai.pigzombie", true),
  			"creeperexplode" => $this->getProperty("ai.creeper-explode-destroy-block", false),
- 			"mobgenerate" => $this->geProperty("ai.mobgenerate", false),
+ 			"mobgenerate" => $this->getProperty("ai.mobgenerate", false),
  		];
 
 			if(($poolSize = $this->getProperty("settings.async-workers", "auto")) === "auto"){
@@ -1701,7 +1701,7 @@ class Server{
 			}
 
 			$this->enablePlugins(PluginLoadOrder::POSTWORLD);
-			if($this->aiEnabled) $this->aiHolder = new AIHolder($this)
+			if($this->aiEnabled) $this->aiHolder = new AIHolder($this);
 
 			$this->start();
 		}catch(\Throwable $e){
