@@ -22,9 +22,6 @@
 namespace pocketmine\entity;
 
 
-abstract class Animal extends Creature implements Ageable{
+abstract class Hanging extends Entity implements Attachable{
 
-	public function isBaby(){
-		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_BABY);
-	}
 }
