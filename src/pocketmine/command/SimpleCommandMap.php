@@ -125,8 +125,10 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new ReloadCommand("reload"));
 		$this->register("pocketmine", new TransferServerCommand("transferserver"));
 		
-		$this->register("pocketmine", new MakePluginCommand("mp"));
-		$this->register("pocketmine", new MakeServerCommand("ms"));
+		               // todo fix commands \\
+		
+		//$this->register("pocketmine", new MakePluginCommand("mp"));
+		//$this->register("pocketmine", new MakeServerCommand("ms")); 
 
 		if($this->server->getProperty("debug.commands", false)){
 			$this->register("pocketmine", new StatusCommand("status"));
