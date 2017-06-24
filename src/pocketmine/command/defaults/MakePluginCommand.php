@@ -43,7 +43,7 @@ class MakePluginCommand extends VanillaCommand{
 			return true;
 		}
 
-		$pharPath = Server::getInstance()->getPluginPath().DIRECTORY_SEPARATOR . "GenisysPro" . DIRECTORY_SEPARATOR . $description->getName()."_v".$description->getVersion()."_".time().".phar";
+		$pharPath = Server::getInstance()->getPluginPath().DIRECTORY_SEPARATOR . "SpigotPE" . DIRECTORY_SEPARATOR . $description->getName()."_v".$description->getVersion()."_".time().".phar";
 		if(file_exists($pharPath)){
 			$sender->sendMessage("Phar plugin already exists, overwriting...");
 			@unlink($pharPath);
@@ -86,21 +86,6 @@ class MakePluginCommand extends VanillaCommand{
 				$finfo->compress(\Phar::GZ);
 			}
 		}
-		$phar->stopBuffering();
-		$license = "
-  _____            _               _____           
- / ____|          (_)             |  __ \          
-| |  __  ___ _ __  _ ___ _   _ ___| |__) | __ ___  
-| | |_ |/ _ \ '_ \| / __| | | / __|  ___/ '__/ _ \ 
-| |__| |  __/ | | | \__ \ |_| \__ \ |   | | | (_) |
- \_____|\___|_| |_|_|___/\__, |___/_|   |_|  \___/ 
-                         __/ |                    
-                        |___/         
- ";
-  $sender->sendMessage($license);
-		$sender->sendMessage("Phar plugin ".$description->getName() ." v".$description->getVersion()." has been created on ".$pharPath);
-		return true;
-	}
 
 	private function sendPluginList(CommandSender $sender){
 		$list = "";
