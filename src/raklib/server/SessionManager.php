@@ -213,7 +213,7 @@ class SessionManager{
 									$this->sendPacket($pk, $source, $port);*/
 								}else{
 									$pk = new OpenConnectionReply1();
-									$pk->mtuSize = max(Session::MAX_MTU_SIZE, $packet->mtuSize);
+									$pk->mtuSize = min(Session::MAX_MTU_SIZE, $packet->mtuSize);
 									$pk->serverID = $this->getID();
 									$this->sendPacket($pk, $source, $port);
 								}

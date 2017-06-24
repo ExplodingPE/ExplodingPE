@@ -25,8 +25,6 @@ class RakLibServer extends \Thread{
 	protected $logger;
 	protected $loader;
 
-	public $loadPaths;
-
 	protected $shutdown;
 
 	/** @var \Threaded */
@@ -53,10 +51,6 @@ class RakLibServer extends \Thread{
 		$this->interface = $interface;
 		$this->logger = $logger;
 		$this->loader = $loader;
-		$loadPaths = [];
-		$this->addDependency($loadPaths, new \ReflectionClass($logger));
-		$this->addDependency($loadPaths, new \ReflectionClass($loader));
-		$this->loadPaths = array_reverse($loadPaths);
 		$this->shutdown = false;
 
 		$this->externalQueue = new \Threaded;
@@ -68,20 +62,6 @@ class RakLibServer extends \Thread{
 			$this->mainPath = \getcwd() . DIRECTORY_SEPARATOR;
 		}
 		$this->start();
-	}
-
-	protected function addDependency(array &$loadPaths, \ReflectionClass $dep){
-		if($dep->getFileName() !== false){
-			$loadPaths[$dep->getName()] = $dep->getFileName();
-		}
-
-		if($dep->getParentClass() instanceof \ReflectionClass){
-			$this->addDependency($loadPaths, $dep->getParentClass());
-		}
-
-		foreach($dep->getInterfaces() as $interface){
-			$this->addDependency($loadPaths, $interface);
-		}
 	}
 
 	public function isShutdown() : bool{
@@ -214,12 +194,6 @@ class RakLibServer extends \Thread{
 
 	public function run(){
 		try{
-			//Load removed dependencies, can't use require_once()
-			foreach($this->loadPaths as $name => $path){
-				if(!class_exists($name, false) and !interface_exists($name, false)){
-					require($path);
-				}
-			}
 			$this->loader->register(true);
 
 			gc_enable();
