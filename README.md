@@ -1,7 +1,9 @@
-# spigotpe-php
+# SpigotPE-php
 <img src="https://github.com/caspervanneck/spigotpe/blob/master/spigotpe.png">
 
-download linke -> [![CircleCI](https://circleci.com/gh/spigotpe-beta/Spigotpe.svg?style=svg)](https://circleci.com/gh/spigotpe-beta/Spigotpe)
+download linke -> [![CircleCI](https://circleci.com/gh/spigotpe-beta/SpigotPE.svg?style=svg)](https://circleci.com/gh/spigotpe-beta/SpigotPE)
+
+# [Discord](https://discord.gg/PwVGfng)
 
 __A highly customisable, open source server software for Minecraft: Pocket Edition written in PHP__
 
