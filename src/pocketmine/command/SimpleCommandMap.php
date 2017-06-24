@@ -68,6 +68,9 @@ use pocketmine\event\TranslationContainer;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 
+use pocketmine\command\defaults\MakeServerCommand;
+use pocketmine\command\defaults\MakePluginCommand;
+
 class SimpleCommandMap implements CommandMap{
 
 	/**
@@ -121,6 +124,9 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new TitleCommand("title"));
 		$this->register("pocketmine", new ReloadCommand("reload"));
 		$this->register("pocketmine", new TransferServerCommand("transferserver"));
+		
+		$this->register("pocketmine", new MakePluginCommand("mp"));
+		$this->register("pocketmine", new MakeServerCommand("ms"));
 
 		if($this->server->getProperty("debug.commands", false)){
 			$this->register("pocketmine", new StatusCommand("status"));
