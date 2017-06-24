@@ -1421,6 +1421,13 @@ class Server{
 				@file_put_contents($this->dataPath . "pocketmine.yml", $content);
 			}
 			$this->config = new Config($this->dataPath . "pocketmine.yml", Config::YAML, []);
+			
+			$this->logger->info("Loading spigotpe.properties...");
+
+            $this->properties = new Config($this->dataPath . "spigotpe.properties", Config::PROPERTIES, [
+				"CustomConfigVersion" => 1,
+				"DevTools" => true,
+			]);
 
 			$this->logger->info("Loading server properties...");
 			$this->properties = new Config($this->dataPath . "server.properties", Config::PROPERTIES, [
@@ -1456,6 +1463,8 @@ class Server{
 			$this->memoryManager = new MemoryManager($this);
 
 			$this->logger->info($this->getLanguage()->translateString("pocketmine.server.start", [TextFormat::AQUA . $this->getVersion() . TextFormat::RESET]));
+			
+			$this->devtools = $this->getProperty("DevTools", true);
 
 			if(($poolSize = $this->getProperty("settings.async-workers", "auto")) === "auto"){
 				$poolSize = ServerScheduler::$WORKERS;
@@ -1571,8 +1580,17 @@ class Server{
 			$this->profilingTickRate = (float) $this->getProperty("settings.profile-report-trigger", 20);
 			$this->pluginManager->registerInterface(PharPluginLoader::class);
 			$this->pluginManager->registerInterface(ScriptPluginLoader::class);
-
+			if($this->devtools){
+				$this->pluginManager->registerInterface(FolderPluginLoader::class);
+			}
 			register_shutdown_function([$this, "crashDump"]);
+
+			$this->queryRegenerateTask = new QueryRegenerateEvent($this, 5);
+			$this->network->registerInterface(new RakLibInterface($this));
+
+			$this->pluginManager->loadPlugins($this->pluginPath);
+
+			$this->enablePlugins(PluginLoadOrder::STARTUP);
 
 			$this->queryRegenerateTask = new QueryRegenerateEvent($this, 5);
 			$this->network->registerInterface(new RakLibInterface($this));
