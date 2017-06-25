@@ -44,4 +44,8 @@ abstract class Flowable extends Transparent{
 	protected function recalculateBoundingBox(){
 		return null;
 	}
+
+	public function getBoundingBox() {
+		return null;
+	}
 }

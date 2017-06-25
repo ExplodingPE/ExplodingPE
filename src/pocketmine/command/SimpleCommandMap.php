@@ -55,6 +55,7 @@ use pocketmine\command\defaults\SetWorldSpawnCommand;
 use pocketmine\command\defaults\SpawnpointCommand;
 use pocketmine\command\defaults\StatusCommand;
 use pocketmine\command\defaults\StopCommand;
+use pocketmine\command\defaults\SummonCommand;
 use pocketmine\command\defaults\TeleportCommand;
 use pocketmine\command\defaults\TellCommand;
 use pocketmine\command\defaults\TimeCommand;
@@ -67,9 +68,6 @@ use pocketmine\command\defaults\WhitelistCommand;
 use pocketmine\event\TranslationContainer;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
-
-use pocketmine\command\defaults\MakeServerCommand;
-use pocketmine\command\defaults\MakePluginCommand;
 
 class SimpleCommandMap implements CommandMap{
 
@@ -118,17 +116,14 @@ class SimpleCommandMap implements CommandMap{
 		$this->register("pocketmine", new KillCommand("kill"));
 		$this->register("pocketmine", new SpawnpointCommand("spawnpoint"));
 		$this->register("pocketmine", new SetWorldSpawnCommand("setworldspawn"));
+		$this->register("pocketmine", new SummonCommand("summon"));
 		$this->register("pocketmine", new TeleportCommand("tp"));
 		$this->register("pocketmine", new TimeCommand("time"));
 		$this->register("pocketmine", new TimingsCommand("timings"));
 		$this->register("pocketmine", new TitleCommand("title"));
 		$this->register("pocketmine", new ReloadCommand("reload"));
 		$this->register("pocketmine", new TransferServerCommand("transferserver"));
-		
-		               // todo fix commands \\
-		
-		//$this->register("pocketmine", new MakePluginCommand("mp"));
-		//$this->register("pocketmine", new MakeServerCommand("ms")); 
+		$this->register("pocketmine", new ReloadCommand("reload"));
 
 		if($this->server->getProperty("debug.commands", false)){
 			$this->register("pocketmine", new StatusCommand("status"));

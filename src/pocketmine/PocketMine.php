@@ -70,6 +70,7 @@ namespace {
 }
 
 namespace pocketmine {
+
 	use pocketmine\utils\Binary;
 	use pocketmine\utils\MainLogger;
 	use pocketmine\utils\ServerKiller;
@@ -78,9 +79,9 @@ namespace pocketmine {
 	use pocketmine\wizard\SetupWizard;
 	use raklib\RakLib;
 
-	const VERSION = "1.3dev";
+	const VERSION = "1.5dev";
 	const API_VERSION = "3.0.0-ALPHA6";
-	const CODENAME = "Unleashed";
+	const CODENAME = "Aurora";
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.
@@ -412,9 +413,7 @@ namespace pocketmine {
 		$errors = 0;
 
 		if(PHP_INT_SIZE < 8){
-			$logger->critical("Running PocketMine-MP with 32-bit systems/PHP is no longer supported. Please upgrade to a 64-bit system or use a 64-bit PHP binary.");
-			$exitCode = 1;
-			break;
+			$logger->warning("Running PocketMine-MP with 32-bit systems/PHP is no longer supported. Please upgrade to a 64-bit system or use a 64-bit PHP binary.");
 		}
 
 		if(php_sapi_name() !== "cli"){
@@ -451,6 +450,7 @@ namespace pocketmine {
 			"mbstring" => "Multibyte String",
 			"yaml" => "YAML",
 			"sockets" => "Sockets",
+			"zip" => "Zip",
 			"zlib" => "Zlib"
 		];
 
@@ -492,6 +492,11 @@ namespace pocketmine {
 				$exitCode = -1;
 				break;
 			}
+		}
+
+
+		if(\Phar::running(true) === ""){
+			$logger->warning("Non-packaged PocketMine-MP installation detected, do not use on production.");
 		}
 
 		ThreadManager::init();

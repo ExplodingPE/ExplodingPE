@@ -21,6 +21,8 @@
 
 declare(strict_types=1);
 
+declare(strict_types=1);
+
 /**
  * Events called when a player attempts to cheat
  */

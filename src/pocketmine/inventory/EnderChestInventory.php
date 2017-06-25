@@ -19,52 +19,28 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\inventory;
 
 use pocketmine\entity\Human;
-use pocketmine\item\Item;
 use pocketmine\level\Level;
 use pocketmine\level\Position;
-use pocketmine\nbt\tag\ListTag;
 use pocketmine\network\mcpe\protocol\BlockEventPacket;
 use pocketmine\Player;
 
-class EnderChestInventory extends ContainerInventory{
-	 
-	private $owner;
-
-	public function __construct(Human $owner, $contents = null){
-		$this->owner = $owner;
-		parent::__construct(new FakeBlockMenu($this, $owner), InventoryType::get(InventoryType::ENDER_CHEST));
-
-		if($contents !== null){
-			if($contents instanceof ListTag){
- 			foreach($contents as $item){
- 				$this->setItem($item["Slot"], Item::nbtDeserialize($item));
- 			}
- 		}else{
-				throw new \InvalidArgumentException("Expecting ListTag, received " . gettype($contents));
-			}
-		}
+class EnderChestInventory extends ContainerInventory {
+	public function __construct(Position $pos){
+        parent::__construct(new FakeBlockMenu($this, $pos), InventoryType::get(InventoryType::ENDER_CHEST));
 	}
 
-	public function getOwner(){
-		return $this->owner;
-	}
- 
-	public function openAt(Position $pos){
-		$this->getHolder()->setComponents($pos->x, $pos->y, $pos->z);
-		$this->getHolder()->setLevel($pos->getLevel());
-		$this->owner->addWindow($this);
-	}
- 
+	/**
+	 * @return Human|InventoryHolder
+     */
 	public function getHolder(){
 		return $this->holder;
 	}
 
 	public function onOpen(Player $who){
+	    $this->setContents($who->getEnderChestInventory()->getContents());
 		parent::onOpen($who);
 
 		if(count($this->getViewers()) === 1){
@@ -81,6 +57,7 @@ class EnderChestInventory extends ContainerInventory{
 	}
 
 	public function onClose(Player $who){
+        $who->getEnderChestInventory()->setContents($this->getContents());
 		if(count($this->getViewers()) === 1){
 			$pk = new BlockEventPacket();
 			$pk->x = $this->getHolder()->getX();
@@ -92,8 +69,6 @@ class EnderChestInventory extends ContainerInventory{
 				$level->addChunkPacket($this->getHolder()->getX() >> 4, $this->getHolder()->getZ() >> 4, $pk);
 			}
 		}
-
 		parent::onClose($who);
 	}
-
-} 
+}

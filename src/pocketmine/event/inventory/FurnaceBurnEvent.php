@@ -21,6 +21,8 @@
 
 declare(strict_types=1);
 
+declare(strict_types=1);
+
 namespace pocketmine\event\inventory;
 
 use pocketmine\event\block\BlockEvent;

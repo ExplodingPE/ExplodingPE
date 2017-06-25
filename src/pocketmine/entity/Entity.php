@@ -207,15 +207,70 @@ abstract class Entity extends Location implements Metadatable{
 	private static $shortNames = [];
 
 	public static function init(){
+		Entity::registerEntity(AreaEffectCloud::class);
 		Entity::registerEntity(Arrow::class);
+		Entity::registerEntity(Bat::class);
+		Entity::registerEntity(Blaze::class);
+		Entity::registerEntity(Boat::class);
+		Entity::registerEntity(CaveSpider::class);
+		Entity::registerEntity(Chicken::class);
+		Entity::registerEntity(Cow::class);
+		Entity::registerEntity(Creeper::class);
+		Entity::registerEntity(Donkey::class);
+		Entity::registerEntity(Egg::class);
+		Entity::registerEntity(EnderCrystal::class);
+		Entity::registerEntity(Enderman::class);
+		Entity::registerEntity(ExperienceOrb::class);
 		Entity::registerEntity(FallingSand::class);
+		Entity::registerEntity(FishingHook::class);
+		Entity::registerEntity(Ghast::class);
+		Entity::registerEntity(Guardian::class);
+		Entity::registerEntity(ElderGuardian::class);
+		Entity::registerEntity(Horse::class);
+		Entity::registerEntity(Husk::class);
+		Entity::registerEntity(IronGolem::class);
 		Entity::registerEntity(Item::class);
+		Entity::registerEntity(LargeFireball::class);
+		Entity::registerEntity(LeashKnot::class);
+		Entity::registerEntity(Lightning::class);
+		Entity::registerEntity(MagmaCube::class);
+		Entity::registerEntity(Minecart::class);
+		Entity::registerEntity(MinecartChest::class);
+		Entity::registerEntity(MinecartHopper::class);
+		Entity::registerEntity(MinecartTNT::class);
+		Entity::registerEntity(Mooshroom::class);
+		Entity::registerEntity(Mule::class);
+		Entity::registerEntity(Ozelot::class);
+	    Entity::registerEntity(Painting::class);
+		Entity::registerEntity(Pig::class);
+		Entity::registerEntity(PigZombie::class);
 		Entity::registerEntity(PrimedTNT::class);
+		Entity::registerEntity(Rabbit::class);
+		Entity::registerEntity(Sheep::class);
+		Entity::registerEntity(Silverfish::class);
+		Entity::registerEntity(Skeleton::class);
+		Entity::registerEntity(SkeletonHorse::class);
+		Entity::registerEntity(Slime::class);
+		Entity::registerEntity(SmallFireball::class);
 		Entity::registerEntity(Snowball::class);
+		Entity::registerEntity(SnowGolem::class);
+		Entity::registerEntity(Spider::class);
 		Entity::registerEntity(Squid::class);
+		Entity::registerEntity(Stray::class);
+		Entity::registerEntity(ThrownEnderPearl::class);
+		Entity::registerEntity(ThrownExpBottle::class);
+		Entity::registerEntity(LingeringPotion::class);
+		Entity::registerEntity(ThrownPotion::class);
+		Entity::registerEntity(TripoidCamera::class);
 		Entity::registerEntity(Villager::class);
+		Entity::registerEntity(Witch::class);
+		Entity::registerEntity(Wither::class);
+		Entity::registerEntity(WitherSkeleton::class);
+		Entity::registerEntity(WitherSkull::class);
+		Entity::registerEntity(Wolf::class);
 		Entity::registerEntity(Zombie::class);
-
+		Entity::registerEntity(ZombieHorse::class);
+		Entity::registerEntity(ZombieVillager::class);
 		Entity::registerEntity(Human::class, true);
 	}
 
@@ -255,9 +310,9 @@ abstract class Entity extends Location implements Metadatable{
 	public $lastY = null;
 	public $lastZ = null;
 
-	public $motionX;
-	public $motionY;
-	public $motionZ;
+	public $motionX = 0.0;
+	public $motionY = 0.0;
+	public $motionZ = 0.0;
 	/** @var Vector3 */
 	public $temporalVector;
 	public $lastMotionX;
@@ -459,7 +514,6 @@ abstract class Entity extends Location implements Metadatable{
 
 		$this->width *= $multiplier;
 		$this->height *= $multiplier;
-		$this->eyeHeight *= $multiplier;
 		$halfWidth = $this->width / 2;
 
 		$this->boundingBox->setBounds(
@@ -472,6 +526,8 @@ abstract class Entity extends Location implements Metadatable{
 		);
 
 		$this->setDataProperty(self::DATA_SCALE, self::DATA_TYPE_FLOAT, $value);
+		$this->setDataProperty(self::DATA_BOUNDING_BOX_WIDTH, self::DATA_TYPE_FLOAT, $this->width);
+		$this->setDataProperty(self::DATA_BOUNDING_BOX_HEIGHT, self::DATA_TYPE_FLOAT, $this->height);
 	}
 
 	public function isSneaking(){
@@ -492,6 +548,14 @@ abstract class Entity extends Location implements Metadatable{
 			$attr = $this->attributeMap->getAttribute(Attribute::MOVEMENT_SPEED);
 			$attr->setValue($value ? ($attr->getValue() * 1.3) : ($attr->getValue() / 1.3), false, true);
 		}
+	}
+
+	public function isGliding(){
+		return $this->getDataFlag(self::DATA_FLAGS, self::DATA_FLAG_GLIDING);
+	}
+
+	public function setGliding($value = true){
+		$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_GLIDING, (bool) $value);
 	}
 
 	public function isImmobile() : bool{
@@ -894,7 +958,7 @@ abstract class Entity extends Location implements Metadatable{
 	 * @param EntityDamageEvent $source
 	 *
 	 */
-	public function attack($damage, EntityDamageEvent $source){
+	public function attack($damage, EntityDamageEvent $source){ //$damage is unused
 		if($this->hasEffect(Effect::FIRE_RESISTANCE) and (
 				$source->getCause() === EntityDamageEvent::CAUSE_FIRE
 				or $source->getCause() === EntityDamageEvent::CAUSE_FIRE_TICK
@@ -933,7 +997,7 @@ abstract class Entity extends Location implements Metadatable{
 	 * @param EntityRegainHealthEvent $source
 	 *
 	 */
-	public function heal($amount, EntityRegainHealthEvent $source){
+	public function heal($amount, EntityRegainHealthEvent $source){ //$amount is unused
 		$this->server->getPluginManager()->callEvent($source);
 		if($source->isCancelled()){
 			return;
@@ -1296,6 +1360,7 @@ abstract class Entity extends Location implements Metadatable{
 	}
 
 	public function getDirection(){
+		//TODO: rewrite to use nbt 'Rot'
 		$rotation = ($this->yaw - 90) % 360;
 		if($rotation < 0){
 			$rotation += 360.0;
