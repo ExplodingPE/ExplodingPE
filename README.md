@@ -18,19 +18,19 @@ This spoon is based off of PMMP (For Stability)
 
 # Features:
 - [X] Fully Functional **Elytra Wings** and **SlimeBlocks**
-- [ ] EnderChests
+- [X] EnderChests
 - [X] **Full Tesseract & PMMP PluginAPI Compatibility**
 - [X] **CustomPotions**
 - [X] **CustomEnchants**
-- [ ] 1.0.1 Blocks & Items
+- [X] 1.0.1 Blocks & Items
 - [X] **CommandLogger**
 - [X] **Toggleable PluginAPI Version Checking**
 - [ ] Fully Functional Nether
 - [X] **Toggleable Built-In Devtools & FolderPluginLoader**
-- [ ] Toggleable PacketLogger (May be removed in the future)
+- [X] Toggleable PacketLogger (May be removed in the future)
 - [X] **Console Only Commands**
 - [X] **Limited Creative**
 - [X] **Weather**  
-- [ ] Spawn Eggs
+- [X] Spawn Eggs
 - [ ] Working Mob Spawners
 - [ ] Toggleable MobAI
