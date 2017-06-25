@@ -1,4 +1,12 @@
 <?php
+<<<<<<< HEAD
+=======
+/*
+ * This file is translated from the Nukkit Project
+ * which is written by MagicDroidX
+ * @link https://github.com/Nukkit/Nukkit
+*/
+>>>>>>> master
 
 namespace pocketmine\entity;
 
@@ -12,6 +20,7 @@ use pocketmine\Player;
 class Painting extends Hanging{
 	const NETWORK_ID = 83;
 
+<<<<<<< HEAD
 	const MOTIVES = [
 		// Motive Width Height
 		["Kebab", 1, 1],
@@ -46,10 +55,17 @@ class Painting extends Hanging{
 	protected $maxHealth = 1;
 
 	public function initEntity(){
+=======
+	private $motive;
+
+	public function initEntity(){
+		$this->setMaxHealth(1);
+>>>>>>> master
 		parent::initEntity();
 
 		if(isset($this->namedtag->Motive)){
 			$this->motive = $this->namedtag["Motive"];
+<<<<<<< HEAD
 		}
 		else{
 			$this->close();
@@ -58,6 +74,9 @@ class Painting extends Hanging{
 
 	public function getMotive(){
 		return $this->motive;
+=======
+		}else $this->close();
+>>>>>>> master
 	}
 
 	public function attack($damage, EntityDamageEvent $source){
@@ -65,14 +84,19 @@ class Painting extends Hanging{
 		if($source->isCancelled()) return false;
 		$this->level->addParticle(new DestroyBlockParticle($this->add(0.5), Block::get(Block::LADDER)));
 		$this->kill();
+<<<<<<< HEAD
 	}
 
 	protected function updateMovement(){
 		//Nothing to update, paintings cannot move.
+=======
+		return true;
+>>>>>>> master
 	}
 
 	public function spawnTo(Player $player){
 		$pk = new AddPaintingPacket();
+<<<<<<< HEAD
 		$pk->entityRuntimeId = $this->getId();
 		$pk->x = (int) $this->x;
 		$pk->y = (int) $this->y;
@@ -83,6 +107,23 @@ class Painting extends Hanging{
 		parent::spawnTo($player);
 	}
 
+=======
+		$pk->eid = $this->getId();
+		$pk->x = $this->x;
+		$pk->y = $this->y;
+		$pk->z = $this->z;
+		$pk->direction = $this->getDirection();
+		$pk->title = $this->motive;
+		$player->dataPacket($pk);
+
+		parent::spawnTo($player);
+	}
+
+	protected function updateMovement(){
+		//Nothing to update, paintings cannot move.
+	}
+
+>>>>>>> master
 	public function getDrops(){
 		return [ItemItem::get(ItemItem::PAINTING, 0, 1)];
 	}

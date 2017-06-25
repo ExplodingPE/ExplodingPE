@@ -1,9 +1,4 @@
 <?php
-<<<<<<< HEAD
-namespace pocketmine\entity;
-
-use pocketmine\item\Item as ItemItem;
-=======
 
 /*
  *
@@ -26,50 +21,53 @@ use pocketmine\item\Item as ItemItem;
 
 namespace pocketmine\entity;
 
->>>>>>> master
+use pocketmine\level\Level;
+use pocketmine\nbt\tag\ByteTag;
+use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class CaveSpider extends Monster{
-	const NETWORK_ID = 40;
+class Ocelot extends Animal{
+	const NETWORK_ID = 22;
 
-<<<<<<< HEAD
-	public $width = 1.438;
-	public $length = 1.188;
-	public $height = 0.547;
+	const DATA_CAT_TYPE = 18;
+
+	const TYPE_WILD = 0;
+	const TYPE_TUXEDO = 1;
+	const TYPE_TABBY = 2;
+	const TYPE_SIAMESE = 3;
+
+	public $width = 0.312;
+	public $length = 2.188;
+	public $height = 0.75;
+
+	public $dropExp = [1, 3];
 	
-	protected $exp_min = 5;
-	protected $exp_max = 5;
-	protected $maxHealth = 12;
-
-	public function initEntity(){
-		parent::initEntity();
-	}
-
-	public function getName(){
-		return "Cave Spider";
-	}
-
-	public function spawnTo(Player $player){
-		$pk = new AddEntityPacket();
-		$pk->type = self::NETWORK_ID;
-		$pk->entityRuntimeId = $this->getId();
-=======
-	public $width = 1;
-	public $length = 1;
-	public $height = 0.5;
-
-	public $dropExp = [5, 5];
-
 	public function getName() : string{
-		return "Cave Spider";
+		return "Ocelot";
 	}
-	
+
+	public function __construct(Level $level, CompoundTag $nbt){
+		if(!isset($nbt->CatType)){
+			$nbt->CatType = new ByteTag("CatType", mt_rand(0, 3));
+		}
+		parent::__construct($level, $nbt);
+
+		$this->setDataProperty(self::DATA_CAT_TYPE, self::DATA_TYPE_BYTE, $this->getCatType());
+	}
+
+	public function setCatType(int $type){
+		$this->namedtag->CatType = new ByteTag("CatType", $type);
+	}
+
+	public function getCatType() : int{
+		return (int) $this->namedtag["CatType"];
+	}
+
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
 		$pk->eid = $this->getId();
-		$pk->type = CaveSpider::NETWORK_ID;
->>>>>>> master
+		$pk->type = self::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;
 		$pk->z = $this->z;
@@ -83,16 +81,4 @@ class CaveSpider extends Monster{
 
 		parent::spawnTo($player);
 	}
-<<<<<<< HEAD
-
-	public function getDrops(){
-		return[
-			ItemItem::get(ItemItem::STRING, 0, mt_rand(0, 2)),
-			ItemItem::get(ItemItem::SPIDER_EYE, 0, mt_rand(0, 1))
-		];
-	 }
-  	
 }
-=======
-}
->>>>>>> master

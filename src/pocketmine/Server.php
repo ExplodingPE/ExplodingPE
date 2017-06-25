@@ -263,6 +263,13 @@ class Server{
 
 	/** @var Level */
 	private $levelDefault = null;
+	
+	/** spigotpe Config */
+	public $devtools = true;
+	public $aiConfig = [];
+ 	public $aiEnabled = false;
+ 	public $aiHolder = null;
+
 
 	/**
 	 * @return string
@@ -318,6 +325,10 @@ class Server{
 	 */
 	public function getDataPath() : string{
 		return $this->dataPath;
+	}
+	
+	public function getAIHolder(){
+		return $this->aiHolder;
 	}
 
 	/**
@@ -1422,6 +1433,24 @@ class Server{
 			}
 			$this->config = new Config($this->dataPath . "pocketmine.yml", Config::YAML, []);
 
+            $this->properties = new Config($this->dataPath . "spigotpe.properties", Config::PROPERTIES, [
+				"CustomConfigVersion" => 2,
+				"DevTools" => true,
+				"ai.enable" => false,
+				"ai.cow" => false,
+				"ai.chicken" => false,
+				"ai.zombie" => 1,
+				"ai.skeleton" => false,
+				"ai.pig" => false,
+				"ai.sheep" => false,
+				"ai.creeper" => false,
+				"ai.iron-golem" => false,
+				"ai.snow-golem" => false,
+				"ai.pigzombie" => false,
+				"ai.creeper-explode-destroy-block" => false,
+				"ai.mobgenerate" => false,
+			]);
+
 			$this->logger->info("Loading server properties...");
 			$this->properties = new Config($this->dataPath . "server.properties", Config::PROPERTIES, [
 				"motd" => "Minecraft: PE Server",
@@ -1456,6 +1485,23 @@ class Server{
 			$this->memoryManager = new MemoryManager($this);
 
 			$this->logger->info($this->getLanguage()->translateString("pocketmine.server.start", [TextFormat::AQUA . $this->getVersion() . TextFormat::RESET]));
+			
+			$this->devtools = $this->getProperty("DevTools", true);
+			$this->aiEnabled = $this->getProperty("ai.enable", false);
+ 		    $this->aiConfig = [
+     		"cow" => $this->getProperty("ai.cow", true),
+ 			"chicken" => $this->getProperty("ai.chicken", true),
+    		"zombie" => $this->getProperty("ai.zombie", 1),
+ 			"skeleton" => $this->getProperty("ai.skeleton", true),
+ 			"pig" => $this->getProperty("ai.pig", true),
+ 			"sheep" => $this->getProperty("ai.sheep", true),
+ 			"creeper" => $this->getProperty("ai.creeper", true),
+ 			"irongolem" => $this->getProperty("ai.iron-golem", true),
+ 			"snowgolem" => $this->getProperty("ai.snow-golem", true),
+ 			"pigzombie" => $this->getProperty("ai.pigzombie", true),
+ 			"creeperexplode" => $this->getProperty("ai.creeper-explode-destroy-block", false),
+ 			"mobgenerate" => $this->getProperty("ai.mobgenerate", false),
+ 		];
 
 			if(($poolSize = $this->getProperty("settings.async-workers", "auto")) === "auto"){
 				$poolSize = ServerScheduler::$WORKERS;
@@ -1661,6 +1707,7 @@ class Server{
 			}
 
 			$this->enablePlugins(PluginLoadOrder::POSTWORLD);
+			if($this->aiEnabled) $this->aiHolder = new AIHolder($this);
 
 			$this->start();
 		}catch(\Throwable $e){
