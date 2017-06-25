@@ -5,10 +5,32 @@
 
 ### We accept pull request so what are you waiting for
 
-[Discord](https://discord.gg/PwVGfng)
+Join us here! [Discord](https://discord.gg/PwVGfng)
 
 DOWNLOAD LINK -> [![CircleCI](https://circleci.com/gh/spigotpe-beta/Spigotpe.svg?style=svg)](https://circleci.com/gh/spigotpe-beta/Spigotpe)
 
-If you want to join SpigotPE make a few pull request and we might bring you on the team!
+## Warning: 32-Bit support is Deprecated!!!
 
-Alot more coming soon stay tuned
+# Introduction:
+This is an Advanced & Feature Rich Server Software to hopefully Replace Tesseract.  
+(They're dead. And this is **NOT** supposed to be taken out of context.)  
+This spoon is based off of PMMP (For Stability)  
+
+# Features:
+- [X] Fully Functional **Elytra Wings** and **SlimeBlocks**
+- [ ] EnderChests
+- [X] **Full Tesseract & PMMP PluginAPI Compatibility**
+- [X] **CustomPotions**
+- [X] **CustomEnchants**
+- [ ] 1.0.1 Blocks & Items
+- [X] **CommandLogger**
+- [X] **Toggleable PluginAPI Version Checking**
+- [ ] Fully Functional Nether
+- [X] **Toggleable Built-In Devtools & FolderPluginLoader**
+- [ ] Toggleable PacketLogger (May be removed in the future)
+- [X] **Console Only Commands**
+- [X] **Limited Creative**
+- [X] **Weather**  
+- [ ] Spawn Eggs
+- [ ] Working Mob Spawners
+- [ ] Toggleable MobAI
