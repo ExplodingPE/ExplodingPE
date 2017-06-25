@@ -79,15 +79,9 @@ namespace pocketmine {
 	use pocketmine\wizard\SetupWizard;
 	use raklib\RakLib;
 
-<<<<<<< HEAD
-	const VERSION = "1.5dev";
+	const VERSION = "1.4dev";
 	const API_VERSION = "3.0.0-ALPHA6";
 	const CODENAME = "Aurora";
-=======
-	const VERSION = "1.4dev";
-	const API_VERSION = "3.0.0";
-	const CODENAME = "Unleashed";
->>>>>>> master
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.
@@ -456,11 +450,7 @@ namespace pocketmine {
 			"mbstring" => "Multibyte String",
 			"yaml" => "YAML",
 			"sockets" => "Sockets",
-<<<<<<< HEAD
-			"zip" => "Zip",
-=======
-		//	"zip" => "Zip",
->>>>>>> master
+			//"zip" => "Zip",
 			"zlib" => "Zlib"
 		];
 
