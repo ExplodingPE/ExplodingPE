@@ -451,7 +451,7 @@ namespace pocketmine {
 			"mbstring" => "Multibyte String",
 			"yaml" => "YAML",
 			"sockets" => "Sockets",
-			"zip" => "Zip",
+		//	"zip" => "Zip",
 			"zlib" => "Zlib"
 		];
 
