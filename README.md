@@ -10,3 +10,5 @@
 DOWNLOAD LINK -> [![CircleCI](https://circleci.com/gh/spigotpe-beta/Spigotpe.svg?style=svg)](https://circleci.com/gh/spigotpe-beta/Spigotpe)
 
 If you want to join SpigotPE make a few pull request and we might bring you on the team!
+
+Alot more coming soon stay tuned
