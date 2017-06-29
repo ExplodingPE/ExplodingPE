@@ -16,22 +16,23 @@ This is an Advanced & Feature Rich Server Software to hopefully Replace Tesserac
 (They're dead. And this is **NOT** supposed to be taken out of context.)  
 This spoon is based off of PMMP (For Stability)  
 
-# Features:
-- [X] Fully Functional **Elytra Wings** and **SlimeBlocks**
-- [X] EnderChests
-- [X] **Full Tesseract & PMMP PluginAPI Compatibility**
-- [X] **CustomPotions**
-- [X] **CustomEnchants**
-- [X] 1.0.x Blocks & Items
+# ToDo:
+- [ ] Fully Functional **Elytra Wings** and **SlimeBlocks**
+- [ ] EnderChests
+- [ ] **Full Tesseract & PMMP PluginAPI Compatibility**
+- [ ] **CustomPotions**
+- [ ] **CustomEnchants**
+- [ ] 1.0.x Blocks & Items
 - [ ] 1.1.x Blocks & Items
-- [X] **CommandLogger**
-- [X] **Toggleable PluginAPI Version Checking**
+- [ ] **CommandLogger**
+- [ ] **Toggleable PluginAPI Version Checking**
 - [ ] Fully Functional Nether
-- [X] **Toggleable Built-In Devtools & FolderPluginLoader**
-- [X] Toggleable PacketLogger (May be removed in the future)
-- [X] **Console Only Commands**
-- [X] **Limited Creative**
-- [X] **Weather**  
-- [X] Spawn Eggs
+- [ ] **Toggleable Built-In Devtools & FolderPluginLoader**
+- [ ] Toggleable PacketLogger (May be removed in the future)
+- [ ] **Console Only Commands**
+- [ ] **Limited Creative**
+- [ ] **Weather**  
+- [ ] Spawn Eggs
 - [ ] Working Mob Spawners
 - [ ] Toggleable MobAI
+- [ ] suport 32bit
