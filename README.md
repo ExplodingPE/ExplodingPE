@@ -7,7 +7,7 @@
 
 Join us here! [Discord](https://discord.gg/PwVGfng)
 
-DOWNLOAD LINK -> [![CircleCI](https://circleci.com/gh/spigotpe-beta/Spigotpe.svg?style=svg)](https://circleci.com/gh/spigotpe-beta/Spigotpe)
+DOWNLOAD LINK -> [![CircleCI](https://circleci.com/gh/SpigotPE-Team/SpigotPE.svg?style=svg)](https://circleci.com/gh/SpigotPE-Team/SpigotPE)
 
 ## Warning: 32-Bit support is Deprecated!!!
 
