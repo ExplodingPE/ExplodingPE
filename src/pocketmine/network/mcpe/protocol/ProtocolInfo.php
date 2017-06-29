@@ -43,7 +43,7 @@ interface ProtocolInfo{
 	/**
 	 * Current Minecraft PE version reported by the server. This is usually the earliest currently supported version.
 	 */
-	const MINECRAFT_VERSION = 'v1.'.2.50';
+	const MINECRAFT_VERSION = 'v1.1.2.50';
 	/**
 	 * Version number sent to clients in ping responses.
 	 */
