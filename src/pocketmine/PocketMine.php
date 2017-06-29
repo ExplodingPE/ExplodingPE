@@ -70,7 +70,6 @@ namespace {
 }
 
 namespace pocketmine {
-
 	use pocketmine\utils\Binary;
 	use pocketmine\utils\MainLogger;
 	use pocketmine\utils\ServerKiller;
@@ -79,9 +78,9 @@ namespace pocketmine {
 	use pocketmine\wizard\SetupWizard;
 	use raklib\RakLib;
 
-	const VERSION = "1.4dev";
+	const VERSION = "1.0_PRE";
 	const API_VERSION = "3.0.0-ALPHA6";
-	const CODENAME = "Aurora";
+	const CODENAME = "slushy";
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.
@@ -292,7 +291,7 @@ namespace pocketmine {
 	/**
 	 * @param string $offset In the format of +09:00, +02:00, -04:00 etc.
 	 *
-	 * @return string
+	 * @return string|bool
 	 */
 	function parse_offset($offset){
 		//Make signed offsets unsigned for date_parse
@@ -393,11 +392,12 @@ namespace pocketmine {
 				}else{
 					$args = $trace[$i]["params"];
 				}
-				foreach($args as $name => $value){
-					$params .= (is_object($value) ? get_class($value) . " object" : gettype($value) . " " . (is_array($value) ? "Array()" : Utils::printable(@strval($value)))) . ", ";
-				}
+
+				$params = implode(", ", array_map(function($value){
+					return (is_object($value) ? get_class($value) . " object" : gettype($value) . " " . (is_array($value) ? "Array()" : Utils::printable(@strval($value))));
+				}, $args));
 			}
-			$messages[] = "#$j " . (isset($trace[$i]["file"]) ? cleanPath($trace[$i]["file"]) : "") . "(" . (isset($trace[$i]["line"]) ? $trace[$i]["line"] : "") . "): " . (isset($trace[$i]["class"]) ? $trace[$i]["class"] . (($trace[$i]["type"] === "dynamic" or $trace[$i]["type"] === "->") ? "->" : "::") : "") . $trace[$i]["function"] . "(" . Utils::printable(substr($params, 0, -2)) . ")";
+			$messages[] = "#$j " . (isset($trace[$i]["file"]) ? cleanPath($trace[$i]["file"]) : "") . "(" . (isset($trace[$i]["line"]) ? $trace[$i]["line"] : "") . "): " . (isset($trace[$i]["class"]) ? $trace[$i]["class"] . (($trace[$i]["type"] === "dynamic" or $trace[$i]["type"] === "->") ? "->" : "::") : "") . $trace[$i]["function"] . "(" . Utils::printable($params) . ")";
 		}
 
 		return $messages;
@@ -413,7 +413,9 @@ namespace pocketmine {
 		$errors = 0;
 
 		if(PHP_INT_SIZE < 8){
-			$logger->warning("Running PocketMine-MP with 32-bit systems/PHP is no longer supported. Please upgrade to a 64-bit system or use a 64-bit PHP binary.");
+			$logger->critical("Running PocketMine-MP with 32-bit systems/PHP is no longer supported. Please upgrade to a 64-bit system or use a 64-bit PHP binary.");
+			$exitCode = 1;
+			break;
 		}
 
 		if(php_sapi_name() !== "cli"){
@@ -450,7 +452,7 @@ namespace pocketmine {
 			"mbstring" => "Multibyte String",
 			"yaml" => "YAML",
 			"sockets" => "Sockets",
-			//"zip" => "Zip",
+			"zip" => "Zip",
 			"zlib" => "Zlib"
 		];
 

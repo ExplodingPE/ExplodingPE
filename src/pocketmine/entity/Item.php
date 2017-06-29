@@ -52,12 +52,13 @@ class Item extends Entity{
 
 	protected $gravity = 0.04;
 	protected $drag = 0.02;
-	protected $maxHealth = 5;
 
 	public $canCollide = false;
 
 	protected function initEntity(){
 		parent::initEntity();
+
+		$this->setMaxHealth(5);
 		$this->setHealth($this->namedtag["Health"]);
 		if(isset($this->namedtag->Age)){
 			$this->age = $this->namedtag["Age"];
@@ -89,9 +90,9 @@ class Item extends Entity{
 	public function attack($damage, EntityDamageEvent $source){
 		if(
 			$source->getCause() === EntityDamageEvent::CAUSE_VOID or
-			(($source->getCause() === EntityDamageEvent::CAUSE_FIRE_TICK or
+			$source->getCause() === EntityDamageEvent::CAUSE_FIRE_TICK or
 			$source->getCause() === EntityDamageEvent::CAUSE_ENTITY_EXPLOSION or
-			$source->getCause() === EntityDamageEvent::CAUSE_BLOCK_EXPLOSION) and $this->item->getId() !== ItemItem::NETHER_STAR)
+			$source->getCause() === EntityDamageEvent::CAUSE_BLOCK_EXPLOSION
 		){
 			parent::attack($damage, $source);
 		}
@@ -228,10 +229,6 @@ class Item extends Entity{
 	 */
 	public function setThrower($thrower){
 		$this->thrower = $thrower;
-	}
-
-	public function isFireProof(): bool {
-		return $this->item->getId() === ItemItem::NETHER_STAR;
 	}
 
 	public function spawnTo(Player $player){

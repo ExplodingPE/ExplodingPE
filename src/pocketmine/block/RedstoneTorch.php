@@ -23,8 +23,6 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
-use pocketmine\item\Item;
-
 class RedstoneTorch extends Torch{
 
 	protected $id = self::REDSTONE_TORCH;
@@ -33,17 +31,11 @@ class RedstoneTorch extends Torch{
 		$this->meta = $meta;
 	}
 
-    public function getLightLevel(){
-        return 0;
-    }
-
 	public function getName(){
 		return "Redstone Torch";
 	}
 
-	public function getDrops(Item $item){
-		return [
-			[self::REDSTONE_TORCH, 0, 1],
-		];
+	public function getLightLevel(){
+		return 7;
 	}
 }

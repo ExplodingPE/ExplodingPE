@@ -21,8 +21,6 @@
 
 declare(strict_types=1);
 
-declare(strict_types=1);
-
 namespace pocketmine\event\block;
 
 use pocketmine\block\Block;
@@ -36,10 +34,10 @@ use pocketmine\Player;
 class BlockPlaceEvent extends BlockEvent implements Cancellable{
 	public static $handlerList = null;
 
-	/** @var \pocketmine\Player */
+	/** @var Player */
 	protected $player;
 
-	/** @var \pocketmine\item\Item */
+	/** @var Item */
 	protected $item;
 
 

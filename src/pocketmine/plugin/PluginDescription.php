@@ -139,9 +139,7 @@ class PluginDescription{
 	 * @return array
 	 */
 	public function getCompatibleApis(){
-		$apis = $this->api;
-		array_push($apis, \pocketmine\API_VERSION);
-		return $apis;
+		return $this->api;
 	}
 
 	/**

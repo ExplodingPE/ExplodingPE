@@ -25,7 +25,6 @@ namespace pocketmine\block;
 
 use pocketmine\item\Item;
 use pocketmine\level\Level;
-use pocketmine\math\Vector3;
 use pocketmine\Player;
 
 class Torch extends Flowable{
@@ -44,9 +43,10 @@ class Torch extends Flowable{
 		return "Torch";
 	}
 
+
 	public function onUpdate($type){
 		if($type === Level::BLOCK_UPDATE_NORMAL){
-			$below = $this->getSide(Vector3::SIDE_DOWN);
+			$below = $this->getSide(0);
 			$side = $this->getDamage();
 			$faces = [
 				1 => 4,
@@ -58,7 +58,7 @@ class Torch extends Flowable{
 				0 => 0,
 			];
 
-			if($this->getSide($faces[$side])->isTransparent() === true and !($side === Vector3::SIDE_DOWN && ($below instanceof Slab && ($below->meta & 0x08) === 0x08) || ($below instanceof Stair && ($below->meta & 0x04) === 0x04) || $below instanceof Fence || $below instanceof StoneWall)){
+			if($this->getSide($faces[$side])->isTransparent() === true and !($side === 0 and ($below->getId() === self::FENCE or $below->getId() === self::COBBLE_WALL))){
 				$this->getLevel()->useBreakOn($this);
 
 				return Level::BLOCK_UPDATE_NORMAL;
@@ -69,7 +69,7 @@ class Torch extends Flowable{
 	}
 
 	public function place(Item $item, Block $block, Block $target, $face, $fx, $fy, $fz, Player $player = null){
-		$below = $this->getSide(Vector3::SIDE_DOWN);
+		$below = $this->getSide(0);
 
 		if($target->isTransparent() === false and $face !== 0){
 			$faces = [
@@ -83,7 +83,7 @@ class Torch extends Flowable{
 			$this->getLevel()->setBlock($block, $this, true, true);
 
 			return true;
-		}elseif($below->isTransparent() === false or ($below instanceof Slab && ($below->meta & 0x08) === 0x08) || ($below instanceof Stair && ($below->meta & 0x04) === 0x04) || $below instanceof Fence || $below instanceof StoneWall){
+		}elseif($below->isTransparent() === false or $below->getId() === self::FENCE or $below->getId() === self::COBBLE_WALL){
 			$this->meta = 0;
 			$this->getLevel()->setBlock($block, $this, true, true);
 
@@ -95,7 +95,7 @@ class Torch extends Flowable{
 
 	public function getDrops(Item $item){
 		return [
-			Item::get($this->getId(), 0, 1)
+			[$this->id, 0, 1],
 		];
 	}
 }

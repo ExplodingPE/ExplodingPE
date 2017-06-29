@@ -23,9 +23,7 @@ declare(strict_types=1);
 
 namespace pocketmine\block;
 
-use pocketmine\item\Tool;
-
-class StoneButton extends Button{
+class StoneButton extends Flowable{
 
 	protected $id = self::STONE_BUTTON;
 
@@ -37,7 +35,7 @@ class StoneButton extends Button{
 		return "Stone Button";
 	}
 
-	public function getToolType(): int{
-		return Tool::TYPE_PICKAXE;
+	public function getHardness(){
+		return 0.5;
 	}
 }

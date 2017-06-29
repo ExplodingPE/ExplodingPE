@@ -21,8 +21,6 @@
 
 declare(strict_types=1);
 
-declare(strict_types=1);
-
 namespace pocketmine\event\block;
 
 use pocketmine\block\Block;
@@ -35,7 +33,7 @@ use pocketmine\Player;
 class SignChangeEvent extends BlockEvent implements Cancellable{
 	public static $handlerList = null;
 
-	/** @var \pocketmine\Player */
+	/** @var Player */
 	private $player;
 	/** @var string[] */
 	private $lines = [];

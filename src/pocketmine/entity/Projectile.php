@@ -39,7 +39,6 @@ abstract class Projectile extends Entity{
 	const DATA_SHOOTER_ID = 17;
 
 	protected $damage = 0;
-	protected $isCritical;
 
 	public $hadCollision = false;
 
@@ -58,6 +57,8 @@ abstract class Projectile extends Entity{
 
 	protected function initEntity(){
 		parent::initEntity();
+
+		$this->setMaxHealth(1);
 		$this->setHealth(1);
 		if(isset($this->namedtag->Age)){
 			$this->age = $this->namedtag["Age"];
@@ -199,7 +200,4 @@ abstract class Projectile extends Entity{
 		return $hasUpdate;
 	}
 
-	public function isCritical(){
-		return $this->isCritical;
-	}
 }

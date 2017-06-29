@@ -31,19 +31,7 @@ class Lever extends Flowable{
 		$this->meta = $meta;
 	}
 
-	public function getName(): string{
+	public function getName(){
 		return "Lever";
-	}
-
-	public function getHardness(): float{
-		return 0.5;
-	}
-
-	public function getResistance(){
-		return 2.5;
-	}
-
-	public function canBeActivated(){ //TODO: Redstone
-		return false;
 	}
 }

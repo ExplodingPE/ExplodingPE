@@ -37,7 +37,7 @@ interface WindowTypes{
 	const DISPENSER = 6;
 	const DROPPER = 7;
 	const HOPPER = 8;
-	const CAULDRON = 9;//WTF DUDE?!
+	const CAULDRON = 9;
 	const MINECART_CHEST = 10;
 	const MINECART_HOPPER = 11;
 	const HORSE = 12;
@@ -45,4 +45,5 @@ interface WindowTypes{
 	const STRUCTURE_EDITOR = 14;
 	const TRADING = 15;
 	const COMMAND_BLOCK = 16;
+
 }

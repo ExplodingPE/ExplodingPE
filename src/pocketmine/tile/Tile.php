@@ -26,7 +26,9 @@ declare(strict_types=1);
  */
 namespace pocketmine\tile;
 
+use pocketmine\block\Block;
 use pocketmine\event\Timings;
+use pocketmine\event\TimingsHandler;
 use pocketmine\level\format\Chunk;
 use pocketmine\level\Level;
 use pocketmine\level\Position;
@@ -36,27 +38,15 @@ use pocketmine\nbt\tag\StringTag;
 
 abstract class Tile extends Position{
 
-    const BEACON = "Beacon";
-    const BREWING_STAND = "BrewingStand";
-    const CAULDRON = "Cauldron";
-    const CHEST = "Chest";
-    const COMPARATOR = "Comparator";
-    const DAY_LIGHT_DETECTOR = "DLDetector";
-    const DISPENSER = "Dispenser";
-    const DROPPER = "Dropper";
-    const ENCHANT_TABLE = "EnchantTable";
-    const ENDER_CHEST = "EnderChest";
-    const END_PORTAL = "EndPortal";
-    const FURNACE = "Furnace";
-    const FLOWER_POT = "FlowerPot";
-    const HOPPER = "Hopper";
-    const ITEM_FRAME = "ItemFrame";
-    const MOB_SPAWNER = "MobSpawner";
-    const MOVING_BLOCK = "MovingBlock";
-    const NOTEBLOCK = "Music";
-    const PISTON = "PistonArm";
-    const SIGN = "Sign";
-    const SKULL = "Skull";
+	const BREWING_STAND = "BrewingStand";
+	const CHEST = "Chest";
+	const ENCHANT_TABLE = "EnchantTable";
+	const FLOWER_POT = "FlowerPot";
+	const FURNACE = "Furnace";
+	const ITEM_FRAME = "ItemFrame";
+	const MOB_SPAWNER = "MobSpawner";
+	const SIGN = "Sign";
+	const SKULL = "Skull";
 
 	public static $tileCount = 1;
 
@@ -75,22 +65,15 @@ abstract class Tile extends Position{
 	protected $server;
 	protected $timings;
 
-	/** @var \pocketmine\event\TimingsHandler */
+	/** @var TimingsHandler */
 	public $tickTimer;
 
 	public static function init(){
-        self::registerTile(Beacon::class);
-        self::registerTile(BrewingStand::class);
-		self::registerTile(Cauldron::class);
 		self::registerTile(Chest::class);
-        self::registerTile(EnchantTable::class);
-        self::registerTile(EnderChest::class);
-        self::registerTile(EndPortal::class);
+		self::registerTile(EnchantTable::class);
 		self::registerTile(FlowerPot::class);
 		self::registerTile(Furnace::class);
-        self::registerTile(ItemFrame::class);
-        self::registerTile(MovingBlock::class);
-        self::registerTile(PistonArm::class);
+		self::registerTile(ItemFrame::class);
 		self::registerTile(Sign::class);
 		self::registerTile(Skull::class);
 	}
@@ -101,7 +84,7 @@ abstract class Tile extends Position{
 	 * @param CompoundTag $nbt
 	 * @param             $args
 	 *
-	 * @return Tile
+	 * @return Tile|null
 	 */
 	public static function createTile($type, Level $level, CompoundTag $nbt, ...$args){
 		if(isset(self::$knownTiles[$type])){
@@ -181,7 +164,7 @@ abstract class Tile extends Position{
 	}
 
 	/**
-	 * @return \pocketmine\block\Block
+	 * @return Block
 	 */
 	public function getBlock(){
 		return $this->level->getBlock($this);

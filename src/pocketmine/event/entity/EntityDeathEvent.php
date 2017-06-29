@@ -21,8 +21,6 @@
 
 declare(strict_types=1);
 
-declare(strict_types=1);
-
 namespace pocketmine\event\entity;
 
 use pocketmine\entity\Living;
@@ -52,7 +50,7 @@ class EntityDeathEvent extends EntityEvent{
 	}
 
 	/**
-	 * @return \pocketmine\item\Item[]
+	 * @return Item[]
 	 */
 	public function getDrops(){
 		return $this->drops;

@@ -21,8 +21,6 @@
 
 declare(strict_types=1);
 
-declare(strict_types=1);
-
 namespace pocketmine\event\entity;
 
 use pocketmine\entity\Entity;
@@ -69,7 +67,7 @@ class EntityShootBowEvent extends EntityEvent implements Cancellable{
 	}
 
 	/**
-	 * @return Projectile
+	 * @return Entity
 	 */
 	public function getProjectile(){
 		return $this->projectile;

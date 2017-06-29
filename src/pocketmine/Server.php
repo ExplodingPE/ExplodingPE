@@ -53,6 +53,7 @@ use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item;
 use pocketmine\lang\BaseLang;
 use pocketmine\level\format\io\leveldb\LevelDB;
+use pocketmine\level\format\io\LevelProvider;
 use pocketmine\level\format\io\LevelProviderManager;
 use pocketmine\level\format\io\region\Anvil;
 use pocketmine\level\format\io\region\McRegion;
@@ -80,8 +81,8 @@ use pocketmine\nbt\tag\StringTag;
 use pocketmine\network\CompressBatchedTask;
 use pocketmine\network\mcpe\protocol\BatchPacket;
 use pocketmine\network\mcpe\protocol\DataPacket;
-use pocketmine\network\mcpe\protocol\PlayerListPacket;
 use pocketmine\network\mcpe\protocol\ProtocolInfo;
+use pocketmine\network\mcpe\protocol\PlayerListPacket;
 use pocketmine\network\mcpe\RakLibInterface;
 use pocketmine\network\Network;
 use pocketmine\network\query\QueryHandler;
@@ -268,7 +269,7 @@ class Server{
 	 * @return string
 	 */
 	public function getName() : string{
-		return "ClearSky-PocketMine-MP";
+		return "SpigotPE";
 	}
 
 	/**
@@ -1047,7 +1048,7 @@ class Server{
 
 		try{
 			$path = $this->getDataPath() . "worlds/" . $name . "/";
-			/** @var \pocketmine\level\format\io\LevelProvider $provider */
+			/** @var LevelProvider $provider */
 			$provider::generate($path, $name, $seed, $generator, $options);
 
 			$level = new Level($this, $name, $path, (string) $provider);

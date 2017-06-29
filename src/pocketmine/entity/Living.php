@@ -35,7 +35,6 @@ use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\FloatTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\network\mcpe\protocol\EntityEventPacket;
-use pocketmine\Server;
 use pocketmine\utils\BlockIterator;
 
 abstract class Living extends Entity implements Damageable{
@@ -46,15 +45,12 @@ abstract class Living extends Entity implements Damageable{
 	protected $attackTime = 0;
 
 	protected $invisible = false;
-	
-	protected $exp_min = 0;
-	protected $exp_max = 0;
-	protected $maxHealth = 20;
 
 	protected $jumpVelocity = 0.42;
 
 	protected function initEntity(){
 		parent::initEntity();
+
 		if(isset($this->namedtag->HealF)){
 			$this->namedtag->Health = new FloatTag("Health", (float) $this->namedtag["HealF"]);
 			unset($this->namedtag->HealF);
@@ -63,6 +59,7 @@ abstract class Living extends Entity implements Damageable{
 		}else{
 			$this->namedtag->Health = new FloatTag("Health", (float) $this->getMaxHealth());
 		}
+
 		$this->setHealth($this->namedtag["Health"]);
 	}
 
@@ -83,7 +80,7 @@ abstract class Living extends Entity implements Damageable{
 			$pk = new EntityEventPacket();
 			$pk->entityRuntimeId = $this->getId();
 			$pk->event = EntityEventPacket::RESPAWN;
-			Server::getInstance()->broadcastPacket($this->hasSpawned, $pk);
+			$this->server->broadcastPacket($this->hasSpawned, $pk);
 		}
 	}
 
@@ -92,7 +89,6 @@ abstract class Living extends Entity implements Damageable{
 	}
 
 	public function setMaxHealth($amount){
-		if(is_null($this->attributeMap->getAttribute(Attribute::HEALTH))) $this->attributeMap->addAttribute(Attribute::getAttribute(Attribute::HEALTH));
 		$this->attributeMap->getAttribute(Attribute::HEALTH)->setMaxValue($amount);
 	}
 
@@ -332,7 +328,7 @@ abstract class Living extends Entity implements Damageable{
 	 * @param int   $maxDistance
 	 * @param array $transparent
 	 *
-	 * @return Block
+	 * @return Block|null
 	 */
 	public function getTargetBlock($maxDistance, array $transparent = []){
 		try{

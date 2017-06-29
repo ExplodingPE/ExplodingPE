@@ -28,7 +28,7 @@ use pocketmine\item\Tool;
 use pocketmine\math\AxisAlignedBB;
 use pocketmine\Player;
 
-class WoodSlab extends Slab{
+class WoodSlab extends Transparent{
 
 	protected $id = self::WOOD_SLAB;
 

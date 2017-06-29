@@ -21,8 +21,6 @@
 
 declare(strict_types=1);
 
-declare(strict_types=1);
-
 namespace pocketmine\event\entity;
 
 use pocketmine\entity\Creature;
@@ -38,6 +36,7 @@ use pocketmine\entity\Vehicle;
 class EntityDespawnEvent extends EntityEvent{
 	public static $handlerList = null;
 
+	/** @var int */
 	private $entityType;
 
 	/**

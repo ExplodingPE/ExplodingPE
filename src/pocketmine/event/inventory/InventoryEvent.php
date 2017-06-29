@@ -21,13 +21,12 @@
 
 declare(strict_types=1);
 
-declare(strict_types=1);
-
 /**
  * Inventory related events
  */
 namespace pocketmine\event\inventory;
 
+use pocketmine\entity\Human;
 use pocketmine\event\Event;
 use pocketmine\inventory\Inventory;
 
@@ -48,7 +47,7 @@ abstract class InventoryEvent extends Event{
 	}
 
 	/**
-	 * @return \pocketmine\entity\Human[]
+	 * @return Human[]
 	 */
 	public function getViewers(){
 		return $this->inventory->getViewers();

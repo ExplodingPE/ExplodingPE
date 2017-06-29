@@ -55,9 +55,9 @@ use pocketmine\network\mcpe\protocol\DataPacket;
 use pocketmine\network\mcpe\protocol\DisconnectPacket;
 use pocketmine\network\mcpe\protocol\DropItemPacket;
 use pocketmine\network\mcpe\protocol\EntityEventPacket;
-use pocketmine\network\mcpe\protocol\EntityFallPacket;
 use pocketmine\network\mcpe\protocol\ExplodePacket;
 use pocketmine\network\mcpe\protocol\FullChunkDataPacket;
+use pocketmine\network\mcpe\protocol\GameRulesChangedPacket;
 use pocketmine\network\mcpe\protocol\HurtArmorPacket;
 use pocketmine\network\mcpe\protocol\InteractPacket;
 use pocketmine\network\mcpe\protocol\InventoryActionPacket;
@@ -72,6 +72,7 @@ use pocketmine\network\mcpe\protocol\MobEquipmentPacket;
 use pocketmine\network\mcpe\protocol\MoveEntityPacket;
 use pocketmine\network\mcpe\protocol\MovePlayerPacket;
 use pocketmine\network\mcpe\protocol\PlayerActionPacket;
+use pocketmine\network\mcpe\protocol\EntityFallPacket;
 use pocketmine\network\mcpe\protocol\PlayerInputPacket;
 use pocketmine\network\mcpe\protocol\PlayerListPacket;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
@@ -263,7 +264,7 @@ interface NetworkSession{
 
 	public function handleReplaceItemInSlot(ReplaceItemInSlotPacket $packet) : bool;
 
-	//public function handleGameRulesChanged(GameRulesChangedPacket $packet) : bool; //TODO
+	public function handleGameRulesChanged(GameRulesChangedPacket $packet) : bool;
 
 	//public function handleCamera(CameraPacket $packet) : bool; //edu only :(
 
