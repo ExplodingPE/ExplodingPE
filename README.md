@@ -36,3 +36,4 @@ This spoon is based off of PMMP (For Stability)
 - [ ] Working Mob Spawners
 - [ ] Toggleable MobAI
 - [ ] suport 32bit
+- [ ] stablety and speed imrovments
