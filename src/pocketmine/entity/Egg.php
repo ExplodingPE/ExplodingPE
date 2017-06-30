@@ -1,26 +1,5 @@
 <?php
 
-/*
- *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
- * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * @author PocketMine Team
- * @link http://www.pocketmine.net/
- *
- *
-*/
-
-declare(strict_types=1);
-
 namespace pocketmine\entity;
 
 use pocketmine\level\Level;
@@ -28,13 +7,11 @@ use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class Snowball extends Projectile{
-	const NETWORK_ID = 81;
-
+class Egg extends Projectile{
+	const NETWORK_ID = 82;
 	public $width = 0.25;
 	public $length = 0.25;
 	public $height = 0.25;
-
 	protected $gravity = 0.03;
 	protected $drag = 0.01;
 
@@ -42,32 +19,45 @@ class Snowball extends Projectile{
 		parent::__construct($level, $nbt, $shootingEntity);
 	}
 
-    public function getName(){
-        return "Snowball";
-    }
-
 	public function onUpdate($currentTick){
 		if($this->closed){
 			return false;
 		}
-
+		
 		$this->timings->startTiming();
-
+		
 		$hasUpdate = parent::onUpdate($currentTick);
-
+		
 		if($this->age > 1200 or $this->isCollided){
-			$this->close();
+			$this->kill();
 			$hasUpdate = true;
+			/*if(mt_rand(1, 8) === 1){
+				$chicken = null;
+				$level = $this->chunk;
+				
+				if(!($level instanceof Level)){
+					return false;
+				}
+				
+				$nbt = new CompoundTag("", ["Pos" => new ListTag("Pos", [new DoubleTag("", $this->getX()),new DoubleTag("", $this->getY()),new DoubleTag("", $this->getZ())]),
+						"Motion" => new ListTag("Motion", [new DoubleTag("", 0),new DoubleTag("", 0),new DoubleTag("", 0)]),"Rotation" => new ListTag("Rotation", [new FloatTag("", mt_rand(0, 360)),new FloatTag("", 0)])]);
+				$nbt->Age = new StringTag("Age", 0);
+				$chicken = Entity::createEntity("Chicken", $level, $nbt);
+				if($chicken instanceof Entity){
+					$chicken->setDataProperty(14, self::DATA_TYPE_BYTE, 0);
+					$chicken->spawnToAll();
+				}
+			}*/
 		}
-
+		
 		$this->timings->stopTiming();
-
+		
 		return $hasUpdate;
 	}
 
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
-		$pk->type = Snowball::NETWORK_ID;
+		$pk->type = self::NETWORK_ID;
 		$pk->entityRuntimeId = $this->getId();
 		$pk->x = $this->x;
 		$pk->y = $this->y;

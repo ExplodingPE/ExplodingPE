@@ -1,26 +1,4 @@
 <?php
-
-/*
- *
- *  ____            _        _   __  __ _                  __  __ ____
- * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
- * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
- * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
- * |_|   \___/ \___|_|\_\___|\__|_|  |_|_|_| |_|\___|     |_|  |_|_|
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * @author PocketMine Team
- * @link http://www.pocketmine.net/
- *
- *
-*/
-
-declare(strict_types=1);
-
 namespace pocketmine\entity;
 
 use pocketmine\event\entity\EntityDamageByEntityEvent;
@@ -28,22 +6,29 @@ use pocketmine\item\Item as ItemItem;
 use pocketmine\network\mcpe\protocol\AddEntityPacket;
 use pocketmine\Player;
 
-class Zombie extends Monster{
-	const NETWORK_ID = 32;
+class Husk extends Monster{
+	const NETWORK_ID = 47;
 
-	public $width = 0.6;
-	public $length = 0.6;
-	public $height = 1.8;
+	public $width = 1.031;
+	public $length = 0.891;
+	public $height = 2;
+	
+	protected $exp_min = 5;
+	protected $exp_max = 5;
 	protected $maxHealth = 20;
 
+	public function initEntity(){
+		parent::initEntity();
+	}
+
 	public function getName(){
-		return "Zombie";
+		return "Husk";
 	}
 
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();
+		$pk->type = self::NETWORK_ID;
 		$pk->entityRuntimeId = $this->getId();
-		$pk->type = Zombie::NETWORK_ID;
 		$pk->x = $this->x;
 		$pk->y = $this->y;
 		$pk->z = $this->z;
@@ -60,7 +45,7 @@ class Zombie extends Monster{
 
 	public function getDrops(){
 		$drops = [
-			ItemItem::get(ItemItem::FEATHER, 0, 1)
+			ItemItem::get(ItemItem::ROTTEN_FLESH, 0, 1)
 		];
 		if($this->lastDamageCause instanceof EntityDamageByEntityEvent and $this->lastDamageCause->getEntity() instanceof Player){
 			if(mt_rand(0, 199) < 5){
@@ -76,6 +61,12 @@ class Zombie extends Monster{
 						break;
 				}
 			}
+		}
+
+		if($this->lastDamageCause instanceof EntityDamageByEntityEvent and $this->lastDamageCause->getEntity() instanceof Creeper && $this->lastDamageCause->getEntity()->isPowered()){
+			$drops = [
+				ItemItem::get(ItemItem::SKULL, 2, 1)
+			];
 		}
 
 		return $drops;

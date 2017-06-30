@@ -399,6 +399,7 @@ class Effect{
 		if($ev->isCancelled()){
 			return;
 		}
+		if(!$entity instanceof Living) return;
 		if($entity instanceof Player){
 			$pk = new MobEffectPacket();
 			$pk->entityRuntimeId = $entity->getId();
@@ -414,7 +415,6 @@ class Effect{
 
 			$entity->dataPacket($pk);
 		}
-
 		switch($this->id){
 			case Effect::INVISIBILITY:
 				$entity->setDataFlag(Entity::DATA_FLAGS, Entity::DATA_FLAG_INVISIBLE, true);
@@ -453,7 +453,7 @@ class Effect{
 				$attr->setMaxValue($max);
 				break;
 			case Effect::ABSORPTION:
-				$new = (4 * $this->getEffectLevel());
+				$new = (4 * ($this->amplifier + 1));
 				if($new > $entity->getAbsorption()){
 					$entity->setAbsorption($new);
 				}
@@ -471,6 +471,7 @@ class Effect{
 		if($ev->isCancelled()){
 			return;
 		}
+		if(!$entity instanceof Living) return;
 		if($entity instanceof Player){
 			$pk = new MobEffectPacket();
 			$pk->entityRuntimeId = $entity->getId();
