@@ -19,25 +19,28 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\block;
 
-use pocketmine\item\Tool;
+class DragonEgg extends Fallable{
 
-class WoodenButton extends Button{
+	protected $id = self::DRAGON_EGG;
 
-	protected $id = self::WOODEN_BUTTON;
+	public function __construct(){}
 
-	public function __construct($meta = 0){
-		$this->meta = $meta;
-	}
+    public function getHardness(){
+        return 3;
+    }
+
+    public function getResistance(){
+        return 45;
+    }
+
+    public function getLightLevel(){
+        return 1;
+    }
 
 	public function getName(){
-		return "Wooden Button";
+		return "Dragon Egg";
 	}
 
-	public function getToolType(): int{
-		return Tool::TYPE_AXE;
-	}
 }

@@ -19,25 +19,42 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\block;
 
+use pocketmine\item\Item;
 use pocketmine\item\Tool;
 
-class WoodenButton extends Button{
+class NetherQuartzOre extends Solid {
 
-	protected $id = self::WOODEN_BUTTON;
+	protected $id = self::NETHER_QUARTZ_ORE;
 
-	public function __construct($meta = 0){
-		$this->meta = $meta;
+	public function __construct() {
+
 	}
 
-	public function getName(){
-		return "Wooden Button";
+	public function getName() {
+		return "Nether Quartz Ore";
 	}
 
-	public function getToolType(): int{
-		return Tool::TYPE_AXE;
+	public function getToolType() {
+		return Tool::TYPE_PICKAXE;
+	}
+
+	public function getHardness() {
+		return 3;
+	}
+
+	public function getResistance() {
+		return 15;
+	}
+
+	public function getDrops(Item $item) {
+		if ($item->isPickaxe()) {
+			return [
+				[Item::NETHER_QUARTZ, 0, 1],
+			];
+		} else {
+			return [];
+		}
 	}
 }

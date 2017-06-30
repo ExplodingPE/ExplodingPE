@@ -19,25 +19,19 @@
  *
 */
 
-declare(strict_types=1);
+namespace pocketmine\inventory;
 
-namespace pocketmine\block;
+use pocketmine\tile\Beacon;
 
-use pocketmine\item\Tool;
-
-class WoodenButton extends Button{
-
-	protected $id = self::WOODEN_BUTTON;
-
-	public function __construct($meta = 0){
-		$this->meta = $meta;
+class BeaconInventory extends ContainerInventory {
+	public function __construct(Beacon $tile){
+		parent::__construct($tile, InventoryType::get(InventoryType::BEACON));
 	}
 
-	public function getName(){
-		return "Wooden Button";
-	}
-
-	public function getToolType(): int{
-		return Tool::TYPE_AXE;
+	/**
+	 * @return Beacon|InventoryHolder
+     */
+	public function getHolder() {
+		return $this->holder;
 	}
 }

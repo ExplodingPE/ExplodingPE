@@ -19,25 +19,25 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\block;
 
-use pocketmine\item\Tool;
+use pocketmine\item\Item;
 
-class WoodenButton extends Button{
+class JungleDoor extends WoodDoor {
 
-	protected $id = self::WOODEN_BUTTON;
+	protected $id = self::JUNGLE_DOOR_BLOCK;
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;
 	}
 
 	public function getName(){
-		return "Wooden Button";
+		return "Jungle Door Block";
 	}
 
-	public function getToolType(): int{
-		return Tool::TYPE_AXE;
+	public function getDrops(Item $item){
+		return [
+			[Item::JUNGLE_DOOR_BLOCK, 0, 1],
+		];
 	}
 }
