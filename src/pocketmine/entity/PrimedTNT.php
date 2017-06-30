@@ -124,7 +124,6 @@ class PrimedTNT extends Entity implements Explosive{
 
 			if($this->fuse <= 0){
 				$this->kill();
-				$this->explode();
 			}
 
 		}
@@ -133,8 +132,18 @@ class PrimedTNT extends Entity implements Explosive{
 		return $hasUpdate or $this->fuse >= 0 or abs($this->motionX) > 0.00001 or abs($this->motionY) > 0.00001 or abs($this->motionZ) > 0.00001;
 	}
 
+	public function kill(){
+		if(!$this->isAlive()){
+			return;
+		}
+		$this->explode();
+		if(!$this->closed){
+			$this->close();
+		}
+	}
+
 	public function explode(){
-		$this->server->getPluginManager()->callEvent($ev = new ExplosionPrimeEvent($this, 4));
+		$this->server->getPluginManager()->callEvent($ev = new ExplosionPrimeEvent($this, 3));
 
 		if(!$ev->isCancelled()){
 			$explosion = new Explosion($this, $ev->getForce(), $this);
@@ -143,7 +152,12 @@ class PrimedTNT extends Entity implements Explosive{
 			}
 			$explosion->explodeB();
 		}
+		$this->close();
 	}
+
+    public function getName(){
+        return "Primed TNT";
+    }
 
 	public function spawnTo(Player $player){
 		$pk = new AddEntityPacket();

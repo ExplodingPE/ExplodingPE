@@ -42,6 +42,10 @@ class Snowball extends Projectile{
 		parent::__construct($level, $nbt, $shootingEntity);
 	}
 
+    public function getName(){
+        return "Snowball";
+    }
+
 	public function onUpdate($currentTick){
 		if($this->closed){
 			return false;
@@ -52,7 +56,7 @@ class Snowball extends Projectile{
 		$hasUpdate = parent::onUpdate($currentTick);
 
 		if($this->age > 1200 or $this->isCollided){
-			$this->kill();
+			$this->close();
 			$hasUpdate = true;
 		}
 
