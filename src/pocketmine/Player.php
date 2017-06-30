@@ -3274,6 +3274,10 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 	public function handleFullChunkData(FullChunkDataPacket $packet) : bool{
 		return false;
 	}
+	
+	public function handleGameRulesChanged(GameRulesChangedPacket $packet) : bool{
+		return false;
+	}
 
 	public function handleSetCommandsEnabled(SetCommandsEnabledPacket $packet) : bool{
 		return false;
