@@ -35,7 +35,7 @@ class ByteTag extends NamedTag{
 	 * @param string $name
 	 * @param int    $value
 	 */
-	public function __construct($name = "", $value = 0){
+	public function __construct(string $name = "", int $value = 0){
 		parent::__construct($name, $value);
 	}
 
@@ -43,18 +43,32 @@ class ByteTag extends NamedTag{
 		return NBT::TAG_Byte;
 	}
 
-	public function read(NBT $nbt, $network = false){
+	public function read(NBT $nbt, bool $network = false){
 		$this->value = $nbt->getSignedByte();
 	}
 
-	public function write(NBT $nbt, $network = false){
+	public function write(NBT $nbt, bool $network = false){
 		$nbt->putByte($this->value);
 	}
 
 	/**
 	 * @return int
 	 */
-	public function &getValue(){
+	public function &getValue() : int{
 		return parent::getValue();
+	}
+
+	/**
+	 * @param int $value
+	 *
+	 * @throws \TypeError
+	 */
+	public function setValue($value){
+		if(!is_int($value)){
+			throw new \TypeError("ByteTag value must be of type int, " . gettype($value) . " given");
+		}elseif($value < -(2 ** 7) or $value > ((2 ** 7) - 1)){
+			throw new \InvalidArgumentException("Value $value is too large!");
+		}
+		parent::setValue($value);
 	}
 }
