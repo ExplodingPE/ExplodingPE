@@ -19,20 +19,29 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\item;
 
-class CookedFish extends Food {
+use pocketmine\entity\Effect;
+
+class PufferFish extends Food {
+
 	public function __construct($meta = 0, $count = 1) {
-		parent::__construct(self::COOKED_FISH, $meta, $count, "Cooked Fish");
+		parent::__construct(self::PUFFER_FISH, $meta, $count, 'Puffer Fish');
 	}
 
 	public function getFoodRestore(): int {
-		return 5;
+		return 1.0;
 	}
 
 	public function getSaturationRestore(): float {
-		return 6;
+		return 0.2;
+	}
+
+	public function getAdditionalEffects(): array {
+		[
+			Effect::getEffect(Effect::HUNGER)->setDuration(300)->setAmplifier(2),
+			Effect::getEffect(Effect::NAUSEA)->setDuration(300)->setAmplifier(1),
+			Effect::getEffect(Effect::POISON)->setDuration(1200)->setAmplifier(3),
+		];
 	}
 }

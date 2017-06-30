@@ -19,20 +19,13 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\item;
 
-class CookedFish extends Food {
-	public function __construct($meta = 0, $count = 1) {
-		parent::__construct(self::COOKED_FISH, $meta, $count, "Cooked Fish");
-	}
+use pocketmine\block\Block;
 
-	public function getFoodRestore(): int {
-		return 5;
-	}
-
-	public function getSaturationRestore(): float {
-		return 6;
+class DarkOakDoor extends WoodenDoor{
+	public function __construct($meta = 0, $count = 1){
+		$this->block = Block::get(Item::DARK_OAK_DOOR_BLOCK);
+		Item::__construct(self::DARK_OAK_DOOR, 0, $count, "Dark Oak Door");
 	}
 }

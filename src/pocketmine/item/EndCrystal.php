@@ -3,6 +3,7 @@
 /*
  *
  *  ____            _        _   __  __ _                  __  __ ____
+ *  ____            _        _   __  __ _                  __  __ ____
  * |  _ \ ___   ___| | _____| |_|  \/  (_)_ __   ___      |  \/  |  _ \
  * | |_) / _ \ / __| |/ / _ \ __| |\/| | | '_ \ / _ \_____| |\/| | |_) |
  * |  __/ (_) | (__|   <  __/ |_| |  | | | | | |  __/_____| |  | |  __/
@@ -19,51 +20,36 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\item;
 
 use pocketmine\block\Block;
-use pocketmine\entity\Boat as BoatEntity;
+use pocketmine\entity\EnderCrystal;
+use pocketmine\entity\Entity;
 use pocketmine\level\Level;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\nbt\tag\DoubleTag;
 use pocketmine\nbt\tag\FloatTag;
-use pocketmine\nbt\tag\IntTag;
 use pocketmine\nbt\tag\ListTag;
+use pocketmine\nbt\tag\StringTag;
 use pocketmine\Player;
 
-class Boat extends Item{
+class EndCrystal extends Item{
 	public function __construct($meta = 0, $count = 1){
-		parent::__construct(self::BOAT, $meta, $count, "Oak Boat");
-		if($this->meta === 1){
-			$this->name = "Spruce Boat";
-		}elseif($this->meta === 2){
-			$this->name = "Birch Boat";
-		}elseif($this->meta === 3){
-			$this->name = "Jungle Boat";
-		}elseif($this->meta === 4){
-			$this->name = "Acacia Boat";
-		}elseif($this->meta === 5){
-			$this->name = "Dark Oak Boat";
-		}
+		parent::__construct(self::END_CRYSTAL, $meta, $count, "End Crystal");
 	}
-	
-	public function getMaxStackSize(){
-		return 1;
-	}
-	
+
 	public function canBeActivated(){
 		return true;
 	}
 
 	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz){
-		$realPos = $target->getSide($face)->add(0.5, 0.4, 0.5);
-		$boat = new BoatEntity($player->getLevel(), new CompoundTag("", [
+		$entity = null;
+
+		$nbt = new CompoundTag("", [
 			new ListTag("Pos", [
-				new DoubleTag("", $realPos->getX()),
-				new DoubleTag("", $realPos->getY()),
-				new DoubleTag("", $realPos->getZ())
+				new DoubleTag("", $block->getX() + 0.5),
+				new DoubleTag("", $block->getY()),
+				new DoubleTag("", $block->getZ() + 0.5)
 			]),
 			new ListTag("Motion", [
 				new DoubleTag("", 0),
@@ -74,13 +60,22 @@ class Boat extends Item{
 				new FloatTag("", 0),
 				new FloatTag("", 0)
 			]),
-			new IntTag("WoodID",$this->getDamage()),
-		]));
-		$boat->spawnToAll();
-		if($player->isSurvival()){
-			--$this->count;
+		]);
+
+		if($this->hasCustomName()){
+			$nbt->CustomName = new StringTag("CustomName", $this->getCustomName());
 		}
-		
-		return true;
+
+		$entity = Entity::createEntity(EnderCrystal::NETWORK_ID, $level, $nbt);
+
+		if($entity instanceof Entity){
+			if($player->isSurvival()){
+				--$this->count;
+			}
+			$entity->spawnToAll();
+			return true;
+		}
+
+		return false;
 	}
 }

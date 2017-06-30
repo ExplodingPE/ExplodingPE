@@ -19,20 +19,11 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\item;
 
-class CookedFish extends Food {
+class ShulkerShell extends Item {
 	public function __construct($meta = 0, $count = 1) {
-		parent::__construct(self::COOKED_FISH, $meta, $count, "Cooked Fish");
-	}
-
-	public function getFoodRestore(): int {
-		return 5;
-	}
-
-	public function getSaturationRestore(): float {
-		return 6;
+		parent::__construct(self::SHULKER_SHELL, $meta, $count, "Shulker Shell");
 	}
 }
+

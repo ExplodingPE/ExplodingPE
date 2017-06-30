@@ -19,20 +19,17 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\item;
 
-class CookedFish extends Food {
+use pocketmine\block\Block;
+
+class Cauldron extends Item {
 	public function __construct($meta = 0, $count = 1) {
-		parent::__construct(self::COOKED_FISH, $meta, $count, "Cooked Fish");
+		$this->block = Block::get(Block::CAULDRON_BLOCK);
+		parent::__construct(self::CAULDRON, $meta, $count, "Cauldron");
 	}
 
-	public function getFoodRestore(): int {
-		return 5;
-	}
-
-	public function getSaturationRestore(): float {
-		return 6;
+	public function getMaxStackSize(): int {
+		return 1;
 	}
 }

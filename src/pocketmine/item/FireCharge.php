@@ -19,20 +19,39 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\item;
 
-class CookedFish extends Food {
+use pocketmine\block\Block;
+use pocketmine\block\Fire;
+use pocketmine\block\Solid;
+use pocketmine\level\Level;
+use pocketmine\Player;
+
+class FireCharge extends Item {
 	public function __construct($meta = 0, $count = 1) {
-		parent::__construct(self::COOKED_FISH, $meta, $count, "Cooked Fish");
+		parent::__construct(self::FIRE_CHARGE, $meta, $count, "Fire Charge");
 	}
 
-	public function getFoodRestore(): int {
-		return 5;
+	public function canBeActivated() {
+		return true;
 	}
 
-	public function getSaturationRestore(): float {
-		return 6;
+	public function onActivate(Level $level, Player $player, Block $block, Block $target, $face, $fx, $fy, $fz) {
+		if ($block->getId() === self::AIR and ($target instanceof Solid)) {
+			$level->setBlock($block, new Fire(), true);
+			$this->useOn($block);
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public function useOn($object) {
+		if ($object instanceof Block) {
+			$this->count--;
+			return true;
+		} else return false;
 	}
 }
+
