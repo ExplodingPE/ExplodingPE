@@ -2533,7 +2533,7 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				return true;
 			}
 
-					$nbt = new CompoundTag("", [
+			$nbt = new CompoundTag("", [
 				new ListTag("Pos", [
 					new DoubleTag("", $this->x),
 					new DoubleTag("", $this->y + $this->getEyeHeight()),
@@ -2576,6 +2576,30 @@ class Player extends Human implements CommandSender, InventoryHolder, ChunkLoade
 				default:
 					return true;
 			}
+			$projectile = Entity::createEntity($type, $this->getLevel(), $nbt, $this);
+			$projectile->setMotion($projectile->getMotion()->multiply($f));
+			if($this->isSurvival()){
+				$item->setCount($item->getCount() - 1);
+				$this->inventory->setItemInHand($item->getCount() > 0 ? $item : Item::get(Item::AIR));
+			}
+			if($projectile instanceof Projectile){
+				$this->server->getPluginManager()->callEvent($projectileEv = new ProjectileLaunchEvent($projectile));
+				if($projectileEv->isCancelled()){
+					$projectile->kill();
+				}else{
+					$projectile->spawnToAll();
+					$this->level->addSound(new LaunchSound($this), $this->getViewers());
+				}
+			}else{
+				$projectile->spawnToAll();
+			}
+
+			$this->setDataFlag(self::DATA_FLAGS, self::DATA_FLAG_ACTION, true);
+			$this->startAction = $this->server->getTick();
+		}
+
+		return true;
+	}
 
 	public function handlePlayerAction(PlayerActionPacket $packet) : bool{
 		if($this->spawned === false or (!$this->isAlive() and $packet->action !== PlayerActionPacket::ACTION_RESPAWN and $packet->action !== PlayerActionPacket::ACTION_DIMENSION_CHANGE)){
