@@ -2565,12 +2565,6 @@ class Server{
 			$this->maxTick = 20;
 			$this->maxUse = 0;
 
-			if(($this->tickCounter & 0b111111111) === 0){
-				if(($this->dserverConfig["enable"] and $this->dserverConfig["queryTickUpdate"]) or !$this->dserverConfig["enable"]){
-					$this->updateQuery();
-				}
-			}
-
 			$this->getNetwork()->updateName();
 		}
 
