@@ -1423,10 +1423,12 @@ class Server{
 	public function about(){
 		$string = '
 
-	§3spigotpe§f is a custom version of §bpmmp§f, modified by §5spigotpe-team§f
+	§3SpigotPE§f is a custom version of §bpmmp§f, modified by §5SpigotPE-Team§f
 	Version: §6' . $this->getPocketMineVersion() . '§f
 	Target client version: §b' . ProtocolInfo::MINECRAFT_VERSION . '§f
-	Source code: §dhttps://github.com/iTXTech/Genisys§f
+	Source code: §dhttps://github.com/SpigotPE-Team/SpigotPE§f
+	PHP Version: §e' . PHP_VERSION . '§f
+	System OS: §6' . PHP_OS .'§f
 	';
 	
 		$this->getLogger()->info($string);
