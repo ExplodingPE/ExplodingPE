@@ -20,7 +20,7 @@ This spoon is based off of PMMP (For Stability)
 - [X] Fully Functional **Elytra Wings** and **SlimeBlocks**
 - [X] EnderChests
 - [X] **Full Tesseract & PMMP PluginAPI Compatibility**
-- [ ] **CustomPotions**
+- [X] **CustomPotions**
 - [ ] **CustomEnchants**
 - [ ] 1.0.x Blocks & Items
 - [ ] 1.1.x Blocks & Items
@@ -32,7 +32,7 @@ This spoon is based off of PMMP (For Stability)
 - [ ] **Console Only Commands**
 - [ ] **Limited Creative**
 - [ ] **Weather**  
-- [ ] Spawn Eggs
+- [X] Spawn Eggs
 - [ ] Working Mob Spawners
 - [ ] Toggleable MobAI
 - [ ] suport 32bit
