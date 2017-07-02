@@ -25,7 +25,7 @@ This spoon is based off of PMMP (For Stability)
 - [ ] 1.0.x Blocks & Items
 - [ ] 1.1.x Blocks & Items
 - [ ] **CommandLogger**
-- [ ] **Toggleable PluginAPI Version Checking**
+- [x] **Toggleable PluginAPI Version Checking**
 - [ ] Fully Functional Nether
 - [ ] **Toggleable Built-In Devtools & FolderPluginLoader**
 - [ ] Toggleable PacketLogger (May be removed in the future)
