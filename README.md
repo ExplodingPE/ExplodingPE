@@ -19,7 +19,7 @@ This spoon is based off of PMMP (For Stability)
 # ToDo:
 - [X] Fully Functional **Elytra Wings** and **SlimeBlocks**
 - [X] EnderChests
-- [X] **Full Tesseract & PMMP PluginAPI Compatibility**
+- [X] **Full Tesseract & PMMP PluginAPI Compatibility not all plugins just ask and we will look at it**
 - [X] **CustomPotions**
 - [ ] **CustomEnchants**
 - [ ] 1.0.x Blocks & Items
