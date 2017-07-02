@@ -152,7 +152,7 @@ interface BlockIds{
 	const LIT_REDSTONE_LAMP = 124;
 	const DROPPER = 125;
 	const ACTIVATOR_RAIL = 126;
-	const COCOA = 127;
+	const COCOA = 127, COCOA_BLOCK = 127, COCOA_PODS = 127;
 	const SANDSTONE_STAIRS = 128;
 	const EMERALD_ORE = 129;
 	const ENDER_CHEST = 130;
