@@ -22,7 +22,7 @@ This spoon is based off of PMMP (For Stability)
 - [X] **Full Tesseract & PMMP PluginAPI Compatibility not all plugins just ask and we will look at it**
 - [X] **CustomPotions**
 - [ ] **CustomEnchants**
-- [ ] 1.0.x Blocks & Items
+- [x] 1.0.x Blocks & Items
 - [ ] 1.1.x Blocks & Items
 - [ ] **CommandLogger**
 - [x] **Toggleable PluginAPI Version Checking**
@@ -35,5 +35,5 @@ This spoon is based off of PMMP (For Stability)
 - [X] Spawn Eggs
 - [ ] Working Mob Spawners
 - [ ] Toggleable MobAI
-- [ ] suport 32bit
+- [ ] support 32bit
 - [ ] stablety and speed imrovments
