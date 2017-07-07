@@ -105,6 +105,7 @@ use pocketmine\utils\Utils;
 use pocketmine\utils\UUID;
 use pocketmine\utils\VersionString;
 use pocketmine\resourcepacks\ResourcePackManager;
+use pocketmine\entity\ai\AIHolder;
 
 /**
  * The class that manages everything
@@ -266,6 +267,9 @@ class Server{
 
 	/** Advanced Config */
 	public $advancedConfig = null;
+	public $aiConfig = [];
+ 	public $aiEnabled = false;
+ 	public $aiHolder = null;
 
 	/**
 	 * @return string
@@ -675,6 +679,11 @@ class Server{
 	public function getTick(){
 		return $this->tickCounter;
 	}
+	
+	public function getAIHolder(){
+ 		return $this->aiHolder;
+ 	}
+ 
 
 	/**
 	 * Returns the last server TPS measure
@@ -1461,6 +1470,21 @@ class Server{
 	}
 
 	public function loadAdvancedConfig(){
+		$this->aiEnabled = $this->getAdvancedProperty("ai.enable", false);
+ 		$this->aiConfig = [
+ 			"cow" => $this->getAdvancedProperty("ai.cow", true),
+ 			"chicken" => $this->getAdvancedProperty("ai.chicken", true),
+ 			"zombie" => $this->getAdvancedProperty("ai.zombie", 1),
+ 			"skeleton" => $this->getAdvancedProperty("ai.skeleton", true),
+ 			"pig" => $this->getAdvancedProperty("ai.pig", true),
+ 			"sheep" => $this->getAdvancedProperty("ai.sheep", true),
+ 			"creeper" => $this->getAdvancedProperty("ai.creeper", true),
+ 			"irongolem" => $this->getAdvancedProperty("ai.iron-golem", true),
+ 			"snowgolem" => $this->getAdvancedProperty("ai.snow-golem", true),
+    		"pigzombie" => $this->getAdvancedProperty("ai.pigzombie", true),
+     		"creeperexplode" => $this->getAdvancedProperty("ai.creeper-explode-destroy-block", false),
+ 			"mobgenerate" => $this->getAdvancedProperty("ai.mobgenerate", false),
+ 		];
 		
 	}
 	
@@ -1777,6 +1801,7 @@ class Server{
 				$this->autoSaveTicks = (int) $this->getProperty("ticks-per.autosave", 6000);
 			}
 
+			  if($this->aiEnabled) $this->aiHolder = new AIHolder($this);
 			$this->enablePlugins(PluginLoadOrder::POSTWORLD);
 
 			if($cfgVer > $advVer){
@@ -1811,7 +1836,7 @@ class Server{
 
 	/**
 	 * @param string        $tip
-	 * @param Player[]|null $recipients
+	 * @param Player[]|null $recipients //enablePlugins
 	 *
 	 * @return int
 	 */
