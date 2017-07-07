@@ -5,8 +5,9 @@
 
 ### We accept pull request so what are you waiting for
 
-Join us here! [Discord](https://discord.gg/PwVGfng)
+# Join us here! [Discord](https://discord.gg/PwVGfng)
 
+# Here is our twitter! [Our Twitter](https://mobile.twitter.com/TeamSpigotpe)
 DOWNLOAD LINK -> [![CircleCI](https://circleci.com/gh/SpigotPE-Team/SpigotPE.svg?style=svg)](https://circleci.com/gh/SpigotPE-Team/SpigotPE)
 
 ## Warning: 32-Bit support is Deprecated!!!
