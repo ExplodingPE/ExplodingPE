@@ -29,7 +29,7 @@ This spoon is based off of PMMP (For Stability)
 - [x] **Toggleable PluginAPI Version Checking**
 - [ ] Fully Functional Nether
 - [ ] **Toggleable Built-In Devtools & FolderPluginLoader**
-- [ ] Toggleable PacketLogger (May be removed in the future)
+- [ ] Toggleable PacketLogger (May be removed in the future and #wip)
 - [ ] **Console Only Commands**
 - [ ] **Limited Creative**
 - [ ] **Weather**  
