@@ -180,16 +180,7 @@ class MainLogger extends \AttachableThreadedLogger{
 	protected function send($message, $level, $prefix, $color){
 		$now = time();
 
-		$thread = \Thread::getCurrentThread();
-		if($thread === null){
-			$threadName = "Server thread";
-		}elseif($thread instanceof Thread or $thread instanceof Worker){
-			$threadName = $thread->getThreadName() . " thread";
-		}else{
-			$threadName = (new \ReflectionClass($thread))->getShortName() . " thread";
-		}
-
-		$message = TextFormat::toANSI(TextFormat::AQUA . "[" . date("H:i:s", $now) . "] " . TextFormat::RESET . $color . "[" . $threadName . "/" . $prefix . "]:" . " " . $message . TextFormat::RESET);
+		$message = TextFormat::toANSI(TextFormat::BOLD . TextFormat::GRAY . "[" . TextFormat::GREEN . "SpigotPE" . TextFormat::GRAY . "] " . TextFormat::RESET . TextFormat::AQUA . "[" . date("H:i:s", $now) . "] " . TextFormat::RESET . $color . "[" . $prefix . "]:" . " " . $message . TextFormat::RESET);
 		$cleanMessage = TextFormat::clean($message);
 
 		if(!Terminal::hasFormattingCodes()){
