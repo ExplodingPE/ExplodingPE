@@ -469,30 +469,8 @@ class Server{
 	/**
 	 * @return bool
 	 */
-	public function getForceGamemode(){
+	public function getForceGamemode() : bool{
 		return $this->getConfigBoolean("force-gamemode", false);
-	}
-
-	/**
-	 * Returns the gamemode text name
-	 *
-	 * @param int $mode
-	 *
-	 * @return string
-	 */
-	public static function getGamemodeString($mode){
-		switch((int) $mode){
-			case Player::SURVIVAL:
-				return "%gameMode.survival";
-			case Player::CREATIVE:
-				return "%gameMode.creative";
-			case Player::ADVENTURE:
-				return "%gameMode.adventure";
-			case Player::SPECTATOR:
-				return "%gameMode.spectator";
-		}
-
-		return "UNKNOWN";
 	}
 
 	/**
@@ -530,6 +508,39 @@ class Server{
 			default:
 				throw new \InvalidArgumentException("Invalid gamemode $mode");
 		}
+	}
+
+	/**
+	 * Parses a string and returns a gamemode integer, -1 if not found
+	 *
+	 * @param string $str
+	 *
+	 * @return int
+	 */
+	public static function getGamemodeFromString(string $str) : int{
+		switch(strtolower(trim($str))){
+			case (string) Player::SURVIVAL:
+			case "survival":
+			case "s":
+				return Player::SURVIVAL;
+
+			case (string) Player::CREATIVE:
+			case "creative":
+			case "c":
+				return Player::CREATIVE;
+
+			case (string) Player::ADVENTURE:
+			case "adventure":
+			case "a":
+				return Player::ADVENTURE;
+
+			case (string) Player::SPECTATOR:
+			case "spectator":
+			case "view":
+			case "v":
+				return Player::SPECTATOR;
+		}
+		return -1;
 	}
 
 	/**
