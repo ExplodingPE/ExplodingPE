@@ -496,36 +496,40 @@ class Server{
 	}
 
 	/**
-	 * Parses a string and returns a gamemode integer, -1 if not found
+	 * Returns the gamemode text name
 	 *
-	 * @param string $str
+	 * @param int $mode
 	 *
-	 * @return int
+	 * @return string
 	 */
-	public static function getGamemodeFromString($str){
-		switch(strtolower(trim($str))){
-			case (string) Player::SURVIVAL:
-			case "survival":
-			case "s":
-				return Player::SURVIVAL;
-
-			case (string) Player::CREATIVE:
-			case "creative":
-			case "c":
-				return Player::CREATIVE;
-
-			case (string) Player::ADVENTURE:
-			case "adventure":
-			case "a":
-				return Player::ADVENTURE;
-
-			case (string) Player::SPECTATOR:
-			case "spectator":
-			case "view":
-			case "v":
-				return Player::SPECTATOR;
+	public static function getGamemodeString(int $mode) : string{
+		switch((int) $mode){
+			case Player::SURVIVAL:
+				return "%gameMode.survival";
+			case Player::CREATIVE:
+				return "%gameMode.creative";
+			case Player::ADVENTURE:
+				return "%gameMode.adventure";
+			case Player::SPECTATOR:
+				return "%gameMode.spectator";
 		}
-		return -1;
+
+		return "UNKNOWN";
+	}
+
+	public static function getGamemodeName(int $mode) : string{
+		switch($mode){
+			case Player::SURVIVAL:
+				return "Survival";
+			case Player::CREATIVE:
+				return "Creative";
+			case Player::ADVENTURE:
+				return "Adventure";
+			case Player::SPECTATOR:
+				return "Spectator";
+			default:
+				throw new \InvalidArgumentException("Invalid gamemode $mode");
+		}
 	}
 
 	/**
