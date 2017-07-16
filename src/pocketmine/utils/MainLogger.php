@@ -54,7 +54,7 @@ class MainLogger extends \AttachableThreadedLogger{
 	}
 
 	/**
-	 * @return MainLogger|null
+	 * @return MainLogger
 	 */
 	public static function getLogger(){
 		return static::$logger;
