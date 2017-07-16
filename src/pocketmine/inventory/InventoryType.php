@@ -1,4 +1,5 @@
 <?php
+
 /*
  *
  *  ____            _        _   __  __ _                  __  __ ____
@@ -17,13 +18,18 @@
  *
  *
 */
+
 declare(strict_types=1);
+
 namespace pocketmine\inventory;
+
 use pocketmine\network\mcpe\protocol\types\WindowTypes;
+
 /**
  * Saves all the information regarding default inventory sizes and types
  */
 class InventoryType{
+
 	//NOTE: Do not confuse these with the network IDs.
 	const CHEST = 0;
 	const DOUBLE_CHEST = 1;
@@ -40,23 +46,29 @@ class InventoryType{
     const HOPPER = 12;
 	const ENDER_CHEST = 13;
 	const BEACON = 14;
+
     const PLAYER_FLOATING = 254;//#TODO
+
 	private static $default = [];
+
 	private $size;
 	private $title;
 	private $typeId;
+
 	/**
 	 * @param $index
 	 *
-	 * @return InventoryType
+	 * @return InventoryType|null
 	 */
 	public static function get($index){
 		return static::$default[$index] ?? null;
 	}
+
 	public static function init(){
 		if(count(static::$default) > 0){
 			return;
 		}
+
 		//TODO: move network stuff out of here
 		//TODO: move inventory data to json
 		static::$default = [
@@ -77,6 +89,7 @@ class InventoryType{
 			static::BEACON => new InventoryType(0, "Beacon", WindowTypes::BEACON),
 		];
 	}
+
 	/**
 	 * @param int    $defaultSize
 	 * @param string $defaultTitle
@@ -87,18 +100,21 @@ class InventoryType{
 		$this->title = $defaultTitle;
 		$this->typeId = $typeId;
 	}
+
 	/**
 	 * @return int
 	 */
 	public function getDefaultSize(){
 		return $this->size;
 	}
+
 	/**
 	 * @return string
 	 */
 	public function getDefaultTitle(){
 		return $this->title;
 	}
+
 	/**
 	 * @return int
 	 */
