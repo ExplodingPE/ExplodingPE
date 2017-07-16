@@ -21,16 +21,15 @@
 
 declare(strict_types=1);
 
-namespace pocketmine\level\light;
+namespace pocketmine\level;
+
 
 use pocketmine\block\Block;
-use pocketmine\level\ChunkManager;
-use pocketmine\level\Level;
 
 //TODO: make light updates asynchronous
 abstract class LightUpdate{
 
-	/** @var ChunkManager */
+	/** @var Level */
 	protected $level;
 
 	/** @var \SplQueue */
@@ -43,7 +42,7 @@ abstract class LightUpdate{
 	/** @var bool[] */
 	protected $removalVisited = [];
 
-	public function __construct(ChunkManager $level){
+	public function __construct(Level $level){
 		$this->level = $level;
 		$this->removalQueue = new \SplQueue();
 		$this->spreadQueue = new \SplQueue();
@@ -62,14 +61,9 @@ abstract class LightUpdate{
 	abstract protected function setLight(int $x, int $y, int $z, int $level);
 
 	public function setAndUpdateLight(int $x, int $y, int $z, int $newLevel){
-		if(!$this->level->isInWorld($x, $y, $z)){
-			throw new \InvalidArgumentException("Coordinates x=$x, y=$y, z=$z are out of range");
-		}
-
 		if(isset($this->spreadVisited[$index = Level::blockHash($x, $y, $z)]) or isset($this->removalVisited[$index])){
 			throw new \InvalidArgumentException("Already have a visit ready for this block");
 		}
-
 		$oldLevel = $this->getLight($x, $y, $z);
 
 		if($oldLevel !== $newLevel){
@@ -98,7 +92,7 @@ abstract class LightUpdate{
 			];
 
 			foreach($points as list($cx, $cy, $cz)){
-				if(!$this->level->isInWorld($cx, $cy, $cz)){
+				if($cy < 0){
 					continue;
 				}
 				$this->computeRemoveLight($cx, $cy, $cz, $oldAdjacentLight);
@@ -123,7 +117,7 @@ abstract class LightUpdate{
 			];
 
 			foreach($points as list($cx, $cy, $cz)){
-				if(!$this->level->isInWorld($cx, $cy, $cz)){
+				if($cy < 0){
 					continue;
 				}
 				$this->computeSpreadLight($cx, $cy, $cz, $newAdjacentLight);
@@ -137,7 +131,7 @@ abstract class LightUpdate{
 		if($current !== 0 and $current < $oldAdjacentLevel){
 			$this->setLight($x, $y, $z, 0);
 
-			if(!isset($this->removalVisited[$index = Level::blockHash($x, $y, $z)])){
+			if(!isset($visited[$index = Level::blockHash($x, $y, $z)])){
 				$this->removalVisited[$index] = true;
 				if($current > 1){
 					$this->removalQueue->enqueue([$x, $y, $z, $current]);
