@@ -90,7 +90,7 @@ class Flat extends Generator{
 		$y = 0;
 		foreach($matches[3] as $i => $b){
 			$b = Item::fromString($b . $matches[4][$i]);
-			$cnt = $matches[2][$i] === "" ? 1 : intval($matches[2][$i]);
+			$cnt = $matches[2][$i] === "" ? 1 : (int) ($matches[2][$i]);
 			for($cY = $y, $y += $cnt; $cY < $y; ++$cY){
 				$result[$cY] = [$b->getId(), $b->getDamage()];
 			}
@@ -112,23 +112,17 @@ class Flat extends Generator{
 
 		$this->floorLevel = $y = count($this->structure);
 
-		for(; $y < 0xFF; ++$y){
-			$this->structure[$y] = [0, 0];
-		}
-
-
 		$this->chunk = clone $this->level->getChunk($chunkX, $chunkZ);
 		$this->chunk->setGenerated();
 
 		for($Z = 0; $Z < 16; ++$Z){
 			for($X = 0; $X < 16; ++$X){
 				$this->chunk->setBiomeId($X, $Z, $biome);
-				for($y = 0; $y < 128; ++$y){
+				for($y = 0; $y < 256 and isset($this->structure[$y]); ++$y){
 					$this->chunk->setBlock($X, $y, $Z, ...$this->structure[$y]);
 				}
 			}
 		}
-
 
 		preg_match_all('#(([0-9a-z_]{1,})\(?([0-9a-z_ =:]{0,})\)?),?#', $options, $matches);
 		foreach($matches[2] as $i => $option){

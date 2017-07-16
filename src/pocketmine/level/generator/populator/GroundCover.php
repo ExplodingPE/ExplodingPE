@@ -52,7 +52,7 @@ class GroundCover extends Populator{
 					$endY = $startY - count($cover);
 					for($y = $startY; $y > $endY and $y >= 0; --$y){
 						$b = $cover[$startY - $y];
-						if($column{$y} === "\x00" and $b->isSolid()){
+						if($column{(int) $y} === "\x00" and $b->isSolid()){
 							break;
 						}
 						if($b->getDamage() === 0){
