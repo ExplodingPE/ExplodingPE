@@ -920,9 +920,9 @@ class Player extends Human implements CommandSender, ChunkLoader, IPlayer, Netwo
 
 		$this->spawnToAll();
 
-		if($this->server->getUpdater()->hasUpdate() and $this->hasPermission(Server::BROADCAST_CHANNEL_ADMINISTRATIVE) and $this->server->getProperty("auto-updater.on-update.warn-ops", true)){
-			$this->server->getUpdater()->showPlayerUpdate($this);
-		}
+		//if($this->server->getUpdater()->hasUpdate() and $this->hasPermission(Server::BROADCAST_CHANNEL_ADMINISTRATIVE) and $this->server->getProperty("auto-updater.on-update.warn-ops", true)){
+		//	$this->server->getUpdater()->showPlayerUpdate($this);
+		//}
 
 		if($this->getHealth() <= 0){
 			$this->sendRespawnPacket($this->getSpawn());
