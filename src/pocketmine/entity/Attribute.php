@@ -77,6 +77,8 @@ class Attribute{
 	 * @param bool   $shouldSend
 	 *
 	 * @return Attribute
+	 *
+	 * @throws \InvalidArgumentException
 	 */
 	public static function addAttribute($id, $name, $minValue, $maxValue, $defaultValue, $shouldSend = true){
 		if($minValue > $maxValue or $defaultValue > $maxValue or $defaultValue < $minValue){

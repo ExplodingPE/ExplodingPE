@@ -75,6 +75,8 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 	protected $xpSeed;
 	protected $maxHealth = 20;
 
+	protected $baseOffset = 1.62;
+
 	public function __construct(Level $level, CompoundTag $nbt){
 		if($this->skin === "" and (!isset($nbt->Skin) or !isset($nbt->Skin->Data) or !Player::isValidSkin($nbt->Skin->Data->getValue()))){
 			throw new \InvalidStateException((new \ReflectionClass($this))->getShortName() . " must have a valid skin set");
@@ -143,13 +145,16 @@ class Human extends Creature implements ProjectileSource, InventoryHolder{
 		$attr = $this->attributeMap->getAttribute(Attribute::HUNGER);
 		$old = $attr->getValue();
 		$attr->setValue($new);
+
+		$reset = false;
 		// ranges: 18-20 (regen), 7-17 (none), 1-6 (no sprint), 0 (health depletion)
 		foreach([17, 6, 0] as $bound){
 			if(($old > $bound) !== ($new > $bound)){
 				$reset = true;
+				break;
 			}
 		}
-		if(isset($reset)){
+		if($reset){
 			$this->foodTickTimer = 0;
 		}
 
