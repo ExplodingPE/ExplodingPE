@@ -46,7 +46,6 @@ class MainLogger extends \AttachableThreadedLogger{
 		if(static::$logger instanceof MainLogger){
 			throw new \RuntimeException("MainLogger has been already created");
 		}
-		static::$logger = $this;
 		touch($logFile);
 		$this->logFile = $logFile;
 		$this->logDebug = (bool) $logDebug;
@@ -55,10 +54,22 @@ class MainLogger extends \AttachableThreadedLogger{
 	}
 
 	/**
-	 * @return MainLogger
+	 * @return MainLogger|null
 	 */
 	public static function getLogger(){
 		return static::$logger;
+	}
+
+	/**
+	 * Assigns the MainLogger instance to the {@link MainLogger#logger} static property. Because static properties are
+	 * thread-local, this must be called from the body of every Thread if you want the logger to be accessible via
+	 * {@link MainLogger#getLogger}.
+	 */
+	public function registerStatic(){
+		if(static::$logger instanceof MainLogger){
+			throw new \RuntimeException("MainLogger has been already registered");
+		}
+		static::$logger = $this;
 	}
 
 	public function emergency($message){
@@ -180,7 +191,16 @@ class MainLogger extends \AttachableThreadedLogger{
 	protected function send($message, $level, $prefix, $color){
 		$now = time();
 
-		$message = TextFormat::toANSI(TextFormat::BOLD . TextFormat::GRAY . "[" . TextFormat::GREEN . "SpigotPE" . TextFormat::GRAY . "] " . TextFormat::RESET . TextFormat::AQUA . "[" . date("H:i:s", $now) . "] " . TextFormat::RESET . $color . "[" . $prefix . "]:" . " " . $message . TextFormat::RESET);
+		$thread = \Thread::getCurrentThread();
+		if($thread === null){
+			$threadName = "Server thread";
+		}elseif($thread instanceof Thread or $thread instanceof Worker){
+			$threadName = $thread->getThreadName() . " thread";
+		}else{
+			$threadName = (new \ReflectionClass($thread))->getShortName() . " thread";
+		}
+
+		$message = TextFormat::toANSI(TextFormat::AQUA . "[" . date("H:i:s", $now) . "] " . TextFormat::RESET . $color . "[" . $threadName . "/" . $prefix . "]:" . " " . $message . TextFormat::RESET);
 		$cleanMessage = TextFormat::clean($message);
 
 		if(!Terminal::hasFormattingCodes()){
