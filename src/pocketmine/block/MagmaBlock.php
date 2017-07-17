@@ -53,7 +53,7 @@ class MagmaBlock extends Solid{
 	public function getDrops(Item $item){
 		if($item->isPickaxe() >= Tool::TIER_WOODEN){
 			return [
-				[Item::213, 0, 1],
+				[Item::MAGMA_BLOCK, 0, 1],
 			];
 		}else{
 			return [];
