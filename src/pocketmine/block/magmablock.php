@@ -28,7 +28,7 @@ use pocketmine\item\Tool;
 
 class magmablock extends Solid{
 
-	protected $id = self::MAGMA;
+	protected $id = self::MAGMA_BLOCK;
 
 	public function __construct($meta = 0){
 		$this->meta = $meta;
