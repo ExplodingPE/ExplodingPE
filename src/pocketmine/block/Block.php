@@ -301,9 +301,8 @@ class Block extends Position implements BlockIds, Metadatable{
  			self::$list[self::GREEN_GLAZED_TERRACOTTA] = GreenGlazedTerracotta::class;
  			self::$list[self::RED_GLAZED_TERRACOTTA] = RedGlazedTerracotta::class;
  			self::$list[self::BLACK_GLAZED_TERRACOTTA] = BlackGlazedTerracotta::class;
-			self::$list[self::MAGMA] = MAGMA::class;
+			self::$list[self::MAGMA_BLOCK] = MagmaBlock::class;
 			self::$list[self::BONE_BLOCK] = BoneBlock::class;
-
 			foreach(self::$list as $id => $class){
 				if($class !== null){
 					/** @var Block $block */
