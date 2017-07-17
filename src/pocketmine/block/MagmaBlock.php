@@ -26,7 +26,7 @@ namespace pocketmine\block;
 use pocketmine\item\Item;
 use pocketmine\item\Tool;
 
-class magmablock extends Solid{
+class MagmaBlock extends Solid{
 
 	protected $id = self::MAGMA_BLOCK;
 
