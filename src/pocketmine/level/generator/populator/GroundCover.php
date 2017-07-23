@@ -30,7 +30,7 @@ use pocketmine\utils\Random;
 
 class GroundCover extends Populator{
 
-	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
+	public function populate(ChunkManager $level, int $chunkX, int $chunkZ, Random $random){
 		$chunk = $level->getChunk($chunkX, $chunkZ);
 		for($x = 0; $x < 16; ++$x){
 			for($z = 0; $z < 16; ++$z){
@@ -52,7 +52,7 @@ class GroundCover extends Populator{
 					$endY = $startY - count($cover);
 					for($y = $startY; $y > $endY and $y >= 0; --$y){
 						$b = $cover[$startY - $y];
-						if($column{(int) $y} === "\x00" and $b->isSolid()){
+						if($column{$y} === "\x00" and $b->isSolid()){
 							break;
 						}
 						if($b->getDamage() === 0){
