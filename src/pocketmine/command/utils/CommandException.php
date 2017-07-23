@@ -21,14 +21,8 @@
 
 declare(strict_types=1);
 
-namespace pocketmine\command;
+namespace pocketmine\command\utils;
 
-use pocketmine\plugin\Plugin;
+class CommandException extends \RuntimeException{
 
-interface PluginIdentifiableCommand{
-
-	/**
-	 * @return Plugin
-	 */
-	public function getPlugin() : Plugin;
 }
