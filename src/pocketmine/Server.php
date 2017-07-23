@@ -1470,20 +1470,28 @@ class Server{
 		}, $microseconds);
 	}
 
-	public function about(){
-		$string = '
+public function about(){
+ $string = "
 
-	§3SpigotPE§f is a custom version of §bpmmp§f, modified by §5SpigotPE-Team§f
-	Version: §6' . $this->getPocketMineVersion() . '§f
-	Target client version: §b' . ProtocolInfo::MINECRAFT_VERSION . '§f
-	Source code: §dhttps://github.com/SpigotPE-Team/SpigotPE§f
-	PHP Version: §e' . PHP_VERSION . '§f
-	System OS: §6' . PHP_OS .'§f
+§6    _____       _             _   _____  ______        
+§6   / ____|     (_)           | | |  __ \|  ____|  
+§6  | (___  _ __  _  __ _  ___ | |_| |__) | |__ 
+§6   \___ \| '_ \| |/ _` |/ _ \| __|  ___/|  __|
+§6   ____) | |_) | | (_| | (_) | |_| |    | |____ 
+§6  |_____/| .__/|_|\__, |\___/ \__|_|    |______| 
+ §6        | |       __/ |                                                 
+  §6       |_|      |___/      
+		 
+  §6Version: §6" . $this->getPocketMineVersion() . '§f
+  §6Client Version: §6' . ProtocolInfo::MINECRAFT_VERSION . '§f
+  §6PHP Version: §6' . PHP_VERSION . '§f
+  §6System OS: §6' . PHP_OS .'§f
+  §6This core was maintain by §6spigpotpe
 	';
-	
+			
 		$this->getLogger()->info($string);
 	}
-
+	
 	public function loadAdvancedConfig(){
 		$this->aiEnabled = $this->getAdvancedProperty("ai.enable", false);
  		$this->aiConfig = [
