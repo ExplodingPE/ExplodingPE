@@ -101,6 +101,36 @@ dserver:
  #서버 목록，';'를 사용하여 분리하세요，예시: 1.example.com:19132;2.example.com:19133
  server-list: ""
 
+#The AI feature is still broken, you can use it and give us a feedback about it.
+ #Sometimes it can crash your server.
+ai:
+ #AI switch
+ enable: false
+ #Zombie'AI，0=disabled，1=AI 1.0ver，2=new AI(Faultiness)
+ zombie: 1
+ #PigZombie's AI
+ pigzombie: true
+ #the AI of cow and mushroom cow
+ cow: true
+ #Chicken's AI
+ chicken: true
+ #Sheep's AI
+ sheep: true
+ #Pigs' AI
+ pig: true
+ #Skeleton's AI
+ skeleton: true
+ #Creeper's AI
+ creeper: true
+ #Iron golem's AI
+ iron-golem: true
+ #Snow golem's AI
+ snow-golem: true
+ #Destory blocks if creeper exploded
+ creeper-explode-destroy-block: false
+ #Choose if allow mob auto generate
+ mobgenerate: false
+ 
 inventory:
  #모루와 관련된 문제가 있는 경우 true로 설정하세요. 인벤토리 처리를 vanila fashion (기본 방식)으로 치트 방지나 확인 없이 진행합니다.
  allow-cheats: false
