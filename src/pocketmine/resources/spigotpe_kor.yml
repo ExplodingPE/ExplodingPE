@@ -1,4 +1,8 @@
-version: 1
+#Spigotpe고급 구성 파일
+
+#이 파일의 버전
+config:
+ version: 3
 
 level:
  #날씨 시스템을 켜는 경우 설정하세요
