@@ -36,5 +36,5 @@ This spoon is based off of PMMP (For Stability)
 - [X] Spawn Eggs
 - [X] Working Mob Spawners (#WIP)
 - [X] Toggleable MobAI (very buggy but working)
-- [ ] support 32bit
+- [X] support 32bit
 - [ ] stablety and speed imrovments
