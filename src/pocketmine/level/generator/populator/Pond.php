@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\level\generator\populator;
 
 use pocketmine\block\Water;
@@ -33,7 +31,7 @@ class Pond extends Populator{
 	private $lavaOdd = 4;
 	private $lavaSurfaceOdd = 4;
 
-	public function populate(ChunkManager $level, int $chunkX, int $chunkZ, Random $random){
+	public function populate(ChunkManager $level, $chunkX, $chunkZ, Random $random){
 		if($random->nextRange(0, $this->waterOdd) === 0){
 			$x = $random->nextRange($chunkX << 4, ($chunkX << 4) + 16);
 			$y = $random->nextBoundedInt(128);
@@ -45,15 +43,15 @@ class Pond extends Populator{
 		}
 	}
 
-	public function setWaterOdd(int $waterOdd){
+	public function setWaterOdd($waterOdd){
 		$this->waterOdd = $waterOdd;
 	}
 
-	public function setLavaOdd(int $lavaOdd){
+	public function setLavaOdd($lavaOdd){
 		$this->lavaOdd = $lavaOdd;
 	}
 
-	public function setLavaSurfaceOdd(int $lavaSurfaceOdd){
+	public function setLavaSurfaceOdd($lavaSurfaceOdd){
 		$this->lavaSurfaceOdd = $lavaSurfaceOdd;
 	}
 }

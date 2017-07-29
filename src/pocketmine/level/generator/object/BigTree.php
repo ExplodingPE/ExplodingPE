@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\level\generator\object;
 
 use pocketmine\level\ChunkManager;
@@ -41,11 +39,11 @@ class BigTree extends Tree{
 	private $addLogVines = false;
 	private $addCocoaPlants = false;
 
-	public function canPlaceObject(ChunkManager $level, int $x, int $y, int $z, Random $random) : bool{
+	public function canPlaceObject(ChunkManager $level, $x, $y, $z, Random $random){
 		return false;
 	}
 
-	public function placeObject(ChunkManager $level, int $x, int $y, int $z, Random $random){
+	public function placeObject(ChunkManager $level, $x, $y, $z, Random $random){
 
 		/*$this->trunkHeight = (int) ($this->totalHeight * $this->trunkHeightMultiplier);
 		$leaves = $this->getLeafGroupPoints($level, $pos);

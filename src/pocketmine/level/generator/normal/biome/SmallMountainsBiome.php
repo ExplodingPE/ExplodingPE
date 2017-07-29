@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\level\generator\normal\biome;
 
 
@@ -32,7 +30,7 @@ class SmallMountainsBiome extends MountainsBiome{
 		$this->setElevation(63, 97);
 	}
 
-	public function getName() : string{
+	public function getName(){
 		return "Small Mountains";
 	}
 }

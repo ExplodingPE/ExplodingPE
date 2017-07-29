@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\level\generator\normal\biome;
 
 use pocketmine\block\Sapling;
@@ -47,7 +45,7 @@ class TaigaBiome extends SnowyBiome{
 		$this->rainfall = 0.8;
 	}
 
-	public function getName() : string{
+	public function getName(){
 		return "Taiga";
 	}
 }

@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\level\generator\normal\biome;
 
 use pocketmine\block\Block;
@@ -33,7 +31,7 @@ abstract class SandyBiome extends NormalBiome{
 			Block::get(Block::SAND, 0),
 			Block::get(Block::SANDSTONE, 0),
 			Block::get(Block::SANDSTONE, 0),
-			Block::get(Block::SANDSTONE, 0)
+			Block::get(Block::SANDSTONE, 0),
 		]);
 	}
 }

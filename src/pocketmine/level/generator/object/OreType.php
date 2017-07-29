@@ -19,29 +19,18 @@
  *
 */
 
-declare(strict_types=1);
-
 namespace pocketmine\level\generator\object;
 
 use pocketmine\block\Block;
 
 class OreType{
-	/** @var Block */
-	public $material;
-	/** @var int */
-	public $clusterCount;
-	/** @var int */
-	public $clusterSize;
-	/** @var int */
-	public $maxHeight;
-	/** @var int */
-	public $minHeight;
+	public $material, $clusterCount, $clusterSize, $maxHeight, $minHeight;
 
-	public function __construct(Block $material, int $clusterCount, int $clusterSize, int $minHeight, int $maxHeight){
+	public function __construct(Block $material, $clusterCount, $clusterSize, $minHeight, $maxHeight){
 		$this->material = $material;
-		$this->clusterCount = $clusterCount;
-		$this->clusterSize = $clusterSize;
-		$this->maxHeight = $maxHeight;
-		$this->minHeight = $minHeight;
+		$this->clusterCount = (int) $clusterCount;
+		$this->clusterSize = (int) $clusterSize;
+		$this->maxHeight = (int) $maxHeight;
+		$this->minHeight = (int) $minHeight;
 	}
 }
