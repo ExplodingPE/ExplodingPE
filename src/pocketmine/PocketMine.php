@@ -78,9 +78,9 @@ namespace pocketmine {
 	use pocketmine\wizard\SetupWizard;
 	use raklib\RakLib;
 
-	const VERSION = "1.2_Pre";
+	const VERSION = "1.0dev";
 	const API_VERSION = "3.0.1";
-	const CODENAME = "amazing speed";
+	const CODENAME = "SpigotPE TEAM";
 
 	/*
 	 * Startup code. Do not look at it, it may harm you.
