@@ -19,8 +19,6 @@
  *
 */
 
-declare(strict_types=1);
-
 /**
  * Named Binary Tag handling classes
  */
@@ -40,9 +38,9 @@ use pocketmine\nbt\tag\NamedTag;
 use pocketmine\nbt\tag\ShortTag;
 use pocketmine\nbt\tag\StringTag;
 use pocketmine\nbt\tag\Tag;
-use pocketmine\utils\Binary;
 
 #ifndef COMPILE
+use pocketmine\utils\Binary;
 #endif
 
 
@@ -69,22 +67,9 @@ class NBT{
 	const TAG_IntArray = 11;
 
 	public $buffer;
-	public $offset;
+	private $offset;
 	public $endianness;
 	private $data;
-
-	public static function combineCompoundTags(CompoundTag $nbt, CompoundTag $nbtExtra, $override = false) {
-		$tag = clone $nbt;
-		foreach ($nbtExtra as $k => $v) {
-			if (!($v instanceof Tag)) {
-				continue;
-			}
-			if (!isset($tag->{$k}) or (isset($tag->{$k}) and $override)) {
-				$tag->{$k} = clone $v;
-			}
-		}
-		return $tag;
-	}
 
 	/**
 	 * @param int $type
@@ -185,7 +170,6 @@ class NBT{
 
 		return true;
 	}
-
 
 	public function get($len){
 		if($len < 0){
@@ -297,10 +281,6 @@ class NBT{
 
 	public function getShort(){
 		return $this->endianness === self::BIG_ENDIAN ? Binary::readShort($this->get(2)) : Binary::readLShort($this->get(2));
-	}
-
-	public function getSignedShort() : int{
-		return $this->endianness === self::BIG_ENDIAN ? Binary::readSignedShort($this->get(2)) : Binary::readSignedLShort($this->get(2));
 	}
 
 	public function putShort($v){
@@ -418,7 +398,7 @@ class NBT{
 
 	public function setArray(array $data, callable $guesser = null){
 		$this->data = new CompoundTag("", []);
-		self::fromArray($this->data, $data, $guesser ?? [self::class, "fromArrayGuesser"]);
+		self::fromArray($this->data, $data, $guesser === null ? [self::class, "fromArrayGuesser"] : $guesser);
 	}
 
 	/**
