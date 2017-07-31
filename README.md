@@ -38,3 +38,4 @@ This spoon is based off of PMMP (For Stability)
 - [X] Toggleable MobAI (very buggy but working)
 - [ ] support 32bit
 - [ ] stablety and speed imrovments
+- [X] mcpe 1.2 beta support #Wip (idk if it's working)
