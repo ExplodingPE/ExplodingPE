@@ -25,39 +25,22 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
-class AnimatePacket extends DataPacket{
-	const NETWORK_ID = ProtocolInfo::ANIMATE_PACKET;
+class ShowStoreOfferPacket extends DataPacket{
+	const NETWORK_ID = ProtocolInfo::SHOW_STORE_OFFER_PACKET;
 
-	const ACTION_SWING_ARM = 1;
-
-	const ACTION_STOP_SLEEP = 3;
-	const ACTION_CRITICAL_HIT = 4;
-
-	public $action;
-	public $entityRuntimeId;
-	public $float = 0.0; //TODO (Boat rowing time?)
+	public $offerId;
 
 	public function decodePayload(){
-		$this->action = $this->getVarInt();
-		$this->entityRuntimeId = $this->getEntityRuntimeId();
-		if($this->action & 0x80){
-			$this->float = $this->getLFloat();
-		}
+		$this->offerId = $this->getString();
 	}
 
 	public function encodePayload(){
-		$this->putVarInt($this->action);
-		$this->putEntityRuntimeId($this->entityRuntimeId);
-		if($this->action & 0x80){
-			$this->putLFloat($this->float);
-		}
+		$this->putString($this->offerId);
 	}
 
 	public function handle(NetworkSession $session) : bool{
-		return $session->handleAnimate($this);
+		return $session->handleShowStoreOffer($this);
 	}
-
 }

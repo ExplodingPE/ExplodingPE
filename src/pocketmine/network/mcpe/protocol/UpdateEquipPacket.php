@@ -25,39 +25,34 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
-class AnimatePacket extends DataPacket{
-	const NETWORK_ID = ProtocolInfo::ANIMATE_PACKET;
+class UpdateEquipPacket extends DataPacket{
+	const NETWORK_ID = ProtocolInfo::UPDATE_EQUIP_PACKET;
 
-	const ACTION_SWING_ARM = 1;
-
-	const ACTION_STOP_SLEEP = 3;
-	const ACTION_CRITICAL_HIT = 4;
-
-	public $action;
-	public $entityRuntimeId;
-	public $float = 0.0; //TODO (Boat rowing time?)
+	public $windowId;
+	public $windowType;
+	public $unknownVarint; //TODO: find out what this is (vanilla always sends 0)
+	public $entityUniqueId;
+	public $namedtag;
 
 	public function decodePayload(){
-		$this->action = $this->getVarInt();
-		$this->entityRuntimeId = $this->getEntityRuntimeId();
-		if($this->action & 0x80){
-			$this->float = $this->getLFloat();
-		}
+		$this->windowId = $this->getByte();
+		$this->windowType = $this->getByte();
+		$this->unknownVarint = $this->getVarInt();
+		$this->entityUniqueId = $this->getEntityUniqueId();
+		$this->namedtag = $this->get(true);
 	}
 
 	public function encodePayload(){
-		$this->putVarInt($this->action);
-		$this->putEntityRuntimeId($this->entityRuntimeId);
-		if($this->action & 0x80){
-			$this->putLFloat($this->float);
-		}
+		$this->putByte($this->windowId);
+		$this->putByte($this->windowType);
+		$this->putVarInt($this->unknownVarint);
+		$this->putEntityUniqueId($this->entityUniqueId);
+		$this->put($this->namedtag);
 	}
 
 	public function handle(NetworkSession $session) : bool{
-		return $session->handleAnimate($this);
+		return $session->handleUpdateEquip($this);
 	}
-
 }

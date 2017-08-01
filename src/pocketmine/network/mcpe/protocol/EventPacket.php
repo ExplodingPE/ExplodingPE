@@ -25,39 +25,43 @@ namespace pocketmine\network\mcpe\protocol;
 
 #include <rules/DataPacket.h>
 
-
 use pocketmine\network\mcpe\NetworkSession;
 
-class AnimatePacket extends DataPacket{
-	const NETWORK_ID = ProtocolInfo::ANIMATE_PACKET;
+class EventPacket extends DataPacket{
+	const NETWORK_ID = ProtocolInfo::EVENT_PACKET;
 
-	const ACTION_SWING_ARM = 1;
+	const TYPE_ACHIEVEMENT_AWARDED = 0;
+	const TYPE_ENTITY_INTERACT = 1;
+	const TYPE_PORTAL_BUILT = 2;
+	const TYPE_PORTAL_USED = 3;
+	const TYPE_MOB_KILLED = 4;
+	const TYPE_CAULDRON_USED = 5;
+	const TYPE_PLAYER_DEATH = 6;
+	const TYPE_BOSS_KILLED = 7;
+	const TYPE_AGENT_COMMAND = 8;
+	const TYPE_AGENT_CREATED = 9;
 
-	const ACTION_STOP_SLEEP = 3;
-	const ACTION_CRITICAL_HIT = 4;
-
-	public $action;
-	public $entityRuntimeId;
-	public $float = 0.0; //TODO (Boat rowing time?)
+	public $playerRuntimeId;
+	public $eventData;
+	public $type;
 
 	public function decodePayload(){
-		$this->action = $this->getVarInt();
-		$this->entityRuntimeId = $this->getEntityRuntimeId();
-		if($this->action & 0x80){
-			$this->float = $this->getLFloat();
-		}
+		$this->playerRuntimeId = $this->getEntityRuntimeId();
+		$this->eventData = $this->getVarInt();
+		$this->type = $this->getByte();
+
+		//TODO: nice confusing mess
 	}
 
 	public function encodePayload(){
-		$this->putVarInt($this->action);
-		$this->putEntityRuntimeId($this->entityRuntimeId);
-		if($this->action & 0x80){
-			$this->putLFloat($this->float);
-		}
+		$this->putEntityRuntimeId($this->playerRuntimeId);
+		$this->putVarInt($this->eventData);
+		$this->putByte($this->type);
+
+		//TODO: also nice confusing mess
 	}
 
 	public function handle(NetworkSession $session) : bool{
-		return $session->handleAnimate($this);
+		return $session->handleEvent($this);
 	}
-
 }

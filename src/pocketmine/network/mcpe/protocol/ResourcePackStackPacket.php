@@ -29,6 +29,7 @@ namespace pocketmine\network\mcpe\protocol;
 
 use pocketmine\network\mcpe\NetworkSession;
 use pocketmine\resourcepacks\ResourcePack;
+use pocketmine\resourcepacks\ResourcePackInfoEntry;
 
 class ResourcePackStackPacket extends DataPacket{
 	const NETWORK_ID = ProtocolInfo::RESOURCE_PACK_STACK_PACKET;
