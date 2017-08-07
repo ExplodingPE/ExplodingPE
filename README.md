@@ -1,5 +1,8 @@
-# SpigotPE-php
+# SpigotPE
 <img src="https://github.com/caspervanneck/spigotpe/blob/master/spigotpe.png">
+
+### soon we will be rewritten (11 August then we wil start working on it)
+### but most plugin will break so ask if we need to support a broken plugins
 
 ## we are back better than ever we wont vanish like the last one
 
