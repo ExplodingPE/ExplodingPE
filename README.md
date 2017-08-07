@@ -4,8 +4,6 @@
 ### soon we will be rewritten (11 August then we wil start working on it)
 ### but most plugin will break so ask if we need to support a broken plugins
 
-## we are back better than ever we wont vanish like the last one
-
 ### We accept pull request so what are you waiting for
 
 # Join us here! [Discord](https://discord.gg/PwVGfng)
