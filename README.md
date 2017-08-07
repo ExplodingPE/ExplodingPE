@@ -10,8 +10,8 @@ DOWNLOAD LINK -> [![CircleCI](https://circleci.com/gh/SpigotPE-Team/SpigotPE.svg
 # NOTE FOR NEW PEOPLE YOU MUST USE SpigotPE.phar
 ## Warning: 32-Bit support is Deprecated!!!
 
-### - soon we will be rewritten (11 August then we wil start working on it)
-### - but most plugin will break so ask if we need to support a broken plugins
+- ### soon we will be rewritten (11 August then we will start working on it)
+- ### but most plugin will break so ask if we need to support a broken plugin
 
 # Introduction:
 This is an Advanced & Feature Rich Server Software to hopefully Replace Tesseract.  
