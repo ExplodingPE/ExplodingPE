@@ -1,9 +1,6 @@
 # SpigotPE
 <img src="https://github.com/caspervanneck/spigotpe/blob/master/spigotpe.png">
 
-### soon we will be rewritten (11 August then we wil start working on it)
-### but most plugin will break so ask if we need to support a broken plugins
-
 ### We accept pull request so what are you waiting for
 
 # Join us here! [Discord](https://discord.gg/PwVGfng)
@@ -12,6 +9,9 @@
 DOWNLOAD LINK -> [![CircleCI](https://circleci.com/gh/SpigotPE-Team/SpigotPE.svg?style=svg)](https://circleci.com/gh/SpigotPE-Team/SpigotPE)
 # NOTE FOR NEW PEOPLE YOU MUST USE SpigotPE.phar
 ## Warning: 32-Bit support is Deprecated!!!
+
+### - soon we will be rewritten (11 August then we wil start working on it)
+### - but most plugin will break so ask if we need to support a broken plugins
 
 # Introduction:
 This is an Advanced & Feature Rich Server Software to hopefully Replace Tesseract.  
